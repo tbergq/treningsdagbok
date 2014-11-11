@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+    {% block body_block %}
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <h2>Registrer ny øvelse</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                {% if error %}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-3">
+                {% include "Programs/side_menu.html" %}
+            </div>
+            <div class="col-xs-9">
+                <div class="well">
+                    <form action="/programs/create_exercise/" method="post">
+                        {% csrf_token %}
+                        {% for element in form.visible_fields %}
+                            <div class="form-group">
+                                 <label>{{element.help_text}}</label>
+                                  {{element}}
+                                {{element.errors}}
+                            </div>
+
+                        {% endfor %}
+                        <div class="form-group pull-right">
+                            <input type="checkbox" name="other">
+                            <label>lag en til </label>
+                            <input class="btn btn-primary margin-left" value="Lagre" type="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}

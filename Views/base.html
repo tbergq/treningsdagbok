@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+        {% load static %}
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <title>Treningsdagbok</title>
+</head>
+<body >
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+  	<p class="navbar-text"><a class="navbar-link" href="/workout/">Treninger</a></p>
+        <p class="navbar-text navbar-right">
+            <a href="/account/logout/" class="navbar-link">Logg ut</a>
+        </p>
+        <p class="navbar-text navbar-right">
+  	<a href="/programs/" class="navbar-link">Programmer</a>
+  </p>
+  </div>
+</nav>
+<div class="container" style="background-color:white;">
+    {% block body_block %}{% endblock %}
+</div>
+{% block js %}
+{% endblock %}
+</body>
+</html>

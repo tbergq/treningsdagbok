@@ -1,0 +1,39 @@
+{% extends "base.html" %}  
+                           
+ {% block body_block %}
+        <div class="row">
+            <div class="col-xs-9 col-xs-offset-3">
+                <h3>Vis øvelser</h3>
+            </div>
+        </div>
+     <div class="row">
+        <div class="col-sm-3 col-xs-12">
+            {% include "Programs/side_menu.html" %}
+        </div>
+         <div class="col-xs-12 col-sm-9">
+             <div class="well">
+                 <table class="table table-bordered well-table">
+                     <thead>
+                        <tr>
+                            <th>
+                                Muskelgruppe
+                            </th>
+                            <th>
+                                Øvelse
+                            </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                {% for item in excercises %}
+                    <tr>
+                        <td>{{item.muscle_group}}</td>
+                        <td>{{ item.name }}</td>
+                    </tr>
+
+                     {% endfor %}
+                     </tbody>
+                 </table>
+              </div>
+         </div>
+     </div>
+ {% endblock %}

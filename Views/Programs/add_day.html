@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <h2>Legg til dager for uke {{week}} </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-xs-12">
+                {% include "Programs/side_menu.html" %}
+            </div>
+            <div class="col-sm-9 col-xs-12">
+                <form action="/programs/add_day/{{week}}/" method="post">
+                <div class="well">
+
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Navn</label>
+                            <input class="form-control" type="text" name="name">
+                            <input class="hidden" type="text" value="{{week}}">
+                        </div>
+
+                </div>
+                       <input class="btn btn-primary pull-right" type="submit" value="Legg til">
+                    </form>
+            </div>
+        </div>
+
+{% endblock %}

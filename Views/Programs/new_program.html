@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+    {% block body_block %}
+        <div class="col-xs-9 col-xs-offset-3">
+        <h2>Registrer nytt program</h2>
+        </div>
+        {% if error %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-danger">
+                        {{error}}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+         <div class="col-sm-3 col-xs-12">
+            {% include "Programs/side_menu.html" %}
+        </div>
+            <form action="/programs/new_program/" method="post">
+                {% csrf_token %}
+                <div class="col-xs-12 col-sm-9">
+                    <div class="well">
+                        <div class="form-group">
+                            <label>Navn på programmet</label>
+                            <input class="form-control" type="text" name="name">
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Neste">
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% endblock %}

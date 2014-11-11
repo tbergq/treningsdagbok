@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body_block %}
+	<div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <h2>Legg til  </h2>
+            </div>
+        </div>
+	<div class="row">
+    	<div class="col-sm-3 col-xs-12">
+                {% include "Programs/side_menu.html" %}
+        </div>
+        <div class="col-sm-9 col-xs-12">
+        	<form action="" method="post">
+        	{% csrf_token %}
+        	<div class="well">
+        	<h4>Legg til øvelse til dag {{form.day_program.value}}</h4>
+        		
+        			{% for element in form  %}
+        			<div class ="form-group">
+        				<label>{{element.label_tag}}</label>
+        				{{element}}
+        				{{element.errors}}
+        			</div>
+        			{% endfor %}        			        		
+        	</div>
+        	<div class="pull-right margin-bottom">
+        	
+        	<label>
+        		<input type="checkbox" name="anohter" value="True">
+        		Legg til en til
+        	</label>
+        		<input class="btn btn-primary margin-left" type="submit" value="Lagre">
+        		</div>
+        	</form>
+        </div>
+        
+        <div class=row">
+        	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+        		<div id="partial"></div>	
+        	</div>
+        </div>
+        
+        
+		{% block js %}
+		<script type="text/javascript">
+			var day_id = '{{form.day_program.value}}';
+		</script>
+        <script type="text/javascript" src="{% static 'scripts/addExercise.js' %}"></script>
+        {% endblock %}
+
+{% endblock %}

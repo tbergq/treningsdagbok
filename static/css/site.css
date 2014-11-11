@@ -1,0 +1,22 @@
+body {
+    padding-top: 60px;
+    background-image: url('../images/background.jpg');
+
+}
+
+.margin-left {
+    margin-left: 5px;
+}
+
+.well-table {
+    background-color:white;
+}
+
+.glyphicon-larger {
+	font-size:1.4em;
+	cursor: pointer;
+}
+
+.margin-bottom {
+	margin-bottom: 5px;
+}

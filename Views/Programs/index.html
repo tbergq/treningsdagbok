@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block body_block %}
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <h2>Programmer</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">
+                {% include "Programs/side_menu.html" %}
+
+            </div>
+            <div class="col-xs-9">
+                <div class="well">
+                    <h4>Dine programmer</h4>
+                    <table class="table table-bordered well-table">
+                    	<thead>
+                    		<tr>
+                    			<th></th>
+                    			<th>Navn</th>
+                    			<th>Dato</th>
+                    			<th>Handling</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody>
+                    		{% for program in program_list %}
+                    		<tr>
+                    			<td class="expand" id="{{program.program.id}}" onclick="pala(this)"><span class="glyphicon glyphicon-expand glyphicon-larger"></span></td>
+                    			<td>{{program.program.name}}</td>
+                    			<td>{{program.program.date}}</td>
+                    			<td>                    			
+                    			<button class="btn btn-xs btn-success">
+                    				<span class="glyphicon glyphicon-edit"></span>
+                    				Rediger
+                    			</button>
+                    			<a class="btn btn-primary btn-xs margin-left" href="/programs/add_week/{{program.program.id}}/">
+                    				<span class="glyphicon glyphicon-plus"></span>
+                    				Legg til Uke
+                    			</a>
+                    			</td>
+                    		</tr>
+                    		{% for week in program.weeks %}
+                    		<tr class="{{program.program.id}} hidden">
+                    			<td class="week-expand"><span class="glyphicon glyphicon-expand glyphicon-larger hidden"></td>
+                    			<td>{{week.week.name}}</td>
+                    			<td></td>
+                    			<td>
+                    				<a class ="btn btn-default btn-xs" href="/programs/add_day/{{week.week.id}}/">
+                    					<span class="glyphicon glyphicon-plus"></span>
+                    					Legg til dag
+                    				</a>
+                    			</td>
+                    		</tr>
+                    		{% for day in week.day_program %}
+                    			<tr class="{{program.program.id}} hidden">
+                    				<td></td>
+                    				<td>{{day.day_program.name}}</td>
+                    				<td></td>
+                    				<td>
+                    					<a class="btn btn-info btn-xs" href="/programs/add_exercise_to_day/{{day.day_program.id}}/">
+                    						<span class="glyphicon glyphicon-plus"></span>
+                    						Legg til øvelse
+                    					</a>
+                    				</td>
+                    			</tr>
+                    		{% endfor %}	
+                    		{% endfor %}
+                    		
+                   		 {% endfor %}
+                    	</tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        {% block js %}
+        <script type="text/javascript" src="{% static 'scripts/yourPrograms.js' %}"></script>
+        {% endblock %}
+        
+	{% endblock %}
+    

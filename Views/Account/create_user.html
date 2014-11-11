@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block body_block %}
+
+     <div class="row">
+         <div class="col-xs-12">
+             <form action="/account/create_user/" method="post">
+                  {% csrf_token %}
+                  {% for field in user_form.visible_fields %}
+                    <div class="form-group">
+                        <label>{{field.help_text}}</label>
+                        {{field}}
+                        {{field.errors}}
+                    </div>
+                  {% endfor %}
+                 <div class="form-group">
+                     <label>Bekreft passord</label>
+                     <input class="form-control" type="password" name="confirm">
+                 </div>
+                 <input class="btn btn-primary" type="submit" value="Registrer">
+             </form>
+         </div>
+     </div>
+        <div class="row">
+            <div class="col-xs-12">
+                {% for field in errors %}
+                    <div class="alert alert-danger">
+                                        {{ field }}
+
+                    </div>
+            {% endfor %}
+
+            </div>
+        </div>
+
+
+
+{% endblock %}
