@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h3>Dine økter</h3>
+	</div>
+</div>
+
+<div class="row">
+            <div class="col-sm-3 col-xs-12">
+                {% include "Workout/side_menu.html" %}
+            </div>
+            <div class="col-sm-9 col-xs-12">
+            	<div class="well">
+            	<h4>Velg økt</h4>
+            		<table class="table table-bordered well-table">
+            			<thead>
+            				<tr>
+            				<th>Navn</th>
+            				<th>Dato</th>
+            				<th>Handling</th>
+            				</tr>
+            				
+            			</thead>
+            			<tbody>
+            			{% for program in programs %}
+            			<tr>
+            				
+            				<td>
+            					{{program.name}}
+            				</td>
+            				<td>{{program.date}}</td>
+            				<td>
+            					<form method="get" action="/workout/select/{{program.id}}/">
+            						<input type="submit" class="btn btn-primary btn-sm" value="Registrer">
+            					</form>
+            				</td>
+            				
+            			</tr>
+            			{% endfor %}
+            			</tbody>
+            		</table>
+            	</div>
+            </div>
+</div>
+
+{% endblock %}

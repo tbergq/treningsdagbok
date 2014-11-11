@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^account/', include('account.urls')),
     url(r'^programs/', include('programs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^workout/', include('workout.urls')),
 ]

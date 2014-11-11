@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h3>Velg økt</h3>
+	</div>
+</div>
+
+<div class="row">
+            <div class="col-sm-3 col-xs-12">
+                {% include "Workout/side_menu.html" %}
+            </div>
+            <div class="col-sm-9 col-xs-12">
+            {{programs.name}}
+            </div>
+</div>
+            
+            
+{% endblock %}
