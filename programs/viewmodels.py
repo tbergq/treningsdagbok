@@ -3,9 +3,12 @@ import models
 
 class DayProgramViewModel:
     
-    def __init__(self, day_program):
-        self.day_program = day_program
-
+    def __init__(self, dayProgram):
+        self.day_program = dayProgram
+        self.exercise = []
+        for ex in models.DayExcersice.objects.filter(day_program=dayProgram):
+            self.exercise.append(ShowExersiceViewModel(ex))
+        
 class WeekViewModel:
     
     def __init__(self, week_entity):

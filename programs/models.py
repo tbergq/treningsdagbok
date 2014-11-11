@@ -6,6 +6,8 @@ class Program(models.Model):
     name = models.CharField(max_length=128)
     date = models.DateField()
     user = models.ForeignKey(UserProfile)
+    
+    
 
 class BaseExercise(models.Model):
     muscle_group = models.CharField(max_length=128, blank=True)

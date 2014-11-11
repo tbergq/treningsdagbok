@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
+from programs import viewmodels
 
 # Create your views here.
 
@@ -16,11 +17,14 @@ def index(request):
     return render(request, 'Workout/index.html', {'programs' : programs}) 
 
 
-class LoadExercise(DetailView):
+class LoadExercise(TemplateView):
     
     template_name = 'Workout/select.html'
-    
+    #model = program_models.Program
     
     
     def get_context_data(self, **kwargs):
-        return {'programs' : program_models.Program.objects.get(pk=kwargs['program_id'])}
+        return {'object' : viewmodels.MyProgramsViewModel(kwargs['pk'])}
+    
+    
+    

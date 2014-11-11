@@ -13,7 +13,35 @@
                 {% include "Workout/side_menu.html" %}
             </div>
             <div class="col-sm-9 col-xs-12">
-            {{programs.name}}
+            
+            <table class="table table-bordered">
+            	<thead>
+            	<tr>
+            		<th></th>
+            		<th>{{object.program.name}}</th>
+            		<th></th>
+            	</tr>
+            	</thead>
+            	<tbody>
+            		{% for week in object.weeks %}
+            		<tr>
+            			<td></td>
+            			<td>
+            			{{week.week.name}}
+            			<table class="table table-striped">
+            			{% for day in week.day_program %}
+            			<tr>
+            				<td>{{day.day_program.name}}</td>
+            			</tr>
+            			{% endfor %}
+            			</table>
+            			</td>
+            			<td></td>
+            		</tr>
+            		{% endfor %}
+            	</tbody>
+            </table>
+            
             </div>
 </div>
             
