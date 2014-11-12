@@ -35,9 +35,7 @@ class DayExcersice(models.Model):
     day_program = models.ForeignKey(DayProgram)
 
 
-class TestFormViewClass(models.Model):
-    name = models.CharField(max_length=128)
-    alder = models.IntegerField()
+
 
 
 
