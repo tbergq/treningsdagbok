@@ -6,7 +6,7 @@ import programs.models as program_models
 class DayRegister(models.Model):
     day_program = models.ForeignKey(program_models.DayProgram)
     start_time = models.DateTimeField()
-    end_time = models.DateField()
+    end_time = models.DateField(null=True)
 
 class ExcerciseRegister(models.Model):
     day_excersice = models.ForeignKey(program_models.DayExcersice)

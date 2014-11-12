@@ -33,6 +33,7 @@ class DayExcersice(models.Model):
     set = models.CharField(max_length=10)
     reps = models.CharField(max_length=128)
     day_program = models.ForeignKey(DayProgram)
+    description = models.CharField(max_length=128, null=True)
 
 
 

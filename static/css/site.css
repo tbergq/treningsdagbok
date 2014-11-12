@@ -24,3 +24,7 @@ body {
 .well > h4 {
 	 text-decoration: underline;
 }
+
+.alert-icon {
+	cursor: pointer;
+}

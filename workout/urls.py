@@ -6,4 +6,5 @@ from workout import views
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
         url(r'^select/(?P<pk>\w+)/$', views.LoadExercise.as_view(), name="select"),
+        url(r'^register/(?P<day_id>\w+)/$', views.RegisterWorkout.as_view(), name="register"),
         )

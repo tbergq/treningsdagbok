@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h3>Registrering av {{model.name}}</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-3 col-xs-12">
+    	{% include "Workout/side_menu.html" %}
+    </div>
+    <div class="col-sm-9 col-xs-12">
+    	<div class ="well">
+            <table class="table table-bordered well-table">
+            	<thead>
+            		<tr>
+            			<th>Øvelse</th>
+            			<th>Sets</th>
+            			<th>Reps</th>
+            			<th>Valg</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+            	{% for element in model.exercises %}
+            		<tr>
+            			<td>{{element.name}} 
+            			<span class="glyphicon glyphicon-exclamation-sign pull-right alert-icon" 
+            			title="{{element.description}}" onclick="alert('{{element.description}}')"></span> 
+            			</td>
+            			<td>{{element.sets}}</td>
+            			<td>{{element.reps}}</td>
+            			<td>
+            			<button class="btn btn-xs btn-success" id="{{element.id}}" onclick="loadRegisterPartial(this)")>
+            				<span class="glyphicon glyphicon-edit"></span>
+            			</button>
+            			</td>
+            		</tr>
+            		{% endfor %}
+            	</tbody>
+            </table>
+     	</div>
+    </div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<div id="registerDiv"></div>
+	</div>
+</div>
+
+{% block js %}
+	<script type="text/javascript" src="{% static 'scripts/workout/loadRegister.js' %}"></script>
+{% endblock %}
+
+
+
+{% endblock %}
