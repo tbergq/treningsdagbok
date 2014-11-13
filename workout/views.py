@@ -7,6 +7,7 @@ from django.views.generic.detail import DetailView
 from programs import viewmodels
 from django.utils.decorators import method_decorator
 from treningsdagbok import DTOs
+from django.views.generic.edit import FormView
 
 # Create your views here.
 
@@ -46,6 +47,7 @@ class RegisterWorkout(TemplateView):
     
     
     
+
     
     
     
