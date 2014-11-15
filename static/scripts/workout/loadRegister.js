@@ -8,6 +8,18 @@ function loadRegisterPartial(element) {
 	}).done(function(data){
 		$("#registerDiv").html(data);
 	}).error(function(data){
-		alert(data.status);
+		//alert(data.status);
 	});
 }
+
+$(document).ready(function() {
+	if(started) {
+		console.log("started");
+	} else {
+		var buttons = $(".register-button");
+		
+		for(var i = 0; i < buttons.length; i++) {
+			buttons[i].disabled = true;
+		}
+	}
+});

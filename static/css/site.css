@@ -4,8 +4,18 @@ body {
 
 }
 
+/* margins */
+
 .margin-left {
     margin-left: 5px;
+}
+
+.margin-top {
+	margin-top: 5px;
+}
+
+.margin-bottom {
+	margin-bottom: 5px;
 }
 
 .well-table {

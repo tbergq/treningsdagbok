@@ -27,6 +27,9 @@ class Week(models.Model):
 class DayProgram(models.Model):
     name = models.CharField(max_length=128)
     week = models.ForeignKey(Week)
+    
+    def __str__(self):
+        return self.name
 
 class DayExcersice(models.Model):
     base_excersice = models.ForeignKey(BaseExercise)

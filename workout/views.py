@@ -2,13 +2,14 @@ from programs import models as program_models, BO
 from account import models as account_models
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.detail import DetailView
 from programs import viewmodels
 from django.utils.decorators import method_decorator
 from treningsdagbok import DTOs
 from django.views.generic.edit import FormView
 from workout import forms, models as workout_models
+import datetime
 
 # Create your views here.
 
@@ -38,7 +39,17 @@ class RegisterWorkout(TemplateView):
     template_name = 'Workout/register.html'
     
     def get_context_data(self, **kwargs):
-        return {'model' : DTOs.DTODayProgram(kwargs['day_id'])}
+        day_id = kwargs['day_id']
+        program = BO.DayProgramService().get_from_day_exercise_id(day_id)
+        print program
+        day_register = workout_models.DayRegister.objects.filter(day_program_id=program.id)
+        print day_register
+        return {
+                'model' : DTOs.DTODayProgram(day_id),
+                'day_register' : day_register,
+                'started_register' : day_register != [],
+                
+                }
     
     @method_decorator(login_required(login_url='/account/'))
     def dispatch(self, request, *args, **kwargs):
@@ -96,6 +107,27 @@ class RegisterPartial(FormView):
                 'note' : '' 
         }
     
+
+class StartDayRegister(RedirectView):
+    
+    url = '/workout/register/'
+    
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
+    
+   
+    def post(self, request, *args, **kwargs):
+        print "post"
+        day_exercise_id = kwargs['id']
+        program = BO.DayProgramService().get_from_day_exercise_id(day_exercise_id)
+        entity = workout_models.DayRegister(day_program=program, start_time=datetime.datetime.now())
+        entity.save()
+        return RedirectView.post(self, request, *args, **kwargs)
+    
+    def get_redirect_url(self, *args, **kwargs):
+        print "hoy"
+        return "%s%s" % (self.url, kwargs['id'])
     
     
     
