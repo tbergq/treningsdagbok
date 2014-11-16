@@ -1,7 +1,7 @@
 from django.db import models
 
 import programs.models as program_models
-from django.utils.datetime_safe import strftime
+
 # Create your models here.
 
 class DayRegister(models.Model):

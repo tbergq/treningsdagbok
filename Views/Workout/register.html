@@ -22,8 +22,9 @@
     	</form>
     	<script>var started = false;</script>
     	{% elif  day_register %}
-    	<p>
-    		{{day_register.start_time | date:"c"}}
+    	<p class="pull-right">
+    	Økt startet: 
+    		{{date | date:"d F Y G:H"}}
     		</p>
     	<script>var started = true;</script>
     	{% endif %}

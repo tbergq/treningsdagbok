@@ -40,15 +40,19 @@ class RegisterWorkout(TemplateView):
     
     def get_context_data(self, **kwargs):
         day_id = kwargs['day_id']
-        program = BO.DayProgramService().get_from_day_exercise_id(day_id)
-        print program
-        day_register = workout_models.DayRegister.objects.filter(day_program_id=program.id)
-        print day_register
+        print "dag_id: %s" % day_id
+        #program = BO.DayProgramService().get_from_day_exercise_id(day_id)        
+        day_register = workout_models.DayRegister.objects.filter(day_program_id=day_id)
+        print len(day_register)
+        if len(day_register) == 0:
+            date = ''
+        else:
+            date = day_register[0].start_time
         return {
                 'model' : DTOs.DTODayProgram(day_id),
                 'day_register' : day_register,
                 'started_register' : day_register != [],
-                
+                'date' : date,
                 }
     
     @method_decorator(login_required(login_url='/account/'))
@@ -70,7 +74,6 @@ class RegisterPartial(FormView):
     def get(self, request, *args, **kwargs):
         self.initial['day_id'] = kwargs['day_id']
         self.initial['weigth'] = 60
-        print self.initial
         return FormView.get(self, request, *args, **kwargs)
     
     def form_valid(self, form):
@@ -96,7 +99,6 @@ class RegisterPartial(FormView):
         program = BO.DayProgramService().get_from_day_exercise_id(self.day_id)
         day_register = workout_models.DayRegister.objects.filter(day_program_id=program.id)
         """
-        print self.initial
         
         return {
                 'day_excersice' : 1, 
@@ -118,7 +120,7 @@ class StartDayRegister(RedirectView):
     
    
     def post(self, request, *args, **kwargs):
-        print "post"
+        
         day_exercise_id = kwargs['id']
         program = BO.DayProgramService().get_from_day_exercise_id(day_exercise_id)
         entity = workout_models.DayRegister(day_program=program, start_time=datetime.datetime.now())
@@ -126,7 +128,7 @@ class StartDayRegister(RedirectView):
         return RedirectView.post(self, request, *args, **kwargs)
     
     def get_redirect_url(self, *args, **kwargs):
-        print "hoy"
+        
         return "%s%s" % (self.url, kwargs['id'])
     
     
