@@ -10,7 +10,7 @@ class ExcerciseRegisterForm(forms.ModelForm):
         widgets = {
             'day_excersice' : forms.HiddenInput(),
             'day_register' : forms.HiddenInput(),
-            'set_number' : forms.HiddenInput(),
+            'set_number' : forms.TextInput(attrs={'readonly' : 'readonly', 'class' : 'form-control'}),
             'reps' : forms.TextInput(attrs={'class' : 'form-control'}),
             'weight' : forms.TextInput(attrs={'class' : 'form-control'}),
             'note' : forms.TextInput(attrs={'class' : 'form-control'}),
@@ -19,8 +19,8 @@ class ExcerciseRegisterForm(forms.ModelForm):
         labels = {
             'day_excersice' : '',
             'day_register' : '',
-            'set_number' : '',
+            'set_number' : 'Set',
             'reps' : 'Reps',
             'weight' : 'Vekt',
-            'note' : 'notater',     
+            'note' : 'Notater',     
         }

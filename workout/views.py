@@ -67,14 +67,19 @@ class RegisterPartial(FormView):
     
     template_name = 'Workout/register_partial.html'
     form_class = forms.ExcerciseRegisterForm
-    succsess_url = '/workout/partial/'
+    succsess_url = '/workout/register/'
     initial = {}
     
     
     def get(self, request, *args, **kwargs):
-        self.initial['day_id'] = kwargs['day_id']
-        self.initial['weigth'] = 60
+        self.initial['day_id'] = kwargs['day_id']#day program id
+        self.initial['exercise_id'] = kwargs['exercise_id']#day exercise id
         return FormView.get(self, request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        day_id = request.POST.get('day_id')
+        self.success_url = "%s%s/" % (self.success_url, day_id)
+        return FormView.post(self, request, *args, **kwargs)
     
     def form_valid(self, form):
         form.save()
@@ -85,28 +90,20 @@ class RegisterPartial(FormView):
         return FormView.dispatch(self, request, *args, **kwargs)
     
     
-    
-    
     def get_initial(self):
-        """
-        test = self.get_context_data()
-        print test
-        print self.day_id
-        #day_id = self.request.GET.get('day_id', 1)
-        #print day_id
-        #exercise_id = self.request.GET.get('exercise_id', 1)
-        print self.exercise_id
-        program = BO.DayProgramService().get_from_day_exercise_id(self.day_id)
-        day_register = workout_models.DayRegister.objects.filter(day_program_id=program.id)
-        """
-        
+        print "get init"
+        day_register = workout_models.DayRegister.objects.get(day_program_id=self.initial['day_id'])
+        print day_register
+        set_number = len(workout_models.ExcerciseRegister.objects.filter(day_excersice_id=self.initial['exercise_id'])) + 1
+        print "day_id: %s" % self.initial['day_id']
         return {
-                'day_excersice' : 1, 
-                'day_register' :1 ,
-                'set_number' : 1,
+                'day_excersice' : self.initial['exercise_id'], 
+                'day_register' : day_register ,
+                'set_number' : set_number,
                 'reps' : '',
-                'weight' : self.initial['weigth'],
-                'note' : '' 
+                'weight' : '',
+                'note' : '' ,
+                'day_id' : self.initial['day_id'],
         }
     
 

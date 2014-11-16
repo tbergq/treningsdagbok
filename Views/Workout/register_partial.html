@@ -1,6 +1,6 @@
 
-
-	<form action="" method="post">
+<form action="/workout/register_partial/{{day_id}}{{day_excersice}}/" method="POST" id="partialForm">
+	
 	{% csrf_token %}
 	{% for element in form.visible_fields %}
 		<div class="form-group">
@@ -11,4 +11,7 @@
 		{% for element in form.hidden_fields %}
 		{{element}}
 		{% endfor %}
+		<div class="pull-right">
+			<input class="btn btn-primary margin-bottom" value="Lagre" type="submit">
+		</div>
 	</form>
