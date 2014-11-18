@@ -18,18 +18,23 @@ body {
 	margin-bottom: 5px;
 }
 
+/* background styling */
+
 .well-table {
     background-color:white;
 }
+
+.selected-exercise{
+	background-color: #197fc8;
+}
+
+/* other */
 
 .glyphicon-larger {
 	font-size:1.4em;
 	cursor: pointer;
 }
 
-.margin-bottom {
-	margin-bottom: 5px;
-}
 
 .well > h4 {
 	 text-decoration: underline;

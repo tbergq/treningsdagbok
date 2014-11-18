@@ -94,11 +94,9 @@ class RegisterPartial(FormView):
     
     
     def get_initial(self):
-        print "get init"
         day_register = workout_models.DayRegister.objects.get(day_program_id=self.initial['day_id'])
-        print day_register
         set_number = len(workout_models.ExcerciseRegister.objects.filter(day_excersice_id=self.initial['exercise_id'])) + 1
-        print "day_id: %s" % self.initial['day_id']
+
         return {
                 'day_excersice' : self.initial['exercise_id'], 
                 'day_register' : day_register ,

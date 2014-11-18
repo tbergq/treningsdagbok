@@ -1,7 +1,8 @@
 
 function loadRegisterPartial(element) {
 	var exercise_id = $(element).attr('id');
-	
+	$("tr").removeClass("selected-exercise");
+	$(element).parent().parent().addClass("selected-exercise");
 	$.ajax({
 		url : "/workout/register_partial/" + day_id + "/" + exercise_id + "/",
 		type : "GET"	
