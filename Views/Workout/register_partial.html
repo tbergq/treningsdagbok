@@ -1,17 +1,48 @@
 
-<form action="/workout/register_partial/{{day_id}}{{day_excersice}}/" method="POST" id="partialForm">
+{% load static %}
+
+<form action="" method="POST" id="partialForm">
 	
 	{% csrf_token %}
-	{% for element in form.visible_fields %}
+	<!-- {% for element in form.visible_fields %}
 		<div class="form-group">
 			<label>{{element.label_tag}}</label>
 			{{element}}
 		</div>
-		{% endfor %}
+		{% endfor %}-->
 		{% for element in form.hidden_fields %}
 		{{element}}
-		{% endfor %}
+		{% endfor %} 
+		<div class="col-xs-6">
+			<div class="form-group">
+				<label>{{form.set_number.label_tag}}</label>
+				{{form.set_number}}
+				{{form.set_number.errors}}
+			</div>
+			<div class="form-group">
+				<label>{{form.reps.label_tag}}</label>
+				{{form.reps}}
+				{{form.reps.errors}}
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="form-group">
+				<label>{{form.weight.label_tag}}</label>
+				{{form.weight}}
+				{{form.weight.errors}}
+			</div>
+			<div class="form-group">
+				<label>{{form.note.label_tag}}</label>
+				{{form.note}}
+				{{form.note.errors}}
+			</div>
+		</div>
 		<div class="pull-right">
 			<input class="btn btn-primary margin-bottom" value="Lagre" type="submit">
 		</div>
+		
 	</form>
+	 
+	 
+	 <script src="{% static 'scripts/workout/registerPartial.js' %}">
+	 </script>

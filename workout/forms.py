@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from workout import models as workout_models
+
+required = 'Feltet er påkrevd'
 
 class ExcerciseRegisterForm(forms.ModelForm):
     
@@ -24,3 +27,12 @@ class ExcerciseRegisterForm(forms.ModelForm):
             'weight' : 'Vekt',
             'note' : 'Notater',     
         }
+        
+        error_messages = {
+                          'reps': {
+                'required': required,
+            },
+            
+            'weight' : { 'required': required},
+            'note' : { 'required': required},   
+            }

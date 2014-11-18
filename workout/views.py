@@ -67,7 +67,7 @@ class RegisterPartial(FormView):
     
     template_name = 'Workout/register_partial.html'
     form_class = forms.ExcerciseRegisterForm
-    succsess_url = '/workout/register/'
+    succsess_url = '/workout/register_partial/'
     initial = {}
     
     
@@ -77,8 +77,11 @@ class RegisterPartial(FormView):
         return FormView.get(self, request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        day_id = request.POST.get('day_id')
-        self.success_url = "%s%s/" % (self.success_url, day_id)
+        print "post"
+        day_id = kwargs['day_id']
+        exercise_id = kwargs['exercise_id']
+        self.success_url = '/workout/register_partial/%s/%s/' % (day_id,exercise_id)
+        print "success_url: %s" % self.success_url
         return FormView.post(self, request, *args, **kwargs)
     
     def form_valid(self, form):
