@@ -139,7 +139,7 @@ class StartDayRegister(RedirectView):
     
     def get_redirect_url(self, *args, **kwargs):
         
-        return "%s%s" % (self.url, kwargs['id'])
+        return "%s%s/%s" % (self.url, kwargs['id'], kwargs['program_id'])
     
 
 def get_previous_register_data(request, exercise_id):

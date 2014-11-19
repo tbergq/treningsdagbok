@@ -18,7 +18,7 @@
     	<div class ="well">
     	
     	{% if not day_register %}
-    	<form action="/workout/start_register/{{model.id}}/" method="POST">
+    	<form action="/workout/start_register/{{model.id}}/{{program_id}}/" method="POST">
     	{% csrf_token %}
     		<input class="btn btn-primary pull-right margin-bottom" value="Start registering" type="submit">
     	</form>
