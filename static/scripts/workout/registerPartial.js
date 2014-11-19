@@ -1,8 +1,10 @@
-$(document).ready(function(){
-			
+$(document).ready(
+		function() {
+
 			var ex_id = $("#id_day_excersice").val();
-			
-			$("#partialForm").attr('action', "/workout/register_partial/" + day_id + "/" + ex_id + "/");
+
+			$("#partialForm").attr('action',
+					"/workout/register_partial/" + day_id + "/" + ex_id + "/");
 
 			$("#partialForm").on('submit', function(e) {
 				e.preventDefault();
@@ -15,4 +17,16 @@ $(document).ready(function(){
 					$("#registerDiv").html(data);
 				});
 			});
+			getPreviousSetData(ex_id);
 		});
+
+
+function getPreviousSetData(id) {
+	$.ajax({
+		url : "/workout/get_previous_register_data/" + id + "/",
+		type : "GET",
+		
+	}).done(function(data){
+		$("#previousDiv").html(data);
+	});
+}

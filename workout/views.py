@@ -1,6 +1,6 @@
 from programs import models as program_models, BO
 from account import models as account_models
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.detail import DetailView
@@ -10,6 +10,7 @@ from treningsdagbok import DTOs
 from django.views.generic.edit import FormView
 from workout import forms, models as workout_models
 import datetime
+from django.template.context import RequestContext
 
 # Create your views here.
 
@@ -40,10 +41,9 @@ class RegisterWorkout(TemplateView):
     
     def get_context_data(self, **kwargs):
         day_id = kwargs['day_id']
-        print "dag_id: %s" % day_id
-        #program = BO.DayProgramService().get_from_day_exercise_id(day_id)        
+        program_id = kwargs['program_id']        
         day_register = workout_models.DayRegister.objects.filter(day_program_id=day_id)
-        print len(day_register)
+        
         if len(day_register) == 0:
             date = ''
         else:
@@ -53,6 +53,7 @@ class RegisterWorkout(TemplateView):
                 'day_register' : day_register,
                 'started_register' : day_register != [],
                 'date' : date,
+                'program_id' : program_id,
                 }
     
     @method_decorator(login_required(login_url='/account/'))
@@ -95,8 +96,10 @@ class RegisterPartial(FormView):
     
     def get_initial(self):
         day_register = workout_models.DayRegister.objects.get(day_program_id=self.initial['day_id'])
-        set_number = len(workout_models.ExcerciseRegister.objects.filter(day_excersice_id=self.initial['exercise_id'])) + 1
-
+        previous_sets = workout_models.ExcerciseRegister.objects.filter(day_excersice_id=self.initial['exercise_id']).order_by('set_number')
+        
+        set_number = len(previous_sets) + 1
+        
         return {
                 'day_excersice' : self.initial['exercise_id'], 
                 'day_register' : day_register ,
@@ -105,6 +108,7 @@ class RegisterPartial(FormView):
                 'weight' : '',
                 'note' : '' ,
                 'day_id' : self.initial['day_id'],
+                'previous_sets' : previous_sets,
         }
     
 
@@ -120,7 +124,7 @@ class StartDayRegister(RedirectView):
     def post(self, request, *args, **kwargs):
         
         day_exercise_id = kwargs['id']
-        program = BO.DayProgramService().get_from_day_exercise_id(day_exercise_id)
+        program = program_models.DayProgram.objects.get(pk=day_exercise_id)#BO.DayProgramService().get_from_day_exercise_id(day_exercise_id)
         entity = workout_models.DayRegister(day_program=program, start_time=datetime.datetime.now())
         entity.save()
         return RedirectView.post(self, request, *args, **kwargs)
@@ -129,5 +133,14 @@ class StartDayRegister(RedirectView):
         
         return "%s%s" % (self.url, kwargs['id'])
     
+
+def get_previous_register_data(request, exercise_id):
+    print "hit me"
+    exercises = workout_models.ExcerciseRegister.objects.filter(day_excersice_id=exercise_id).order_by('set_number')
+    previous_set_weight = ""
+    for i in range(len(exercises)):
+        previous_set_weight += "%s x %skg, " % (exercises[i].reps, exercises[i].weight)
+    print previous_set_weight
+    return render_to_response('Workout/previous_register_data.html', {'text' : previous_set_weight}, RequestContext(request))
     
     
