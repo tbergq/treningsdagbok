@@ -112,6 +112,14 @@ class RegisterPartial(FormView):
         }
     
 
+def finish_register(request, program_id):
+    register = workout_models.DayRegister.objects.get(day_program_id=program_id)
+    if not register.end_time:
+        register.end_time = datetime.datetime.now()
+    return redirect('/workout/')
+    
+    
+
 class StartDayRegister(RedirectView):
     
     url = '/workout/register/'

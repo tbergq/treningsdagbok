@@ -60,8 +60,9 @@
             </table>
             
             	<a class="btn btn-default" href="{% url 'select' program_id %}">Tilbake</a>
-            	<a class ="btn btn-primary" href="#">Avslutt registrering</a>
-           
+            	{% if  day_register %}
+            	<a class ="btn btn-primary" href="{% url 'finish_register' model.id %}">Avslutt registrering</a>
+           		{% endif %}
      	</div>
     </div>
 </div>
