@@ -11,4 +11,5 @@ urlpatterns = patterns('',
         url(r'^start_register/(?P<id>\w+)/(?P<program_id>\w+)/$', views.StartDayRegister.as_view(), name="start_register"),
         url(r'^get_previous_register_data/(?P<exercise_id>\w+)/$', views.get_previous_register_data, name="get_previous_register_data"),
         url(r'^finish_registering/(?P<program_id>\w+)/$', views.finish_register, name="finish_register"),
+        url(r'^registered_workouts/$', views.ShowRegisteredExercises.as_view(), name='registered_workouts'),
         )

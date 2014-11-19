@@ -119,6 +119,20 @@ def finish_register(request, program_id):
     return redirect('/workout/')
     
     
+class ShowRegisteredExercises(TemplateView):
+    
+    template_name = 'Workout/registered_workouts.html'
+    
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        context = {'model' : workout_models.DayRegister.objects.filter(user=get_user(request)) }
+        return self.render_to_response(context)
+    
+    
+    
 
 class StartDayRegister(RedirectView):
     
@@ -133,7 +147,7 @@ class StartDayRegister(RedirectView):
         
         day_exercise_id = kwargs['id']
         program = program_models.DayProgram.objects.get(pk=day_exercise_id)#BO.DayProgramService().get_from_day_exercise_id(day_exercise_id)
-        entity = workout_models.DayRegister(day_program=program, start_time=datetime.datetime.now())
+        entity = workout_models.DayRegister(user=get_user(request),day_program=program, start_time=datetime.datetime.now())
         entity.save()
         return RedirectView.post(self, request, *args, **kwargs)
     
