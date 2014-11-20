@@ -16,9 +16,29 @@
     </div>
     <div class="col-sm-9 col-xs-12">
     	<div class="well">
-    		{% for element in model %}
-    			<div>{{element.day_program.name}}</div>
-    		{% endfor %}
+    	<table class="table table-bordered well-table overflow-x-auto">
+    		<thead>
+    			<tr>
+    			<th>Program</th>
+    			<th>Uke/Dag</th>
+    			<th>Start tid</th>
+    			<th class="hidden-xs">Slutt tid</th>
+    			<th>Handling</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			{% for element in model %}
+    			<tr>
+    				<td>{{element.day_program.week.program.name}}</td>
+    				<td>{{element.day_program.week.name}}/{{element.day_program.name}}</td>
+    				<td>{{element.start_time}}</td>
+    				<td class="hidden-xs">{{element.end_time}}</td>
+    				<td><a href="#">Vis økt</a></td>
+    			</tr>
+    			{% endfor %}
+    			
+    		</tbody>
+    		</table>
     	</div>
     </div>
 </div>

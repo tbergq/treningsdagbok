@@ -35,6 +35,10 @@ body {
 	cursor: pointer;
 }
 
+.overflow-x-auto {
+	overflow-x : auto;
+}
+
 
 .well > h4 {
 	 text-decoration: underline;

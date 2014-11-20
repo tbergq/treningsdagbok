@@ -8,7 +8,7 @@ class DayRegister(models.Model):
     day_program = models.ForeignKey(program_models.DayProgram)
     user = models.ForeignKey(account_models.UserProfile)
     start_time = models.DateTimeField()
-    end_time = models.DateField(null=True)
+    end_time = models.DateTimeField(null=True)
 
     
 

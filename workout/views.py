@@ -116,6 +116,10 @@ def finish_register(request, program_id):
     register = workout_models.DayRegister.objects.get(day_program_id=program_id)
     if not register.end_time:
         register.end_time = datetime.datetime.now()
+        register.save()
+        print register.end_time
+    else:
+        print "pala"
     return redirect('/workout/')
     
     
