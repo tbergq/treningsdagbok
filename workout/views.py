@@ -132,7 +132,7 @@ class ShowRegisteredExercises(TemplateView):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        context = {'model' : workout_models.DayRegister.objects.filter(user=get_user(request)) }
+        context = {'model' : workout_models.DayRegister.objects.filter(user=get_user(request)).exclude(end_time=None) }
         return self.render_to_response(context)
     
     
