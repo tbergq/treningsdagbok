@@ -87,7 +87,7 @@ DATABASES = {
         'PASSWORD': '',
     }"""
     'default' : {
-        'NAME': 'tbergq$treningsdagbok',
+        'NAME': 'tbergq$Treningsdagbok',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'tbergq',
         'PASSWORD': 'F!abc123',
