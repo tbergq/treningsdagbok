@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h3>{{name}}</h3>
+	</div>
+</div>
+
+<div class="row">
+            <div class="col-sm-3 col-xs-12">
+                {% include "Workout/side_menu.html" %}
+            </div>
+            <div class="col-sm-9 col-xs-12">
+            	<div class="well">
+            		<table class="table table-bordered well-table">
+            			<thead>
+            				<tr>
+            					<th>Øvelse</th>
+            					<th>Set</th>
+            					<th>Reps</th>
+            					<th>Vekt</th>
+            					<th>Notat</th>
+            				</tr>
+            			</thead>
+            			<tbody>
+            			{% for element in model %}
+            				<tr>
+            					<td>{{element.day_excersice.base_excersice.name}}</td>
+            					<td>{{element.set_number}}</td>
+            					<td>{{element.reps}}</td>
+            					<td>{{element.weight}}</td>
+            					<td>{{element.note}}</td>
+            				<tr>
+            				{% endfor %} 
+            			</tbody>
+            		</table>
+            	</div>
+            </div>
+ </div>
+
+{% endblock %}

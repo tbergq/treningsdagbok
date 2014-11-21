@@ -136,7 +136,21 @@ class ShowRegisteredExercises(TemplateView):
         return self.render_to_response(context)
     
     
+class ShowWorkout(TemplateView):
     
+    template_name = 'Workout/show_workout.html'
+    
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        dayRegisterId = kwargs['day_register_id']
+        context = {'model' : workout_models.ExcerciseRegister.objects.filter(day_register_id=dayRegisterId)}
+        context['name'] = context['model'][0].day_register.day_program.name
+        print len(context)
+        return self.render_to_response(context)
+
 
 class StartDayRegister(RedirectView):
     
