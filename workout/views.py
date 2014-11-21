@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from programs import models as program_models, BO
 from account import models as account_models
 from django.shortcuts import redirect, render, render_to_response

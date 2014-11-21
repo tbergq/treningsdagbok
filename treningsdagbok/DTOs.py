@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from programs import models as program_models
 from workout import models as workout_models
 

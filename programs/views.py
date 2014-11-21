@@ -149,10 +149,12 @@ class AddExerciseToDay(FormView):
     
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
+        print "get"
         day_id = kwargs['day_id']
         """form = self.form_class(
                 initial={'day_program' : day_id}
             )"""
+        print "return"
         return render(request, self.template_name, self.get_dictonary(day_id))
             
     @method_decorator(login_required)

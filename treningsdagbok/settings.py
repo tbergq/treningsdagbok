@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for treningsdagbok project.
 
@@ -98,6 +99,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)

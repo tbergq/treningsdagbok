@@ -14,9 +14,12 @@ class BaseExercise(models.Model):
     name = models.CharField(max_length=128)
     user = models.ForeignKey(UserProfile)
     
-    def __str__(self):
+    """def __str__(self):
         return "%s - %s" % (self.muscle_group, self.name)
-
+"""
+    def __str__(self):
+        return self.name
+    
     class Meta:
         unique_together = ('name', 'user',)
 
