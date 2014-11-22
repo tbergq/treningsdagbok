@@ -17,8 +17,8 @@ class BaseExercise(models.Model):
     """def __str__(self):
         return "%s - %s" % (self.muscle_group, self.name)
 """
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return "%s - %s" % (self.muscle_group ,self.name)
     
     class Meta:
         unique_together = ('name', 'user',)
@@ -31,7 +31,7 @@ class DayProgram(models.Model):
     name = models.CharField(max_length=128)
     week = models.ForeignKey(Week)
     
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
 class DayExcersice(models.Model):
@@ -40,6 +40,7 @@ class DayExcersice(models.Model):
     reps = models.CharField(max_length=128)
     day_program = models.ForeignKey(DayProgram)
     description = models.CharField(max_length=128, null=True)
+    break_time = models.TextField(max_length=10,default="2")
 
 
 

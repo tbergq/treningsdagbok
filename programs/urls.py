@@ -13,5 +13,6 @@ urlpatterns = patterns('',
         url(r'^add_exercise_to_day/(?P<day_id>\w+)/$', AddExerciseToDay.as_view(),name='add_exercise_to_day'),
         url(r'^show_day/(?P<day_id>\w+)/$', ShowDayPartialView.as_view(),name='show_day'),
         url(r'^add_days/$', AddDays.as_view(),name='add_days'),
+        url(r'^get_muscle_groups/$', views.get_muscle_groups,name='get_muscle_groups'),
         )
 

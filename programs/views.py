@@ -2,24 +2,21 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from programs import forms
-from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
 from account.models import UserProfile
 from programs.models import BaseExercise, Program, Week, DayProgram
 import datetime
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.base import TemplateView, RedirectView
-from BO import WeekService
+from BO import WeekService, BaseExerciseService
 from viewmodels import MyProgramsViewModel, ShowDayViewModel
-from django.template.base import kwarg_re
 from django.utils.decorators import method_decorator
-from django.conf.global_settings import LOGIN_URL
+from django.http import JsonResponse
+from django.http.response import HttpResponse
 
 weekService = WeekService()
+base_exercise_service = BaseExerciseService()
 def get_user(request):
     return UserProfile.objects.get(user=request.user)
 
@@ -174,7 +171,7 @@ class AddExerciseToDay(FormView):
 
     def get_dictonary(self, day_id):
         form = self.form_class(
-                initial={'day_program' : day_id}
+                initial={'day_program' : day_id, 'break_time' : ''}
             )
         return {'form' : form}
 
@@ -217,4 +214,14 @@ class AddDays(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return self.url
 
+    
+    
+    
+@login_required(login_url='/account/')
+def get_muscle_groups(request):
+    names = base_exercise_service.get_distinct_muscle_groups()
+    return JsonResponse(names, safe=False)
+    
+    
+    
     

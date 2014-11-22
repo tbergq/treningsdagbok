@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from models import Week, Program, DayExcersice, DayProgram
+from django.db import models
 
 class WeekService:
     repository = Week
@@ -31,3 +32,18 @@ class DayProgramService:
         day_program = DayProgram.objects.get(pk=day_exercise.day_program.id)
         print "day program_id: %s" % day_program.id
         return day_program
+    
+class BaseExerciseService(models.Manager):
+    
+    def get_distinct_muscle_groups(self):
+        from django.db import connection
+        muscle_groups = []
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT distinct muscle_group FROM Treningsdagbok.programs_baseexercise""")
+        for name in cursor.fetchall():
+            muscle_groups.append(name)
+        return muscle_groups
+    
+    
+    
