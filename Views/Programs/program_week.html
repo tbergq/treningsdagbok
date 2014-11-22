@@ -3,47 +3,24 @@
 {% block body_block %}
     <div class="row">
         <div class="col-md-9 col-md-offset-3">
-            <h2>Legg til uke</h2>
+            <h2>Registrer program</h2>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-3">
             {% include "Programs/side_menu.html" %}
         </div>
-        <form action="/programs/add_week/{{program.id}}/" method="post">
-            {% csrf_token %}
+                
         <div class="col-xs-12 col-sm-9">
-            <div class="well">
-
-
-        {% for element in form %}
-            <div class="form-group">
-                <label>{{element.label_tag}}</label>
-                {{element}}
-                {{element.errors}}
-            </div>
-        {% endfor %}
-
-            </div>
-            <input type="submit" class="btn btn-primary pull-right" value="Lagre">
-        </div>
-            </form>
-    </div>
-
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="well">
-                    <h3 class="text-center">{{program.name}}</h3>
+	        <div class="well">
+            	<h3 class="text-center">{{program.name}}</h3>
                     <table class="table table-bordered well-table">
                         <thead>
-
                             <tr>
-
                                 <th id="1"></span></th>
                                 <th>Navn</th>
                                 <th></th>
                             </tr>
-
                         </thead>
                         <tbody>
                         {% for week in weeks %}

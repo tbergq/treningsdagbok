@@ -111,36 +111,19 @@ def show_excercises(request):
     return render_to_response(view, dictionary, context)
 
 
-class CreateWeek(FormView):
-    template_name = 'Programs/add_week.html'
-    form_class = forms.WeekForm
-    success_url = '/programs/'
-
-    @method_decorator(login_required)
-    def get(self, request, program_id):
-        form = self.form_class
-        program = Program.objects.get(pk=program_id)
-        weeks_of_program = weekService.get_all_from_Program_id(program_id)
-        return render(request, self.template_name, {'form': form, 'program' : program, 'weeks' : weeks_of_program})
-
-    def form_valid(self, form):
-        print 'pala'
-        return super(CreateWeek, self).form_valid(form)
-
-    @method_decorator(login_required)
-    def post(self, request, program_id):
-        form = self.form_class(data=request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.program = Program.objects.get(pk=program_id)
-            form.save()
-            return redirect(self.success_url)
-        else:
-            return render(request, self.template_name, self.get_dict(form, program_id))
-
-    def get_dict(self, form, program_id):
-        dict = {'form' : form, 'program' : Program.objects.get(pk=program_id), 'weeks': weekService.get_all_from_Program_id(program_id)}
-        return dict
+class ProgramWeeks(TemplateView):
+    template_name = 'Programs/program_week.html'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        context = {'program' : Program.objects.get(pk=kwargs['program_id']),
+                   'weeks' : Week.objects.filter(program_id=kwargs['program_id'])
+                   }
+        return render(request, self.template_name, context)
+   
 
 
 class AddDayProgram(TemplateView):

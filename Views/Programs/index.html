@@ -30,10 +30,10 @@
                     			<td>{{program.program.name}}</td>
                     			<td>{{program.program.date}}</td>
                     			<td>                    			
-                    			<button class="btn btn-xs btn-success">
+                    			<a href="{% url 'program_week' program.program.id %}" class="btn btn-xs btn-success">
                     				<span class="glyphicon glyphicon-edit"></span>
                     				Rediger
-                    			</button>
+                    			</a>
                     			<a class="btn btn-primary btn-xs margin-left" href="/programs/add_week/{{program.program.id}}/">
                     				<span class="glyphicon glyphicon-plus"></span>
                     				Legg til Uke
