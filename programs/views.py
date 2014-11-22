@@ -12,11 +12,12 @@ from account.models import UserProfile
 from programs.models import BaseExercise, Program, Week, DayProgram
 import datetime
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView, View
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 from BO import WeekService
 from viewmodels import MyProgramsViewModel, ShowDayViewModel
 from django.template.base import kwarg_re
 from django.utils.decorators import method_decorator
+from django.conf.global_settings import LOGIN_URL
 
 weekService = WeekService()
 def get_user(request):
@@ -188,10 +189,32 @@ class ShowDayPartialView(TemplateView):
         return render(request, self.template_name, {'model' : model})
         
     
+class AddDays(RedirectView):
+    url = '/programs/program_week'
+   
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
         
         
+    def post(self, request, *args, **kwargs):
+        program = Week.objects.get(pk=request.POST.get('[0].week_id')).program
+        self.url = "%s/%s/" % (self.url, program.id)
+        number_of_weeks = (len(request.POST) - 1) / 2
+        day_objects = []
+        for i in range(number_of_weeks):
+            week_query_helper = "[%s].week_id" % i
+            number_of_days_helper = "[%s].day_number" % i
+            number_of_days = request.POST.get(number_of_days_helper, 0)
+            week_object = Week.objects.get(pk=request.POST.get(week_query_helper))
+            for j in range(int(number_of_days)):
+                day_name = 'Dag %s' % (j + 1)
+                day_objects.append(DayProgram(name=day_name, week=week_object))
+        for element in day_objects:
+            element.save() 
+        return RedirectView.post(self, request, *args, **kwargs)
         
-        
-        
+    def get_redirect_url(self, *args, **kwargs):
+        return self.url
 
     

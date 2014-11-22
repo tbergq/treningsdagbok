@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 from programs import views
-from programs.views import ProgramWeeks, AddDayProgram, AddExerciseToDay, ShowDayPartialView
+from programs.views import ProgramWeeks, AddDayProgram, AddExerciseToDay, ShowDayPartialView, AddDays
 
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
@@ -12,5 +12,6 @@ urlpatterns = patterns('',
         url(r'^add_day/(?P<week_id>\w+)/$', AddDayProgram.as_view(),name='add_day'),
         url(r'^add_exercise_to_day/(?P<day_id>\w+)/$', AddExerciseToDay.as_view(),name='add_exercise_to_day'),
         url(r'^show_day/(?P<day_id>\w+)/$', ShowDayPartialView.as_view(),name='show_day'),
+        url(r'^add_days/$', AddDays.as_view(),name='add_days'),
         )
 
