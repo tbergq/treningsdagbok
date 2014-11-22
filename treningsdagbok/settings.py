@@ -80,12 +80,7 @@ WSGI_APPLICATION = 'treningsdagbok.wsgi.application'
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    """'default': {
-        'NAME': 'Treningsdagbok',
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'PASSWORD': '',
-    }"""
+    
     'default' : {
         'NAME': 'tbergq$Treningsdagbok',
         'ENGINE': 'django.db.backends.mysql',
