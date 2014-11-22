@@ -38,12 +38,12 @@ TEMPLATE_DIRS = (
 SECRET_KEY = 'eua&yy-q3+dsz@v#esfe9arej5c5_b+@#^z5e4u)5x07!$vl-)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['tbergq.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,11 +82,10 @@ WSGI_APPLICATION = 'treningsdagbok.wsgi.application'
 DATABASES = {
     
     'default' : {
-        'NAME': 'tbergq$Treningsdagbok',
+        'NAME': 'Treningsdagbok',
         'ENGINE': 'django.db.backends.mysql',
-        'USER': 'tbergq',
-        'PASSWORD': 'F!abc123',
-        'HOST' :  'mysql.server',
+        'USER': 'root',
+        'PASSWORD': '',
                  }
 }
 
