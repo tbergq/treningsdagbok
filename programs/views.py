@@ -34,11 +34,26 @@ def new_program(request):
         program.user = UserProfile.objects.get(user=request.user)
         program.name = request.POST.get('name', False)
         program.date = datetime.datetime.now()
-        if not program.name:
-            dictonary['error'] = 'navn maa fylles inn'
+        number_of_weeks = request.POST.get('weeks', False)
+        try:
+            int(number_of_weeks)
+        except:
+            dictonary['error'] = 'Antall uker må være et nummer'
             return render_to_response(view, dictonary, context)
-        else:
+        if not program.name:
+            dictonary['error'] = 'Navn må fylles inn'
+            return render_to_response(view, dictonary, context)
+        elif not number_of_weeks:
+            dictonary['error'] = 'Antall uker må fylles inn'
+            return render_to_response(view, dictonary, context)
+        else:            
             program.save()
+            for i in range(int(number_of_weeks)):
+                week = Week()
+                
+                week.program = program
+                week.name = 'Uke %s' % (i + 1)
+                week.save()
             return redirect('/programs/add_week/%d' % program.id)
 
 
