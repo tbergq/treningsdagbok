@@ -2,6 +2,8 @@
 from django import forms
 from programs.models import BaseExercise, Week, DayProgram, DayExcersice
 from account.models import UserProfile
+from django.core.exceptions import ValidationError
+import re
 
 name_field = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=128, help_text="Navn")
 required_dic = {'required' : 'Feltet er påkrevd'}
@@ -64,6 +66,31 @@ class DayForm(forms.ModelForm):
 
 class DayExerciseForm(forms.ModelForm):
     
+    
+        
+    def clean_set(self):
+        
+        data = self.cleaned_data['set']
+        values = data.split("-")
+        if len(values) > 2:
+            raise forms.ValidationError("Må være et tall eller to tall skilt med -")
+        for number in values:
+            try:
+                int(number)
+            except:
+                raise forms.ValidationError("Må være et tall eller to tall skilt med -")
+        return data
+        
+    """def clean_reps(self):
+        reps = self.cleaned_data['reps']
+        regex_comma = r'^[\d+,\d+]+$'
+        regex_hyphen = r'[\d+-\d+]$'
+        comma_match = re.match(regex_comma, reps)
+        hyphen_match = re.match(regex_hyphen, reps)
+        if not comma_match and not hyphen_match:
+            raise forms.ValidationError("Må være på formen 8,6,4, eller 8-12")
+        return reps"""
+    
     class Meta:
         model = DayExcersice
         fields = ('base_excersice', 'set', 'reps', 'day_program', 'description', 'break_time')
@@ -87,15 +114,15 @@ class DayExerciseForm(forms.ModelForm):
         }
         
         error_messages = {
-            'set' : required_dic,
+            'set' : {'required' : 'Feltet er påkrevd', 'format-error' : 'test pala'},
             'reps' : required_dic,
             'base_excersice' : required_dic,
             'day_program' : required_dic,
-            'description' : required_dic,
+            
             'break_time': required_dic,
         }
     
-    
+        
     
     
     

@@ -14,14 +14,11 @@ class BaseExercise(models.Model):
     name = models.CharField(max_length=128)
     user = models.ForeignKey(UserProfile)
     
-    """def __str__(self):
-        return "%s - %s" % (self.muscle_group, self.name)
-"""
     def __unicode__(self):
         return "%s - %s" % (self.muscle_group ,self.name)
     
     class Meta:
-        unique_together = ('name', 'user',)
+        unique_together = ('name', 'muscle_group',)
 
 class Week(models.Model):
     name = models.CharField(max_length=128)
@@ -39,7 +36,7 @@ class DayExcersice(models.Model):
     set = models.CharField(max_length=10)
     reps = models.CharField(max_length=128)
     day_program = models.ForeignKey(DayProgram)
-    description = models.CharField(max_length=128, null=True)
+    description = models.CharField(max_length=128, null=True, blank=True)
     break_time = models.TextField(max_length=10,default="2")
 
 

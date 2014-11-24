@@ -33,26 +33,36 @@ def new_program(request):
         program.name = request.POST.get('name', False)
         program.date = datetime.datetime.now()
         number_of_weeks = request.POST.get('weeks', False)
+        days_pr_week = request.POST.get('days_pr_week', False)
         try:
             int(number_of_weeks)
+            int(days_pr_week)
         except:
-            dictonary['error'] = 'Antall uker må være et nummer'
+            dictonary['error'] = 'Antall uker/Dager pr uke må være et nummer'
+            dictonary['name'] = request.POST.get('name', False)
             return render_to_response(view, dictonary, context)
         if not program.name:
             dictonary['error'] = 'Navn må fylles inn'
+            dictonary['name'] = request.POST.get('name', False)
             return render_to_response(view, dictonary, context)
         elif not number_of_weeks:
             dictonary['error'] = 'Antall uker må fylles inn'
+            dictonary['name'] = request.POST.get('name', False)
             return render_to_response(view, dictonary, context)
         else:            
             program.save()
             for i in range(int(number_of_weeks)):
                 week = Week()
-                
                 week.program = program
                 week.name = 'Uke %s' % (i + 1)
                 week.save()
-            return redirect('/programs/add_week/%d' % program.id)
+                for j in range(int(days_pr_week)):
+                    day = DayProgram()
+                    day.name = "Dag %s" % (j + 1)
+                    day.week = week
+                    day.save()
+                
+            return redirect('/programs/')
 
 
 @login_required
@@ -104,7 +114,7 @@ def show_excercises(request):
     view = 'Programs/show_excercises.html'
     context = RequestContext(request)
     dictionary = {}
-    excercises = BaseExercise.objects.filter(user=get_user(request)).order_by('muscle_group')#.all()
+    excercises = BaseExercise.objects.all().order_by('muscle_group')
     dictionary['excercises'] = excercises
     return render_to_response(view, dictionary, context)
 
@@ -117,13 +127,31 @@ class ProgramWeeks(TemplateView):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        context = {'program' : Program.objects.get(pk=kwargs['program_id']),
-                   'weeks' : Week.objects.filter(program_id=kwargs['program_id'])
+        model = MyProgramsViewModel(kwargs['program_id'])
+        context = {'model' : model
                    }
         return render(request, self.template_name, context)
    
-
-
+    
+        
+class AddWeek(RedirectView):
+    url = '/programs/program_week/'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        selected_program = Program.objects.get(pk=request.POST.get('program_id'))
+        week_number = len(Week.objects.filter(program=selected_program)) + 1
+        
+        week = Week(name="Uke %s" % (week_number),program=selected_program)
+        week.save()
+        self.url = "%s%s/" % (self.url, selected_program.id)
+        return RedirectView.post(self, request, *args, **kwargs)
+    
+    
+    
 class AddDayProgram(TemplateView):
     template_name = 'Programs/add_day.html'
     
@@ -141,7 +169,7 @@ class AddDayProgram(TemplateView):
 class AddExerciseToDay(FormView):
     template_name = 'Programs/add_exercise_to_day.html'
     form_class = forms.DayExerciseForm
-    success_url = '/programs/'
+    success_url = '/programs/program_week'
     
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
@@ -162,7 +190,9 @@ class AddExerciseToDay(FormView):
             form = form.save(commit=True)
             if another:
                 return redirect('/programs/add_exercise_to_day/%s' % day_id)
-            return redirect(self.success_url)
+            
+            program = DayProgram.objects.get(pk=day_id).week.program.id
+            return redirect("%s/%s/" % (self.success_url, program))
         else:
             print "form not valid"
             return render(request, self.template_name, {'form' : form})
@@ -184,7 +214,15 @@ class ShowDayPartialView(TemplateView):
         model = ShowDayViewModel(day_id)
         
         return render(request, self.template_name, {'model' : model})
-        
+
+
+def add_day(request, week_id):
+    selected_week = Week.objects.get(pk=week_id)
+    number_of_days = len(DayProgram.objects.filter(week=selected_week)) + 1
+    day_name = "Dag %s" % number_of_days
+    day = DayProgram(name=day_name,week=selected_week)
+    day.save()
+    return redirect('/programs/program_week/%s' % selected_week.program.id)
     
 class AddDays(RedirectView):
     url = '/programs/program_week'
