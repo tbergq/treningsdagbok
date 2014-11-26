@@ -17,10 +17,10 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-sm-3 col-xs-12">
                 {% include "Programs/side_menu.html" %}
             </div>
-            <div class="col-xs-9">
+            <div class="col-xs-12 col-sm-9">
                 <div class="well">
                     <form action="/programs/create_exercise/" method="post">
                         {% csrf_token %}

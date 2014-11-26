@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block body_block %}
     <div class="row">
         <div class="col-md-9 col-md-offset-3">
@@ -22,6 +22,7 @@
                                 <th id="1"></th>
                                 <th>Uke</th>
                                 <th>Dager</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -41,9 +42,16 @@
                                				{{day.day_program.name}}
                                				</td>
                                				<td>
-                               					<a href="{% url 'add_exercise_to_day' day.day_program.id %}" class="btn btn-xs btn-success">Vis dag</a>
-                               					<a href="#" class="btn btn-xs btn-danger">Slett dag</a>
+                               					<button data-url="{% url 'show_day' day.day_program.id %}" class="btn btn-sm btn-success show-day"
+                               					onclick="showDayClick(this)">
+                               						Vis dag
+                               					</button>
+                               					<button data-url="{% url 'delete_confirmation' day.day_program.id %}" class="btn btn-sm btn-danger"
+                               					onclick="clickLoadWarning(this)">
+                               						Slett dag
+                               					</button>
                                				</td>
+                               				<td><div class="hidden-xs">Øvelser:</div>{{day.number_of_exercises}}</td>
                                			</tr>
                                		{% endfor %}
                                	</table>
@@ -65,5 +73,21 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalDiv">{% include 'Shared/modal.html' %}</div>
+
+{% block js %}
+	<script type="text/javascript" src="{% static 'scripts/programs/programWeekModal.js' %}"></script>
+<!--
+
+//-->
+</script>
+{% endblock %}
        
 {% endblock %}
+
+
+
+
+
+

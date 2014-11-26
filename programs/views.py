@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from programs import forms
 from account.models import UserProfile
-from programs.models import BaseExercise, Program, Week, DayProgram
+from programs.models import BaseExercise, Program, Week, DayProgram, DayExcersice
 import datetime
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.base import TemplateView, RedirectView
@@ -155,7 +155,7 @@ class AddWeek(RedirectView):
 class AddDayProgram(TemplateView):
     template_name = 'Programs/add_day.html'
     
-    @method_decorator(login_required)
+    @method_decorator(login_required(login_url='account/login/'))
     def get(self,request, *args, **kwargs):    
         return render(request, self.template_name, {'week' : kwargs['week_id']})
     
@@ -165,6 +165,39 @@ class AddDayProgram(TemplateView):
         day.save()
         return redirect('/programs/')
 
+
+class DeleteDayProgram(TemplateView):
+    template_name = 'Programs/delete_confirmation.html'
+    
+    def get_context_data(self, **kwargs):
+        day_program_id = kwargs['day_id']
+        return {'model' : DayProgram.objects.get(pk=day_program_id)}
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+
+class DeleteDayProgramRedirect(RedirectView):
+    
+    def __init__(self):
+        self.program_id = 0
+    
+    def post(self, request, *args, **kwargs):
+        print "delete redirect"
+        day_program_id = kwargs['day_id']
+        day_program = DayProgram.objects.get(pk=day_program_id)
+        self.program_id = day_program.week.program.id
+        DayExcersice.objects.filter(day_program=day_program).delete()
+        day_program.delete()
+        return RedirectView.post(self, request, *args, **kwargs)
+    
+    def get_redirect_url(self, *args, **kwargs):
+        url = '/programs/program_week/%s/' % self.program_id
+        return url
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
     
 class AddExerciseToDay(FormView):
     template_name = 'Programs/add_exercise_to_day.html'

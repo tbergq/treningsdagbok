@@ -8,6 +8,7 @@ class DayProgramViewModel:
         self.exercise = []
         for ex in models.DayExcersice.objects.filter(day_program=dayProgram):
             self.exercise.append(ShowExersiceViewModel(ex))
+        self.number_of_exercises = len(self.exercise)
         
 class WeekViewModel:
     

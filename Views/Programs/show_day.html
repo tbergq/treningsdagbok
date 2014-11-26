@@ -9,6 +9,7 @@
 					<th>Øvelse</th>
 					<th>Sets</th>
 					<th>Reps</th>
+					<th>Pause</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -18,6 +19,7 @@
 				<td>{{element.name}}</td>
 				<td>{{element.exercise.set}}</td>
 				<td>{{element.exercise.reps}}</td>
+				<td>{{element.exercise.break_time}} min</td>
 			</tr>
 			
 			
@@ -27,3 +29,5 @@
 		</table>
 	</div>
 </div>
+
+<script>var dayProgramId = '{{model.program.id}}';</script>
