@@ -14,7 +14,7 @@ $(document).ready(
 					type : "POST",
 					data : $("#partialForm").serialize()
 				}).done(function(data) {
-					$("#registerDiv").html(data);
+					$(".modal-body").html(data);
 				});
 			});
 			getPreviousSetData(ex_id);

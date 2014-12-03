@@ -79,7 +79,6 @@ class RegisterPartial(FormView):
         return FormView.get(self, request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        print "post"
         day_id = kwargs['day_id']
         exercise_id = kwargs['exercise_id']
         self.success_url = '/workout/register_partial/%s/%s/' % (day_id,exercise_id)
@@ -101,6 +100,7 @@ class RegisterPartial(FormView):
         
         set_number = len(previous_sets) + 1
         
+        
         return {
                 'day_excersice' : self.initial['exercise_id'], 
                 'day_register' : day_register ,
@@ -110,6 +110,7 @@ class RegisterPartial(FormView):
                 'note' : '' ,
                 'day_id' : self.initial['day_id'],
                 'previous_sets' : previous_sets,
+                
         }
     
 

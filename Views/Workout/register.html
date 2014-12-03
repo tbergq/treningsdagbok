@@ -50,7 +50,8 @@
             			<td>{{element.sets}}</td>
             			<td>{{element.reps}}</td>
             			<td>
-            			<button class="btn btn-xs btn-success register-button" id="{{element.id}}" onclick="loadRegisterPartial(this)")>
+            			<button class="btn btn-xs btn-success register-button" id="{{element.id}}" onclick="loadRegisterPartial(this)")
+            			data-name="{{element.name}}, Sets: {{element.sets}}, Reps: {{element.reps}}">
             				<span class="glyphicon glyphicon-edit"></span>
             			</button>
             			</td>
@@ -70,10 +71,8 @@
 
 
 <div class="row">
-	<div class="col-xs-12 col-sm-9 col-sm-offset-3">	
-		<div id="registerDiv">
-		
-		</div>
+	<div class="col-xs-12">	
+		{% include 'Shared/modal.html' %}
 	</div>
 </div>
 
