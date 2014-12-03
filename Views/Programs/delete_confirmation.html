@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="alert alert-danger">
-			Er du sikker på at du ønsker å slette {{model.name}} ?
+			Er du sikker på at du ønsker å slette {{model.name}}?
 		</div>
 		<form action="{% url 'delete_day_program' model.id %}" method="post">
 			{% csrf_token %}
