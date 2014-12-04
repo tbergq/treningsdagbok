@@ -320,8 +320,21 @@ class DeleteWeek(RedirectView):
         week = Week.objects.get(pk=kwargs['week_id'])
         self.program_id = week.program_id
         week.delete()
+        weekService.rename_weeks(self.program_id)
         return RedirectView.post(self, request, *args, **kwargs)
+
+class CopyWeek(RedirectView):
     
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return '/programs/program_week/%s/' % Week.objects.get(pk=kwargs['week_id']).program_id
+    
+    def post(self, request, *args, **kwargs):
+        weekService.copy_week_from_week_id(kwargs['week_id'])
+        return RedirectView.post(self, request, *args, **kwargs)
     
     
 @login_required(login_url='/account/')

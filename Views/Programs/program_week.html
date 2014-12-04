@@ -36,6 +36,10 @@
                                 	onclick="clickLoadWarning(this)">
                                 		Slett uke
                                 	</button>
+                                	<form action="{% url 'copy_week' week.week.id %}" method="post">
+                                		{% csrf_token %}
+                                		<button class="btn btn-xs btn-success" type="submit">Kopier</button>
+                                	</form>
                                 </td>
                                <!--   <td><a href="/programs/add_day/{{week.id}}/">Legg til dag</a></td>-->
                                <td> 
