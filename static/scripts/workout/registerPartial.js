@@ -8,7 +8,7 @@ $(document).ready(
 
 			$("#partialForm").on('submit', function(e) {
 				e.preventDefault();
-				console.log("yo!!!!");
+				$("#submitPartialButton").attr('disabled', true);
 				$.ajax({
 					url : $("#partialForm").attr('action'),
 					type : "POST",
@@ -18,6 +18,7 @@ $(document).ready(
 				});
 			});
 			getPreviousSetData(ex_id);
+			$("#submitPartialButton").attr('disabled', false);
 		});
 
 

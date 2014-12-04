@@ -171,7 +171,10 @@ class DeleteDayProgram(TemplateView):
     
     def get_context_data(self, **kwargs):
         day_program_id = kwargs['day_id']
-        return {'model' : DayProgram.objects.get(pk=day_program_id)}
+        return {
+                'model' : DayProgram.objects.get(pk=day_program_id),
+                'url' : '/programs/delete_day_program/%s/' % day_program_id,
+                }
     
     @method_decorator(login_required(login_url='account/login/'))
     def dispatch(self, request, *args, **kwargs):
@@ -183,7 +186,7 @@ class DeleteDayProgramRedirect(RedirectView):
         self.program_id = 0
     
     def post(self, request, *args, **kwargs):
-        print "delete redirect"
+        
         day_program_id = kwargs['day_id']
         day_program = DayProgram.objects.get(pk=day_program_id)
         self.program_id = day_program.week.program.id
@@ -285,6 +288,39 @@ class AddDays(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return self.url
 
+
+class DeleteWeekConfirmation(TemplateView):
+    
+    template_name = 'Programs/delete_confirmation.html'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = {
+                   'model' : Week.objects.get(pk=kwargs['week_id']),
+                   'url' : '/programs/delete_week/%s/' % kwargs['week_id'],
+                   }
+        return context
+    
+class DeleteWeek(RedirectView):
+    
+    def __init__(self):
+        self.program_id = 0
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return '/programs/program_week/%s/' % self.program_id
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return RedirectView.dispatch(self, request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        week = Week.objects.get(pk=kwargs['week_id'])
+        self.program_id = week.program_id
+        week.delete()
+        return RedirectView.post(self, request, *args, **kwargs)
     
     
     

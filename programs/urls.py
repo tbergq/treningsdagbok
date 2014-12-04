@@ -18,5 +18,7 @@ urlpatterns = patterns('',
         url(r'^add_one_day/(?P<week_id>\w+)/$', views.add_day,name='add_one_day'),
         url(r'^delete_confirmation/(?P<day_id>\w+)/$', views.DeleteDayProgram.as_view(),name='delete_confirmation'),
         url(r'^delete_day_program/(?P<day_id>\w+)/$', views.DeleteDayProgramRedirect.as_view(),name='delete_day_program'),
+        url(r'^delete_week_confirmaiton/(?P<week_id>\w+)/$', views.DeleteWeekConfirmation.as_view(),name='delete_week_confirmation'),
+        url(r'^delete_week/(?P<week_id>\w+)/$', views.DeleteWeek.as_view(),name='delete_week'),
         )
 

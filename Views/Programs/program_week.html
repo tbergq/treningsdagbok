@@ -32,6 +32,10 @@
                                 <td>
                                 {{week.week.name}} </br>
                                 	<a href="{% url 'add_one_day' week.week.id %}" class="btn btn-xs btn-success">Legg til dag</a>
+                                	<button class="btn btn-xs btn-danger" data-url="{% url 'delete_week_confirmation' week.week.id %}"
+                                	onclick="clickLoadWarning(this)">
+                                		Slett uke
+                                	</button>
                                 </td>
                                <!--   <td><a href="/programs/add_day/{{week.id}}/">Legg til dag</a></td>-->
                                <td> 

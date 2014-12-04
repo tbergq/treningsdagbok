@@ -3,7 +3,7 @@
 		<div class="alert alert-danger">
 			Er du sikker på at du ønsker å slette {{model.name}}?
 		</div>
-		<form action="{% url 'delete_day_program' model.id %}" method="post">
+		<form action="{{url}}" method="post">
 			{% csrf_token %}
 			<button class="btn btn-default" data-dismiss="modal">Avbryt</button>
 			<input type="submit" class="btn btn-danger" value="Slett">			
