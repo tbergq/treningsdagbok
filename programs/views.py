@@ -342,6 +342,11 @@ def get_muscle_groups(request):
     names = base_exercise_service.get_distinct_muscle_groups()
     return JsonResponse(names, safe=False)
     
+class DeleteDayExercise(DeleteView):
+    template_name = 'Programs/delete_day_exercise_confirmation.html'
+    model = DayExcersice
     
+    def get_success_url(self):
+        return '/programs/add_exercise_to_day/%s/' % self.object.day_program_id
     
     

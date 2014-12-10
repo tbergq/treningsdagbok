@@ -39,7 +39,8 @@ class DayExcersice(models.Model):
     description = models.CharField(max_length=128, null=True, blank=True)
     break_time = models.TextField(max_length=10,default="2")
 
-
+    def __unicode__(self):
+        return self.base_excersice.name
 
 
 

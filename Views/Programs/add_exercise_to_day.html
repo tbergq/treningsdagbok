@@ -16,22 +16,7 @@
         		<form action="" method="post">
         			{% csrf_token %}
         		<h4>Legg til øvelse til dag {{form.day_program}}</h4>        		        		
-        			<!-- <div class="form-group">
-        				<label>{{form.base_excersice.label_tag}}</label>
-        				{{form.base_excersice}}
-        				{{form.base_exersice.errors}}
-        			</div>
-        		
-        			<div class="form-group">
-        				<label>{{form.set.label_tag}}</label>
-        				{{form.set}}
-        				{{form.set.errors}}
-        			</div>
-        			<div class="form-group">
-        				<label>{{form.reps.label_tag}}</label>
-        				{{form.reps}}
-        				{{form.reps.errors}}
-        			</div> -->
+        			
         			{% for element in form.visible_fields %}
         				<div class="form-group">
         					<label>{{element.label_tag}}</label>

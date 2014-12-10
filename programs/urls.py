@@ -21,5 +21,6 @@ urlpatterns = patterns('',
         url(r'^delete_week_confirmaiton/(?P<week_id>\w+)/$', views.DeleteWeekConfirmation.as_view(),name='delete_week_confirmation'),
         url(r'^delete_week/(?P<week_id>\w+)/$', views.DeleteWeek.as_view(),name='delete_week'),
         url(r'^copy_week/(?P<week_id>\w+)/$', views.CopyWeek.as_view(),name='copy_week'),
+        url(r'^delete_day_exercise_confirmation/(?P<pk>\w+)/$', views.DeleteDayExercise.as_view(),name='delete_day_exercise'),
         )
 

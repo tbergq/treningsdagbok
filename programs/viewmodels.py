@@ -35,6 +35,7 @@ class ShowExersiceViewModel:
     def __init__(self, exercise_object):
         self.exercise = exercise_object
         self.name = exercise_object.base_excersice.name
+        
     
 class ShowDayViewModel:
     
