@@ -1,21 +1,19 @@
-{% extends "base.html" %}
 
-    {% block body_block %}
     
     <div class="row margin-top">
     	<div class="col-xs-12">
-    		<div class="alert alert-warning">
-    			Er du sikker på at du ønsker å slette? {{object}}
+    		<div class="alert alert-danger">
+    			Er du sikker på at du ønsker å slette {{object}}
     		</div>
     	</div>
     </div>
     <div class="row margin-bottom">
     	<div class="col-xs-12">
-    		<form action="" method="post">
+    		<form action="{% url 'delete_day_exercise' object.id %}" method="post">
     		{% csrf_token %}
-    		<a href="{% url 'add_exercise_to_day' object.day_program_id %}" class="btn btn-default">Tilbake</a>
-    			<input type="submit" class="btn btn-primary" value="Slett">
+    		
+    			<input type="submit" class="btn btn-danger" value="Slett">
     		</form>
     	</div>
     </div>
-    {% endblock %}
+    

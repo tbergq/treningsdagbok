@@ -31,14 +31,18 @@
                                 <td class="1"><!-- <span class="glyphicon glyphicon-expand"> --></td>
                                 <td>
                                 {{week.week.name}} </br>
-                                	<a href="{% url 'add_one_day' week.week.id %}" class="btn btn-xs btn-success">Legg til dag</a>
-                                	<button class="btn btn-xs btn-danger" data-url="{% url 'delete_week_confirmation' week.week.id %}"
+                                	<a href="{% url 'add_one_day' week.week.id %}" class="btn btn-sm btn-success margin-top">
+                                		<span class="glyphicon glyphicon-plus"></span> Dag
+                                	</a>
+                                	<button class="btn btn-sm btn-danger margin-top" data-url="{% url 'delete_week_confirmation' week.week.id %}"
                                 	onclick="clickLoadWarning(this)">
-                                		Slett uke
+                                		<span class="glyphicon glyphicon-trash"></span> Uke
                                 	</button>
                                 	<form action="{% url 'copy_week' week.week.id %}" method="post">
                                 		{% csrf_token %}
-                                		<button class="btn btn-xs btn-success" type="submit">Kopier</button>
+                                		<button class="btn btn-sm btn-success margin-top" type="submit" title="Lag neste uke identisk som denne uken">
+                                			Kopier
+                                		</button>
                                 	</form>
                                 </td>
                                <!--   <td><a href="/programs/add_day/{{week.id}}/">Legg til dag</a></td>-->
@@ -50,13 +54,13 @@
                                				{{day.day_program.name}}
                                				</td>
                                				<td>
-                               					<button data-url="{% url 'show_day' day.day_program.id %}" class="btn btn-sm btn-success show-day"
+                               					<button data-url="{% url 'show_day' day.day_program.id %}" class="btn btn-sm btn-primary show-day"
                                					onclick="showDayClick(this)">
                                						Vis dag
                                					</button>
                                					<button data-url="{% url 'delete_confirmation' day.day_program.id %}" class="btn btn-sm btn-danger"
                                					onclick="clickLoadWarning(this)">
-                               						Slett dag
+                               						<span class="glyphicon glyphicon-trash"></span> Dag
                                					</button>
                                				</td>
                                				<td><div class="hidden-xs">Øvelser:</div>{{day.number_of_exercises}}</td>
@@ -86,6 +90,7 @@
 
 {% block js %}
 	<script type="text/javascript" src="{% static 'scripts/programs/programWeekModal.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/programs/deleteDayExcercise.js' %}" ></script>
 <!--
 
 //-->

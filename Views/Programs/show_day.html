@@ -23,9 +23,10 @@
 				<td>{{element.exercise.break_time}} min</td>
 				<td>
 					
-						<a class="btn btn-xs btn-danger" href="{% url 'delete_day_exercise' element.exercise.id %}">
+						<button class="btn btn-xs btn-danger" data-url="{% url 'delete_day_exercise' element.exercise.id %}"
+						onclick="loadDeleteExcerciseWarning(this)">
 							<span class="glyphicon glyphicon-trash"></span>
-						</a>
+						</button>
 					
 				</td>
 			</tr>
@@ -39,3 +40,8 @@
 </div>
 
 <script>var dayProgramId = '{{model.program.id}}';</script>
+
+
+
+
+

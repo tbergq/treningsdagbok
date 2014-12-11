@@ -50,6 +50,10 @@
         	</div>
         </div>
         
+        <div>
+        	{% include 'Shared/modal.html' %}
+        </div>
+        
         
 		{% block js %}
 		<script type="text/javascript">
@@ -57,6 +61,11 @@
 			//var muscle_group_url = '{% url "get_muscle_groups" %}';
 		</script>
         <script type="text/javascript" src="{% static 'scripts/addExercise.js' %}"></script>
+        <script type="text/javascript" src="{% static 'scripts/programs/deleteDayExcercise.js' %}" ></script>
+<!--
+
+//-->
+</script>
         {% endblock %}
 
 {% endblock %}
