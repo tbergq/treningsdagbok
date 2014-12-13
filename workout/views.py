@@ -175,14 +175,34 @@ class StartDayRegister(RedirectView):
         
         return "%s%s/%s" % (self.url, kwargs['id'], kwargs['program_id'])
     
-
+@login_required
 def get_previous_register_data(request, exercise_id):
-    print "hit me"
+    
     exercises = workout_models.ExcerciseRegister.objects.filter(day_excersice_id=exercise_id).order_by('set_number')
     previous_set_weight = ""
     for i in range(len(exercises)):
         previous_set_weight += "%s x %skg, " % (exercises[i].reps, exercises[i].weight)
-    print previous_set_weight
+    
     return render_to_response('Workout/previous_register_data.html', {'text' : previous_set_weight}, RequestContext(request))
+
+@login_required
+def get_most_recent_exercise_data(request, day_exercise_id):
+    day_exercise = program_models.DayExcersice.objects.get(pk=day_exercise_id)
+    my_day_registers = workout_models.DayRegister.objects.filter(user=get_user(request)).order_by('start_time')
+    previous_info = u"Siste registrerte av samme øvelse:"
+    ready_for_return = False
+    for register in my_day_registers:
+        my_excercise_registers = workout_models.ExcerciseRegister.objects.filter(day_register=register)
+        for excercise in my_excercise_registers:
+            check_this_exercise = program_models.DayExcersice.objects.get(pk=excercise.day_excersice_id)
+            if check_this_exercise.base_excersice_id == day_exercise.base_excersice_id and check_this_exercise.id != day_exercise.id:
+                previous_info += " %s x %skg," %(excercise.reps, excercise.weight)
+                ready_for_return = True
+        if ready_for_return:
+            return render_to_response('Workout/previous_lifted.html', {'text' : previous_info}, RequestContext(request))
+    
+    return render_to_response('Workout/previous_lifted.html', {'text' : 'Ingen registrerte tidligere for denne øvelsen'}, RequestContext(request))
+
+
     
     

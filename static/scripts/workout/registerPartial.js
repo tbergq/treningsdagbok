@@ -18,6 +18,7 @@ $(document).ready(
 				});
 			});
 			getPreviousSetData(ex_id);
+			getPreviousLifted(ex_id);
 			$("#submitPartialButton").attr('disabled', false);
 		});
 
@@ -31,3 +32,14 @@ function getPreviousSetData(id) {
 		$("#previousDiv").html(data);
 	});
 }
+
+function getPreviousLifted(id) {
+	$.ajax({
+		url: "/workout/previous_lifted/" + id + "/",
+		type : "GET"
+	}).done(function(data){
+		$("#previousLiftedDiv").html(data);
+	})
+}
+
+

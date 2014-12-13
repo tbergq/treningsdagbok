@@ -97,7 +97,7 @@ def create_exercise(request):
             try:
                 excercise.save()
             except:
-                dictionary['error'] = "Ovelsen eksisterer allerede"
+                dictionary['error'] = "Øvelsen eksisterer allerede"
                 return  render_to_response(view, dictionary,context)
             add_another = request.POST.get('other', False)
             if add_another:
