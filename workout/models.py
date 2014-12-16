@@ -10,6 +10,8 @@ class DayRegister(models.Model):
     user = models.ForeignKey(account_models.UserProfile)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True)
+    
+    
 
     
 

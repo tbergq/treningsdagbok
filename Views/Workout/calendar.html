@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+
+<script>
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+    	header : {
+    	    left:   'title',
+    	    center: '',
+    	    right:  'today prev,next'
+    	},
+    	buttonText: {
+			today : "I dag"
+        },
+        monthNames : 
+			['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember'],
+		firstDay :1,
+		dayNamesShort : 
+			['Søn', 'Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør'],
+		events : '/workout/get_calendar_events/',
+		eventClick: function(calEvent, jsEvent, view) {
+
+	        $.ajax({
+		        url : "/workout/show_workout/" + calEvent.id + "/",
+		        type : "GET",
+		        }).done(function(data){
+					document.open();
+					document.write(data);
+					document.close();
+			    });
+
+	    },
+    });
+
+});
+</script>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h3>Kalender</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-3 col-xs-12">
+    	{% include "Workout/side_menu.html" %}
+    </div>
+    <div class="col-sm-9 col-xs-12">
+            
+	<div id="calendar"></div>
+	</div>
+</div>
+
+{% endblock %}

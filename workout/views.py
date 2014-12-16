@@ -9,11 +9,16 @@ from programs import viewmodels
 from django.utils.decorators import method_decorator
 from treningsdagbok import DTOs
 from django.views.generic.edit import FormView
-from workout import forms, models as workout_models
+from workout import forms, models as workout_models, WorkoutServie
 import datetime
 from django.template.context import RequestContext
+from django.http.response import HttpResponse
+import json
+from django.core import serializers
 
 # Create your views here.
+
+workout_service = WorkoutServie
 
 def get_user(request):
     return account_models.UserProfile.objects.get(user=request.user)
@@ -204,5 +209,38 @@ def get_most_recent_exercise_data(request, day_exercise_id):
     return render_to_response('Workout/previous_lifted.html', {'text' : 'Ingen registrerte tidligere for denne øvelsen'}, RequestContext(request))
 
 
+
+class CalendarOverview(TemplateView):
+    template_name = 'Workout/calendar.html'
     
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+   
+@login_required 
+def get_calendar_events(request):
+    start_list = request.GET['start'].split("-")
+    start_date = datetime.datetime(int(start_list[0]), int(start_list[1]), int(start_list[2]))
+    end_list = request.GET['end'].split("-")
+    end_date = datetime.datetime(int(end_list[0]), int(end_list[1]), int(end_list[2]))    
+    my_registers = workout_models.DayRegister.objects.filter(user_id=get_user(request).id,start_time__gte=start_date, start_time__lte=end_date).exclude(end_time=None)
+    json_list = []
+    
+
+    for register in my_registers:
+        register_id = register.id
+        allDay = True
+        name = get_name(register_id)
+        start = register.start_time.strftime("%Y-%m-%dT%H:%M:%S")
+        json_entry = {'id':register_id, 'start':start, 'allDay':allDay, 'title' : name}
+        json_list.append(json_entry)
+    return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+
+def get_name(reg_id):
+        day_register_object = workout_models.DayRegister.objects.get(pk=reg_id)
+        day_program_object = program_models.DayProgram.objects.get(pk=day_register_object.day_program_id)
+        week_object = program_models.Week.objects.get(pk=day_program_object.week_id)
+        program_object = program_models.Program.objects.get(pk=week_object.program_id)
+        return "%s \n %s/%s" % (program_object.name, week_object.name, day_program_object.name) 
     
