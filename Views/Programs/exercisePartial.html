@@ -1,0 +1,25 @@
+
+<div class="form-group">
+	<div class="row">
+		<div class="col-sm-3">
+			<select class="form-control" name="[{{count}}].exercise" id="select-{{count}}">
+				<option selected="selected" value="">--Velg--</option>
+				{% for element in exercises %}
+					<option value="{{element.id}}">{{element}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control" type="text" name="[{{count}}].set" >
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control" type="text" name="[{{count}}].reps" >
+		</div>
+		<div class="col-sm-3">
+			<input class="form-control" type="text" name="[{{count}}].description" >
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control" type="text" name="[{{count}}].break_time" >
+		</div>
+	</div>
+</div>

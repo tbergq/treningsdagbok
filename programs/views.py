@@ -14,6 +14,7 @@ from viewmodels import MyProgramsViewModel, ShowDayViewModel
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 from django.http.response import HttpResponse
+from forms import DayExerciseForm
 
 weekService = WeekService()
 base_exercise_service = BaseExerciseService()
@@ -202,44 +203,39 @@ class DeleteDayProgramRedirect(RedirectView):
     def dispatch(self, request, *args, **kwargs):
         return RedirectView.dispatch(self, request, *args, **kwargs)
     
-class AddExerciseToDay(FormView):
+class AddExerciseToDay(TemplateView):
     template_name = 'Programs/add_exercise_to_day.html'
-    form_class = forms.DayExerciseForm
-    success_url = '/programs/program_week'
     
-    @method_decorator(login_required)
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        selected_day_id = kwargs['day_id']
+        program_object_id = DayProgram.objects.get(pk=selected_day_id).week.program_id
+        return {
+                'day_id' : selected_day_id,
+                'program_id' : program_object_id
+        }
+        
+class AddExerciseFormPartial(FormView):
+    
+    form_class = DayExerciseForm
+    initial = {}
+    template_name = 'Programs/exercisePartial.html'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return FormView.dispatch(self, request, *args, **kwargs)
+    
     def get(self, request, *args, **kwargs):
-        print "get"
-        day_id = kwargs['day_id']
-        """form = self.form_class(
-                initial={'day_program' : day_id}
-            )"""
-        print "return"
-        return render(request, self.template_name, self.get_dictonary(day_id))
-            
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST)
-        day_id = kwargs['day_id']
-        another = request.POST.get('anohter', False)        
-        if form.is_valid():            
-            form = form.save(commit=True)
-            if another:
-                return redirect('/programs/add_exercise_to_day/%s' % day_id)
-            
-            program = DayProgram.objects.get(pk=day_id).week.program.id
-            return redirect("%s/%s/" % (self.success_url, program))
-        else:
-            print "form not valid"
-            return render(request, self.template_name, {'form' : form})
-        return render(request, self.template_name, {'form' : form})
-
-
-    def get_dictonary(self, day_id):
-        form = self.form_class(
-                initial={'day_program' : day_id, 'break_time' : ''}
-            )
-        return {'form' : form}
+        form = DayExerciseForm()
+        form.day_program = request.GET['program_id']
+        count = request.GET['count']
+        exercises = BaseExercise.objects.all()
+        return render (request, self.template_name, {'count' : count, 'exercises' : exercises})
+        #return self.render_to_response(self.get_context_data(form=form))
 
 class ShowDayPartialView(TemplateView):
     template_name = 'Programs/show_day.html'

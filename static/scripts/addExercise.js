@@ -1,9 +1,26 @@
+var readyExecuted = false;
+var count = 0;
 
 $(document).ready(function(){
-	
-	showDay();
+	if(!readyExecuted) {
+		getFormElement();
+		showDay();
+		readyExecuted = true;
+	}
 	//loadMuscleGroups()
 });
+
+function getFormElement() {
+	
+	$.ajax({
+		url: exercisePartialUrl,
+		type : "GET",
+		data : {program_id : programId, count : count}
+	}).done(function(data) {
+		$("#formElements").html($("#formElements").html() + data);
+	});
+	count++;
+}
 
 function loadMuscleGroups() {
 	
