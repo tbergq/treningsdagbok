@@ -23,5 +23,6 @@ urlpatterns = patterns('',
         url(r'^copy_week/(?P<week_id>\w+)/$', views.CopyWeek.as_view(),name='copy_week'),
         url(r'^delete_day_exercise_confirmation/(?P<pk>\w+)/$', views.DeleteDayExercise.as_view(),name='delete_day_exercise'),
         url(r'^exercise_partial/$', views.AddExerciseFormPartial.as_view(), name='exercise_partial'),
+        url(r'^get_base_exercises/$', views.get_base_exercises, name='get_base_exercises'),
         )
 

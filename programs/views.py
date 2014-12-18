@@ -65,6 +65,8 @@ def new_program(request):
                 
             return redirect('/programs/')
 
+def get_base_exercises(request):
+   return JsonResponse(base_exercise_service.get_all(), safe=False)
 
 @login_required
 def index(request):
@@ -214,10 +216,15 @@ class AddExerciseToDay(TemplateView):
     def get_context_data(self, **kwargs):
         selected_day_id = kwargs['day_id']
         program_object_id = DayProgram.objects.get(pk=selected_day_id).week.program_id
+        
+        
         return {
                 'day_id' : selected_day_id,
-                'program_id' : program_object_id
+                'program_id' : program_object_id,
+                
         }
+        
+ 
         
 class AddExerciseFormPartial(FormView):
     
@@ -234,7 +241,8 @@ class AddExerciseFormPartial(FormView):
         form.day_program = request.GET['program_id']
         count = request.GET['count']
         exercises = BaseExercise.objects.all()
-        return render (request, self.template_name, {'count' : count, 'exercises' : exercises})
+        next = int(count) + 1
+        return render (request, self.template_name, {'count' : count, 'exercises' : exercises, 'next' : next})
         #return self.render_to_response(self.get_context_data(form=form))
 
 class ShowDayPartialView(TemplateView):

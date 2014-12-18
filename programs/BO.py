@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from models import Week, Program, DayExcersice, DayProgram
+from models import Week, Program, DayExcersice, DayProgram, BaseExercise
 from django.db import models
 
 class WeekService:
@@ -76,6 +76,15 @@ class BaseExerciseService(models.Manager):
         for name in cursor.fetchall():
             muscle_groups.append(name)
         return muscle_groups
+    
+    def get_all(self):
+        exercises = BaseExercise.objects.all().order_by('muscle_group')
+        exercise_list = []
+        for element in exercises:
+            name = u"%s - %s" % (element.muscle_group, element.name)
+            exercise_list.append({'name' : name})
+            
+        return exercise_list
     
     
     
