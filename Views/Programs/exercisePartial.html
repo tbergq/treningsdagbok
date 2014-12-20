@@ -1,34 +1,23 @@
 
 <div class="form-group">
 	<div class="row">
-		<div class="col-sm-3">
-			<!-- <select class="form-control" name="[{{count}}].exercise" id="select-{{count}}">
-				<option selected="selected" value="">--Velg--</option>
-				{% for element in exercises %}
-					<option value="{{element.id}}">{{element}}</option>
-				{% endfor %}
-			</select>  --> 
-			<div id="combo-{{count}}"></div>
+		<div class="col-sm-3" data-number="combo-value-{{count}}">
+			<input class="hidden" value="{{program_id}}" name="form-{{count}}-day_program">   
+			<input class="hidden" name="form-{{count}}-base_excersice" id="combo-value-{{count}}">
+			 <div id="combo-{{count}}"></div>
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control" type="text" name="[{{count}}].set" >
+			<input class="form-control" type="text" name="form-{{count}}-set" >
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control" type="text" name="[{{count}}].reps" >
+			<input class="form-control" type="text" name="form-{{count}}-reps" >
 		</div>
 		<div class="col-sm-3">
-			<input class="form-control" type="text" name="[{{count}}].description" >
+			<input class="form-control" type="text" name="form-{{count}}-description" >
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control" type="text" name="[{{count}}].break_time" >
+			<input class="form-control" type="text" name="form-{{count}}-break_time" >
 		</div>
 	</div>
 </div>
 <div class=form-group" id="next-{{next}}"></div>
-<!-- 
-<script>
-	$(document).ready(function() {
-		dhtmlXComboFromSelect("select-{{count}}").enableFilteringMode(true);
-		
-		});
-</script>  -->

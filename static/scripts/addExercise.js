@@ -1,33 +1,49 @@
 var readyExecuted = false;
 var count = 0;
-var url = '/programs/get_base_exercises/';
+
 // prepare the data
-var source = ["katt", "hund"];
+var url = '/programs/get_base_exercises/';
+var source =
+{
+    datatype: "json",
+    datafields: [
+        { name: 'name' }
+        
+    ],
+    id: 'id',
+    url: url
+};
+var dataAdapter = new $.jqx.dataAdapter(source);
 
 $(document).ready(function(){
 	if(!readyExecuted) {
 		getFormElement();
 		showDay();
 		readyExecuted = true;
+		//source = getBaseExercises();
 		
 	}
 	//loadMuscleGroups()
 });
 
+
+
 function getFormElement() {
-	console.log(count);
+	
 	$.ajax({
 		url: exercisePartialUrl,
 		type : "GET",
-		data : {program_id : programId, count : count}
+		data : {program_id : day_id, count : count}
 	}).done(function(data) {
 		if(count == 0) {
 			$("#formElements").html(data);
-			count;
+			
 		} else {
 			$("#next-" + count).html(data);
 		}
+		
 		initializeCombobox();
+		$("#id_form-TOTAL_FORMS").val(count);
 		
 	});
 	//count++;
@@ -37,9 +53,10 @@ function getBaseExercises() {
 	
 	$.ajax({
 		url : '/programs/get_base_exercises/',
+		datatype : "json",
 		type : "GET",
 	}).done(function(data) {
-		
+		console.log(data);
 		return data;
 	});
 	
@@ -50,18 +67,28 @@ $("#muscleGroupDropdown").change(function(){
 });
 
 function initializeCombobox() {
-	for(var i = 0; i <= count; i ++) {
+	
 		
 	$("#combo-" + count).jqxComboBox({
-	      theme: 'energyblue',
-	      width: '200px',
-	      height: '25px',
+	      theme: 'bootstrap',
+	      width: '100%',
+	      height: '34px',
 	      selectedIndex: 0,
 	      autoComplete: true,
-	      source : source,
-	  });
-	}
-	//$("#select-" + count).jqxComboBox('loadFromSelect', 'select');
+	      source : dataAdapter,
+	      displayMember : 'name',
+	      valueMember : 'name'
+	});
+	
+	$("#combo-" + count).on('change', function (event) {
+		
+		var value = $(this).jqxComboBox('getSelectedIndex');
+		var inputId = "#" + $(this).parent().attr('data-number');
+		$(inputId).val(value);
+		console.log($(inputId).val());
+	});
+		 
+	//$("#combo-" + count).jqxComboBox('loadFromSelect', 'select-' + count);
 	count++;
 }
 

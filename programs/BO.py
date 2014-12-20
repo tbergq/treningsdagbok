@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from models import Week, Program, DayExcersice, DayProgram, BaseExercise
 from django.db import models
+import forms
 
 class WeekService:
     repository = Week
@@ -79,12 +80,31 @@ class BaseExerciseService(models.Manager):
     
     def get_all(self):
         exercises = BaseExercise.objects.all().order_by('muscle_group')
-        exercise_list = []
+        exercise_list = [{'name' : "--Velg--", 'value' : None}]
         for element in exercises:
             name = u"%s - %s" % (element.muscle_group, element.name)
-            exercise_list.append({'name' : name})
+            exercise_list.append({'name' : name, 'value' : element.id})
             
         return exercise_list
     
+    
+class DayExerciseService:
+    
+    def setup_dayExerciseForm(self, request, number):
+        print request.POST.get('[%s].exercise' % number, None)
+        form = forms.DayExerciseForm()
+        form.day_program = request.POST.get('day_program')
+        form.base_excersice = request.POST.get('[%s].exercise' % number, None)
+        form.set = request.POST.get('[%s].set' % number, None)
+        form.reps = request.POST.get('[%s].reps' % number,None)
+        form.description = request.POST.get('[%s].description' % number, '')
+        form.break_time = request.POST.get('[%s].break_time' % number, None)
+        print form
+        return form
+
+
+
+
+
     
     

@@ -9,15 +9,17 @@ from programs.models import BaseExercise, Program, Week, DayProgram, DayExcersic
 import datetime
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.base import TemplateView, RedirectView
-from BO import WeekService, BaseExerciseService
+from BO import WeekService, BaseExerciseService, DayExerciseService
 from viewmodels import MyProgramsViewModel, ShowDayViewModel
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 from django.http.response import HttpResponse
 from forms import DayExerciseForm
+from django.forms.formsets import formset_factory
 
 weekService = WeekService()
 base_exercise_service = BaseExerciseService()
+day_exercise_service = DayExerciseService()
 def get_user(request):
     return UserProfile.objects.get(user=request.user)
 
@@ -213,6 +215,13 @@ class AddExerciseToDay(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
+    def get(self, request, *args, **kwargs):
+        DayExerciseFormSet = formset_factory(DayExerciseForm)
+        formset = DayExerciseFormSet()
+        context = self.get_context_data(**kwargs)
+        context["formset"] = formset
+        return render(request, self.template_name, context)
+    
     def get_context_data(self, **kwargs):
         selected_day_id = kwargs['day_id']
         program_object_id = DayProgram.objects.get(pk=selected_day_id).week.program_id
@@ -224,7 +233,27 @@ class AddExerciseToDay(TemplateView):
                 
         }
         
- 
+def save_exercises_to_day(request, program_id, day_id):
+    print "save ex to day"
+    context = {'program_id' : program_id, 'day_id' : day_id}
+    DayExerciseFormSet = formset_factory(DayExerciseForm)
+    if request.method == 'POST':
+        print "post"
+        
+        formset = DayExerciseFormSet(request.POST, request.FILES)
+        context["formset"] = formset
+        if formset.is_valid():
+            print "valid"
+            for form in formset:
+                form.save()
+            return redirect('/programs/program_week/%s/' % program_id)
+        else:
+            print "invalid"
+            return render(request, 'Programs/add_exercise_to_day.html', context)
+        
+        return redirect('/programs/add_exercise_to_day/%s/' % day_id)
+    else:
+        return redirect('/account/')
         
 class AddExerciseFormPartial(FormView):
     
@@ -237,12 +266,12 @@ class AddExerciseFormPartial(FormView):
         return FormView.dispatch(self, request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        form = DayExerciseForm()
-        form.day_program = request.GET['program_id']
+        #form = DayExerciseForm()
+        #form.day_program = request.GET['program_id']
         count = request.GET['count']
         exercises = BaseExercise.objects.all()
         next = int(count) + 1
-        return render (request, self.template_name, {'count' : count, 'exercises' : exercises, 'next' : next})
+        return render (request, self.template_name, {'count' : count, 'exercises' : exercises, 'next' : next, 'program_id' : request.GET['program_id']})
         #return self.render_to_response(self.get_context_data(form=form))
 
 class ShowDayPartialView(TemplateView):
