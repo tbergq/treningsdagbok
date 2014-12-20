@@ -33,8 +33,12 @@
             			<tr>
             				<td>{{day.day_program.name}}</td>
             				<td>
-            					<a class="btn btn-xs btn-primary" href="/workout/register/{{day.day_program.id}}/{{object.program.id}}/">Registrer</a>
             					
+            				{% if  day.is_registered %}
+            				<a class="btn btn-xs btn-primary" disabled="disabled" href="/workout/register/{{day.day_program.id}}/{{object.program.id}}/">Registrer</a>
+            				{% elif not day.is_registered %}
+            				<a class="btn btn-xs btn-primary" href="/workout/register/{{day.day_program.id}}/{{object.program.id}}/">Registrer</a>
+            				{% endif %}
             			</tr>
             			{% endfor %}
             			</table>

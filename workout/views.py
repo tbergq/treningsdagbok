@@ -35,7 +35,7 @@ class LoadExercise(TemplateView):
     #model = program_models.Program
     
     def get_context_data(self, **kwargs):
-        return {'object' : viewmodels.MyProgramsViewModel(kwargs['pk'])}
+        return {'object' : viewmodels.MyProgramsViewModel(kwargs['program_id'])}
     
     @method_decorator(login_required(redirect_field_name='/workout/select/', login_url='/account/'))
     def dispatch(self, request, *args, **kwargs):

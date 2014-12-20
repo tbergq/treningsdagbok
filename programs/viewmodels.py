@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import models
+from workout import models as workout_models
 
 class DayProgramViewModel:
     
     def __init__(self, dayProgram):
         self.day_program = dayProgram
         self.exercise = []
+        registers = workout_models.DayRegister.objects.filter(day_program=self.day_program).exclude(end_time=None)
+        self.is_registered = len(registers) > 0
+       
         for ex in models.DayExcersice.objects.filter(day_program=dayProgram):
             self.exercise.append(ShowExersiceViewModel(ex))
         self.number_of_exercises = len(self.exercise)
@@ -35,6 +39,8 @@ class ShowExersiceViewModel:
     def __init__(self, exercise_object):
         self.exercise = exercise_object
         self.name = exercise_object.base_excersice.name
+        
+        
         
     
 class ShowDayViewModel:
