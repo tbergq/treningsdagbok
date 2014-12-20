@@ -56,7 +56,7 @@ function getBaseExercises() {
 		datatype : "json",
 		type : "GET",
 	}).done(function(data) {
-		console.log(data);
+		
 		return data;
 	});
 	
@@ -85,10 +85,10 @@ function initializeCombobox() {
 		var value = $(this).jqxComboBox('getSelectedIndex');
 		var inputId = "#" + $(this).parent().attr('data-number');
 		$(inputId).val(value);
-		console.log($(inputId).val());
+		
 	});
 		 
-	//$("#combo-" + count).jqxComboBox('loadFromSelect', 'select-' + count);
+	
 	count++;
 }
 

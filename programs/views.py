@@ -81,7 +81,7 @@ def index(request):
         for program in dictionary["programs"]:
             programs.append(MyProgramsViewModel(program.id))
         dictionary['program_list'] = programs
-        print len(dictionary['program_list'])
+        
         return render_to_response(view, dictionary, context)
 
 @login_required
@@ -234,21 +234,17 @@ class AddExerciseToDay(TemplateView):
         }
         
 def save_exercises_to_day(request, program_id, day_id):
-    print "save ex to day"
     context = {'program_id' : program_id, 'day_id' : day_id}
     DayExerciseFormSet = formset_factory(DayExerciseForm)
     if request.method == 'POST':
-        print "post"
         
         formset = DayExerciseFormSet(request.POST, request.FILES)
         context["formset"] = formset
         if formset.is_valid():
-            print "valid"
             for form in formset:
                 form.save()
             return redirect('/programs/program_week/%s/' % program_id)
         else:
-            print "invalid"
             return render(request, 'Programs/add_exercise_to_day.html', context)
         
         return redirect('/programs/add_exercise_to_day/%s/' % day_id)
