@@ -15,8 +15,8 @@
     	{% include "Workout/side_menu.html" %}
     </div>
     <div class="col-sm-9 col-xs-12">
-    	<div class="well">
-    	<table class="table table-bordered well-table overflow-x-auto">
+    	<div class="well  overflow-x-auto">
+    	<table class="table table-bordered well-table">
     		<thead>
     			<tr>
     			<th>Program</th>
@@ -33,7 +33,7 @@
     				<td>{{element.day_program.week.name}}/{{element.day_program.name}}</td>
     				<td>{{element.start_time}}</td>
     				<td class="hidden-xs">{{element.end_time}}</td>
-    				<td><a href="{% url 'show_workout' element.id %}">Vis økt</a></td>
+    				<td><a class="btn btn-primary" href="{% url 'show_workout' element.id %}">Vis økt</a></td>
     			</tr>
     			{% endfor %}
     			

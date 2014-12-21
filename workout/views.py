@@ -8,13 +8,14 @@ from django.views.generic.detail import DetailView
 from programs import viewmodels
 from django.utils.decorators import method_decorator
 from treningsdagbok import DTOs
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 from workout import forms, models as workout_models, WorkoutServie
 import datetime
 from django.template.context import RequestContext
 from django.http.response import HttpResponse
 import json
 from django.core import serializers
+from workout.models import ExcerciseRegister
 
 # Create your views here.
 
@@ -155,7 +156,7 @@ class ShowWorkout(TemplateView):
         dayRegisterId = kwargs['day_register_id']
         context = {'model' : workout_models.ExcerciseRegister.objects.filter(day_register_id=dayRegisterId)}
         context['name'] = context['model'][0].day_register.day_program.name
-        print len(context)
+        
         return self.render_to_response(context)
 
 
@@ -243,4 +244,34 @@ def get_name(reg_id):
         week_object = program_models.Week.objects.get(pk=day_program_object.week_id)
         program_object = program_models.Program.objects.get(pk=week_object.program_id)
         return "%s \n %s/%s" % (program_object.name, week_object.name, day_program_object.name) 
+    
+    
+class EditExerciseRegister(UpdateView):
+    form_class = forms.ExcerciseRegisterForm
+    model = ExcerciseRegister
+    template_name = 'Workout/update_exercise.html'
+    
+    
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        return UpdateView.dispatch(self, request, *args, **kwargs)    
+    
+    def get(self, request, *args, **kwargs):
+        register_id = request.GET.get('id')
+        self.object = self.model.objects.get(pk=register_id)
+        form = self.get_form(self.form_class)
+        context = self.get_context_data(object=self.object, form=form)
+        return self.render_to_response(context)
+    
+    def post(self, request, *args, **kwargs):
+        self.success_url = '/workout/show_workout/%s/' % request.POST.get('day_register')
+        register_id = request.POST.get('object_id')
+        self.object = self.model.objects.get(pk=register_id)
+
+        return UpdateView.post(self, request, *args, **kwargs)
+    
+    def get_object(self, queryset=None):
+        return self.object
+    
+
     

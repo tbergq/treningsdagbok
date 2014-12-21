@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block body_block %}
 
 <div class="row">
@@ -13,12 +13,12 @@
                 {% include "Workout/side_menu.html" %}
             </div>
             <div class="col-sm-9 col-xs-12">
-            	<div class="well">
+            	<div class="well overflow-x-auto">
             		<table class="table table-bordered well-table">
             			<thead>
             				<tr>
             					<th>Øvelse</th>
-            					<th>Set</th>
+            					<th class="hidden-xs">Set</th>
             					<th>Reps</th>
             					<th>Vekt</th>
             					<th>Notat</th>
@@ -27,8 +27,14 @@
             			<tbody>
             			{% for element in model %}
             				<tr>
-            					<td>{{element.day_excersice.base_excersice.name}}</td>
-            					<td>{{element.set_number}}</td>
+            					<td>
+            						{{element.day_excersice.base_excersice.name}}
+            						<button class="btn btn-success btn-xs pull-right modal-opener" data-reg-id="{{element.id}}"
+            						data-name="{{element.day_excersice.base_excersice.name}}">
+            							<span class="glyphicon glyphicon-edit"></span>
+            						</button>
+            					</td>
+            					<td class="hidden-xs">{{element.set_number}}</td>
             					<td>{{element.reps}}</td>
             					<td>{{element.weight}}</td>
             					<td>{{element.note}}</td>
@@ -39,5 +45,13 @@
             	</div>
             </div>
  </div>
+ 
+ 
+ {% include 'Shared/modal.html' %}
+ 
+ {% block js %}
+ 	<script src="{% static 'scripts/workout/editRegister.js' %}"></script>
+ {% endblock %}
+ 
 
 {% endblock %}

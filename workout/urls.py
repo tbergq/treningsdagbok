@@ -16,4 +16,5 @@ urlpatterns = patterns('',
         url(r'^previous_lifted/(?P<day_exercise_id>\w+)/$', views.get_most_recent_exercise_data, name='previous_lifted'),
         url(r'^calendar/$', views.CalendarOverview.as_view(), name='calendar'),
         url(r'^get_calendar_events/$', views.get_calendar_events, name='get_calendar_events'),
+        url(r'^edit_exercise/$', views.EditExerciseRegister.as_view(), name='edit_exercise'),
         )
