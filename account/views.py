@@ -24,7 +24,9 @@ def login(request):
             auth_login(request,user)
             return redirect('/programs/')
         else :
-            return HttpResponse("brukernavn eller passord er feil <a href='/account/login/'> tilbake </a>")
+            #return HttpResponse("brukernavn eller passord er feil <a href='/account/login/'> tilbake </a>")
+            dictonary["error"] = 'brukernavn eller passord er feil'
+            return render_to_response(view, dictonary, context)
 
 
 def index(request):
