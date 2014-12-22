@@ -269,6 +269,20 @@ class AddExerciseFormPartial(FormView):
         next = int(count) + 1
         return render (request, self.template_name, {'count' : count, 'exercises' : exercises, 'next' : next, 'program_id' : request.GET['program_id']})
         #return self.render_to_response(self.get_context_data(form=form))
+        
+class EditExerciseView(UpdateView):
+    form_class = DayExerciseForm
+    template_name ='Programs/edit_day.html'
+    model = DayExcersice
+    
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return UpdateView.dispatch(self, request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.success_url = '/programs/add_exercise_to_day/%s/' % request.POST.get('day_program')
+        return UpdateView.post(self, request, *args, **kwargs)
 
 class ShowDayPartialView(TemplateView):
     template_name = 'Programs/show_day.html'

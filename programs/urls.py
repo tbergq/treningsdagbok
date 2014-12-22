@@ -25,5 +25,7 @@ urlpatterns = patterns('',
         url(r'^exercise_partial/$', views.AddExerciseFormPartial.as_view(), name='exercise_partial'),
         url(r'^get_base_exercises/$', views.get_base_exercises, name='get_base_exercises'),
         url(r'^save_exercises_to_day/(?P<program_id>\w+)/(?P<day_id>\w+)/$', views.save_exercises_to_day, name='save_exercises_to_day'),
+        url(r'^edit_day/(?P<pk>\w+)/$', views.EditExerciseView.as_view(), name='edit_day'),
+        
         )
 
