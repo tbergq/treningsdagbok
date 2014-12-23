@@ -2,6 +2,8 @@
 from models import Week, Program, DayExcersice, DayProgram, BaseExercise
 from django.db import models
 import forms
+from __builtin__ import True
+from workout import models as workout_models
 
 class WeekService:
     repository = Week
@@ -41,7 +43,13 @@ class WeekService:
             count += 1
             rename_week.save()
         
-
+    def is_deletable(self,weekId):
+        is_deletable = True
+        days = DayProgram.objects.filter(week_id=weekId)
+        for day in days:
+            if len(workout_models.DayRegister.objects.filter(day_program=day)) > 0:
+                is_deletable = False
+        return is_deletable
 
 class ProgramService:
     
@@ -63,7 +71,7 @@ class DayProgramService:
     def get_from_day_exercise_id(self, day_id):
         day_exercise = DayExcersice.objects.get(pk=day_id)
         day_program = DayProgram.objects.get(pk=day_exercise.day_program.id)
-        print "day program_id: %s" % day_program.id
+        
         return day_program
     
 class BaseExerciseService(models.Manager):
@@ -91,7 +99,7 @@ class BaseExerciseService(models.Manager):
 class DayExerciseService:
     
     def setup_dayExerciseForm(self, request, number):
-        print request.POST.get('[%s].exercise' % number, None)
+        
         form = forms.DayExerciseForm()
         form.day_program = request.POST.get('day_program')
         form.base_excersice = request.POST.get('[%s].exercise' % number, None)
@@ -99,9 +107,11 @@ class DayExerciseService:
         form.reps = request.POST.get('[%s].reps' % number,None)
         form.description = request.POST.get('[%s].description' % number, '')
         form.break_time = request.POST.get('[%s].break_time' % number, None)
-        print form
+        
         return form
 
+    def is_deletable(self, dayExerciseId):
+        return len(workout_models.DayRegister.objects.filter(day_program_id=dayExerciseId)) > 0
 
 
 

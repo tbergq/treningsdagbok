@@ -179,6 +179,7 @@ class DeleteDayProgram(TemplateView):
         return {
                 'model' : DayProgram.objects.get(pk=day_program_id),
                 'url' : '/programs/delete_day_program/%s/' % day_program_id,
+                'is_deletable' : day_exercise_service.is_deletable(day_program_id)
                 }
     
     @method_decorator(login_required(login_url='account/login/'))
@@ -341,9 +342,11 @@ class DeleteWeekConfirmation(TemplateView):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
+        week_id = kwargs['week_id']
         context = {
-                   'model' : Week.objects.get(pk=kwargs['week_id']),
-                   'url' : '/programs/delete_week/%s/' % kwargs['week_id'],
+                   'model' : Week.objects.get(pk=week_id),
+                   'url' : '/programs/delete_week/%s/' % week_id,
+                   'is_deletable' : weekService.is_deletable(week_id)
                    }
         return context
     
@@ -391,5 +394,7 @@ class DeleteDayExercise(DeleteView):
     
     def get_success_url(self):
         return '/programs/add_exercise_to_day/%s/' % self.object.day_program_id
+    
+    
     
     
