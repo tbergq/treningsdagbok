@@ -53,15 +53,23 @@ class WeekService:
 
 class ProgramService:
     
-    def __init__(self, program_id):
-        self.program = Program.objects.get(pk=program_id)
-        self.weeks = self.get_weeks()
+   # def __init__(self, program_id):
+    #    self.program = Program.objects.get(pk=program_id)
+     #   self.weeks = self.get_weeks()
         
         
-    def get_weeks(self):
-        return Week.objects.filter(program=self.program)
+    def get_weeks(self, id):
+        return Week.objects.filter(program_id=id)
         
-        
+    def is_deletable(self, programId):
+        is_deletable = True
+        week_service = WeekService()
+        my_weeks = self.get_weeks(programId)
+        for week in my_weeks:
+            week_is_deletable = week_service.is_deletable(week.id)            
+            if not week_is_deletable:
+                return False
+        return is_deletable
     
     
     

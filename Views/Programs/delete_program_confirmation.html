@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col-xs-12">
+	
+{% if is_deletable %}
+<div class="alert alert-danger">
+	Er du sikker på at du ønsker å slette {{object.name}}?
+</div>
+
+	<form action="{% url 'delete_program' object.id %}" method="post">
+		{% csrf_token %}
+		<div class="pull-right">
+			<input type="button" value="Avbryt" class="btn btn-default" data-dismiss="modal">
+			<input class="btn btn-danger" value="Slett" type="submit">
+		</div>
+	</form>
+
+{% elif not is_deletable %}
+
+<div class="alert alert-danger">
+	{{object.name}} kan ikke slettes da det er registrert økter på dette programmet
+</div>
+<div class="pull-right">
+	<input type="button" value="Avbryt" class="btn btn-default" data-dismiss="modal">
+</div>
+{% endif %}
+
+	</div>
+</div>

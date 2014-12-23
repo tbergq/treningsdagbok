@@ -4,6 +4,10 @@ body {
 
 }
 
+.main-container {
+	background-color:white;
+}
+
 /* margins */
 
 .margin-left {

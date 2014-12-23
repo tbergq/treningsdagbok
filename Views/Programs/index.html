@@ -17,56 +17,31 @@
                     <table class="table table-bordered well-table">
                     	<thead>
                     		<tr>
-                    			<th></th>
+                    			
                     			<th>Navn</th>
                     			<th>Dato</th>
                     			<th>Handling</th>
                     		</tr>
                     	</thead>
                     	<tbody>
-                    		{% for program in program_list %}
+                    		{% for program in programs %}
                     		<tr>
-                    			<td class="expand" id="{{program.program.id}}" onclick="pala(this)"><span class="glyphicon glyphicon-expand glyphicon-larger"></span></td>
-                    			<td>{{program.program.name}}</td>
-                    			<td>{{program.program.date}}</td>
-                    			<td>                    			
-                    			<a href="{% url 'program_week' program.program.id %}" class="btn btn-xs btn-success">
-                    				<span class="glyphicon glyphicon-edit"></span>
-                    				Rediger
-                    			</a>
-                    			<!-- <a class="btn btn-primary btn-xs margin-left" href="#">
-                    				<span class="glyphicon glyphicon-plus"></span>
-                    				Legg til Uke
-                    			</a> -->
-                    			</td>
-                    		</tr>
-                    		{% for week in program.weeks %}
-                    		<tr class="{{program.program.id}} hidden">
-                    			<td class="week-expand"><span class="glyphicon glyphicon-expand glyphicon-larger hidden"></td>
-                    			<td>{{week.week.name}}</td>
-                    			<td></td>
+                    			
                     			<td>
-                    				<a class ="btn btn-default btn-xs" href="/programs/add_day/{{week.week.id}}/">
-                    					<span class="glyphicon glyphicon-plus"></span>
-                    					Legg til dag
+                    				 <a href="{% url 'program_week' program.id %}">                    				
+                    					{{program.name}}
                     				</a>
                     			</td>
-                    		</tr>
-                    		{% for day in week.day_program %}
-                    			<tr class="{{program.program.id}} hidden">
-                    				<td></td>
-                    				<td>{{day.day_program.name}}</td>
-                    				<td></td>
-                    				<td>
-                    					<a class="btn btn-info btn-xs" href="/programs/add_exercise_to_day/{{day.day_program.id}}/">
-                    						<span class="glyphicon glyphicon-plus"></span>
-                    						Legg til øvelse
-                    					</a>
-                    				</td>
-                    			</tr>
-                    		{% endfor %}	
-                    		{% endfor %}
-                    		
+                    			<td>{{program.date}}</td>
+                    			<td>
+                    				<button class="btn btn-danger btn-sm" data-id="{{program.id}}" onclick="deleteProgram(this)" 
+                    				data-url="{% url 'delete_program' program.id %}">
+                    					<span class="glyphicon glyphicon-trash"></span>
+                    					Slett
+                    				</button>
+                    			</td>                    			
+                    			
+                    			
                    		 {% endfor %}
                     	</tbody>
                     </table>
@@ -74,9 +49,10 @@
                 </div>
             </div>
         </div>
-        {% block js %}
+        {% include 'Shared/modal.html' %}
+         {% block js %}
         <script type="text/javascript" src="{% static 'scripts/yourPrograms.js' %}"></script>
-        {% endblock %}
+          {% endblock %}
         
 	{% endblock %}
     

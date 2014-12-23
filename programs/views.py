@@ -16,10 +16,13 @@ from django.http import JsonResponse
 from django.http.response import HttpResponse
 from forms import DayExerciseForm
 from django.forms.formsets import formset_factory
+from programs.BO import ProgramService
 
 weekService = WeekService()
 base_exercise_service = BaseExerciseService()
 day_exercise_service = DayExerciseService()
+program_service = ProgramService()
+
 def get_user(request):
     return UserProfile.objects.get(user=request.user)
 
@@ -76,11 +79,7 @@ def index(request):
     context = RequestContext(request)
     dictionary = {}
     if request.method == 'GET':
-        dictionary['programs'] = Program.objects.filter(user=get_user(request))
-        programs = []
-        for program in dictionary["programs"]:
-            programs.append(MyProgramsViewModel(program.id))
-        dictionary['program_list'] = programs
+        dictionary['programs'] = Program.objects.filter(user=get_user(request))          
         
         return render_to_response(view, dictionary, context)
 
@@ -394,6 +393,25 @@ class DeleteDayExercise(DeleteView):
     
     def get_success_url(self):
         return '/programs/add_exercise_to_day/%s/' % self.object.day_program_id
+    
+    
+class DeleteProgramView(DeleteView):
+    template_name = 'Programs/delete_program_confirmation.html'
+    model = Program
+    success_url = '/programs/'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return DeleteView.dispatch(self, request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['is_deletable'] = program_service.is_deletable(self.object.id)
+        
+        return self.render_to_response(context)
+    
+    
     
     
     
