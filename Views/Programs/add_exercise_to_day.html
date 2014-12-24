@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block head %}
+        <link rel="stylesheet" href="{% static 'scripts/jqwidgets/jqwidgets/styles/jqx.base.css' %}" type="text/css"/>
+	<link rel="stylesheet" href="{% static 'scripts/jqwidgets/jqwidgets/styles/jqx.bootstrap.css' %}" type="text/css"/>
+        <script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxcore.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxbuttons.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxscrollbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxlistbox.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxcombobox.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxdata.js' %}"></script>
+        {% endblock %}
+
 {% block body_block %}
 	<div class="row">
     	<div class="col-xs-12">
@@ -58,18 +70,17 @@
         	{% include 'Shared/modal.html' %}
         </div>
         
-        {% block head %}
-        <link rel="stylesheet" href="{% static 'scripts/jqwidgets/jqwidgets/styles/jqx.base.css' %}" type="text/css"/>
-	<link rel="stylesheet" href="{% static 'scripts/jqwidgets/jqwidgets/styles/jqx.bootstrap.css' %}" type="text/css"/>
-        <script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxcore.js' %}"></script>
-	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxbuttons.js' %}"></script>
-	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxscrollbar.js' %}"></script>
-	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxlistbox.js' %}"></script>
-	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxcombobox.js' %}"></script>
-	<script type="text/javascript" src="{% static 'scripts/jqwidgets/jqwidgets/jqxdata.js' %}"></script>
-        {% endblock %}
+        <div class="hidden" id="dropdownValues">
+        	
+        </div>
         
-		{% block js %}
+        
+		
+
+{% endblock %}
+
+
+{% block js %}
 		
 		<script type="text/javascript">
 			var day_id = '{{day_id}}';
@@ -87,5 +98,3 @@
 //-->
 
         {% endblock %}
-
-{% endblock %}

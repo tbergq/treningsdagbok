@@ -6,11 +6,12 @@ var url = '/programs/get_base_exercises/';
 var source =
 {
     datatype: "json",
+    id: 'value',
     datafields: [
-        { name: 'name' }
+        { name: 'name'}, {name : 'value'}
         
     ],
-    id: 'id',
+    
     url: url
 };
 var dataAdapter = new $.jqx.dataAdapter(source);
@@ -19,6 +20,7 @@ $(document).ready(function(){
 	if(!readyExecuted) {
 		getFormElement();
 		showDay();
+		//getBaseExercises();
 		readyExecuted = true;
 		//source = getBaseExercises();
 		
@@ -56,8 +58,13 @@ function getBaseExercises() {
 		datatype : "json",
 		type : "GET",
 	}).done(function(data) {
+		var htmlData = "";
+		for(var i = 0; i < data.length; i++) {
+			var element = data[i];
+			htmlData += "<div id='" + element.name + "' data-number='" + element.value + "'></div>";
+		}
+		$("#dropdownValues").html(htmlData);
 		
-		return data;
 	});
 	
 }
@@ -77,14 +84,15 @@ function initializeCombobox() {
 	      autoComplete: true,
 	      source : new $.jqx.dataAdapter(source),
 	      displayMember : 'name',
-	      valueMember : 'name',
-	      searchMode : 'contains'
+	      valueMember : 'value',
+	      searchMode : 'containsignorecase'
 	    	  
 	});
 	
 	$("#combo-" + count).on('change', function (event) {
 		
-		var value = $(this).jqxComboBox('getSelectedIndex');
+		var value = $(this).jqxComboBox('val');
+		
 		var inputId = "#" + $(this).parent().attr('data-number');
 		$(inputId).val(value);
 		
