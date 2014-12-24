@@ -1,44 +1,18 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block head %}
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.js"></script>
+
+{% endblock %}
+
 {% block body_block %}
 
 
-<script>
-$(document).ready(function() {
 
-    // page is now ready, initialize the calendar...
-
-    $('#calendar').fullCalendar({
-    	header : {
-    	    left:   'title',
-    	    center: '',
-    	    right:  'today prev,next'
-    	},
-    	buttonText: {
-			today : "I dag"
-        },
-        monthNames : 
-			['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember'],
-		firstDay :1,
-		dayNamesShort : 
-			['Søn', 'Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør'],
-		events : '/workout/get_calendar_events/',
-		eventClick: function(calEvent, jsEvent, view) {
-
-	        $.ajax({
-		        url : "/workout/show_workout/" + calEvent.id + "/",
-		        type : "GET",
-		        }).done(function(data){
-					document.open();
-					document.write(data);
-					document.close();
-			    });
-
-	    },
-    });
-
-});
-</script>
 
 <div class="row">
 	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
@@ -56,4 +30,9 @@ $(document).ready(function() {
 	</div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'scripts/workout/fullCalenderInit.js' %}"></script>
 {% endblock %}
