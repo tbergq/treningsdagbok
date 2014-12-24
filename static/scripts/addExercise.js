@@ -75,9 +75,11 @@ function initializeCombobox() {
 	      height: '34px',
 	      selectedIndex: 0,
 	      autoComplete: true,
-	      source : dataAdapter,
+	      source : new $.jqx.dataAdapter(source),
 	      displayMember : 'name',
-	      valueMember : 'name'
+	      valueMember : 'name',
+	      searchMode : 'contains'
+	    	  
 	});
 	
 	$("#combo-" + count).on('change', function (event) {
