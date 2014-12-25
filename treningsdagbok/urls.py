@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from account import views
 
+
 urlpatterns = [
     # Examples:
     # url(r'^$', 'treningsdagbok.views.home', name='home'),
@@ -12,4 +13,5 @@ urlpatterns = [
     url(r'^programs/', include('programs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^workout/', include('workout.urls')),
+    url(r'^group/', include('group.urls')),
 ]

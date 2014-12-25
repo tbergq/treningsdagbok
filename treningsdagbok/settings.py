@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'account',
     'programs',
     'workout',
+    'group',
 )
 
 MIDDLEWARE_CLASSES = (
