@@ -50,9 +50,15 @@
   		
   	</ul>
   	<ul class="nav navbar-nav navbar-right">
-  		<li>
-  			<a href="/account/logout/" class="navbar-link">Logg ut</a>
-  		</li>
+  		
+  		{% if user.is_authenticated %}
+  			<li>
+  				<a href="/account/create_group/" class="navbar-link">Konto</a>
+  			</li>
+  			<li>
+  				<a href="/account/logout/" class="navbar-link">Logg ut</a>
+  			</li>
+  		{% endif %}
   	</ul>
         
   </div>

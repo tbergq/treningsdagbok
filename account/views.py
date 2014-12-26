@@ -8,8 +8,17 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from models import UserProfile
+from django.views.generic.edit import FormView
+from group import forms as group_forms
+from django.utils.decorators import method_decorator
+import time
+from datetime import date
 
 # Create your views here.
+
+def get_user(request):
+    return UserProfile.objects.get(user=request.user)
+
 def login(request):
     context = RequestContext(request)
     dictonary = {}
@@ -74,3 +83,25 @@ def create_user(request):
 def logout(request):
     auth_logout(request)
     return redirect('/account/login')
+
+
+class CreateGroupForm(FormView):
+    form_class = group_forms.GroupForm
+    template_name = 'Account/create_group.html'
+    success_url = '/group/'
+    
+    @method_decorator(login_required(login_url='account/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        return FormView.dispatch(self, request, *args, **kwargs)
+    
+    
+    def get(self, request, *args, **kwargs):
+        self.initial = {'group_admin' : get_user(request), 'valid_to_date' : date.today().replace(year=date.today().year + 1)}
+        return FormView.get(self, request, *args, **kwargs)
+    
+    
+    def form_valid(self, form):
+        form.save()
+        return FormView.form_valid(self, form)
+    
+    

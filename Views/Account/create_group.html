@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+<div class="row">
+	<div class="col-xs-12">
+		<h3>Opprett gruppe</h3>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<form method="post" action="">
+			{% csrf_token %}
+			{{form}}
+			<div class="pull-right margin-top margin-bottom">
+				<input type="submit" value="Lagre" class="btn btn-primary">
+			</div>
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}
