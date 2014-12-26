@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>{{group.name}}</h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="well">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Navn<th>
+							<th><th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for member in members %}
+							<tr>
+								<td>{{member.name}}</td>
+								<td></td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

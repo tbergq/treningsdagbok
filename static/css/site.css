@@ -24,8 +24,12 @@ body {
 
 /* background styling */
 
-.well-table {
+/*.well-table {
     background-color:white;
+}*/
+
+.well > table {
+	background-color:white;
 }
 
 .selected-exercise{

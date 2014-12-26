@@ -23,18 +23,26 @@ def login(request):
     context = RequestContext(request)
     dictonary = {}
     view = 'Account/login.html'
+    #redirect_url = '/programs/'
     if request.method == 'GET':
+        redirect_url = request.GET.get('next', '/programs/')
+        print request.GET
+        dictonary['redirect_url'] = redirect_url
         return render_to_response(view, dictonary, context)
     elif request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        redirect_url = request.POST.get('redirect_url')
         user = authenticate(username=username, password=password)
         if user:
             auth_login(request,user)
+            print 'auth'
+            #return redirect(redirect_url)
             return redirect('/programs/')
         else :
             #return HttpResponse("brukernavn eller passord er feil <a href='/account/login/'> tilbake </a>")
             dictonary["error"] = 'brukernavn eller passord er feil'
+            dictonary['redirect_url'] = redirect_url
             return render_to_response(view, dictonary, context)
 
 

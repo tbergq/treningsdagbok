@@ -13,6 +13,7 @@
     {% endif %}
         <form action="/account/login/" method="post">
             {% csrf_token %}
+            <input type="text" class="hidden" value="{{redirect_url}}" name="redirect_url">
             <div class="form-group">
                 <label>Brukernavn</label>
                 <input class="form-control" name="username" type="text" value="" placeholder="brukernavn">

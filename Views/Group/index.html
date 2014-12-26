@@ -12,7 +12,22 @@
 	</div>
 	<div class="col-xs.12 col-sm-9">
 		<div class="well">
-			Vis oversikt over gruppe her
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Gruppe</th>
+						<th>Utløpsdato</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for group in model %}
+						<tr>
+							<td><a href="{% url 'group_info' group.id %}">{{group.name}}</a></td>
+							<td>{{group.valid_to_date}}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 			
 			
 		</div>
