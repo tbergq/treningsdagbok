@@ -13,21 +13,29 @@
 		<div class="col-xs-12">
 			<div class="well">
 				<table class="table table-bordered">
-					<thead>
+					
 						<tr>
-							<th>Navn<th>
-							<th><th>
+							<th>Navn</th>
+							<th></th>
 						</tr>
-					</thead>
+					
 					<tbody>
 						{% for member in members %}
 							<tr>
-								<td>{{member.name}}</td>
+								<td>{{member.member.user.username}}</td>
 								<td></td>
 							</tr>
 						{% endfor %}
 					</tbody>
 				</table>
+				<div class="row">
+					<div class="col-xs-12">
+				
+						<div class="pull-right">
+							<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

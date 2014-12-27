@@ -44,7 +44,8 @@ class ShowRequestedGroup(TemplateView):
     def get_context_data(self, **kwargs):
         context = {}
         context['group'] = models.Group.objects.get(pk=kwargs['group_id'])
-        context['members'] = models.GroupMembers.objects.filter(group=context['group'])
+        context['members'] = models.GroupMembers.objects.filter(group_id=kwargs['group_id'])
+        
         return context
     
     
