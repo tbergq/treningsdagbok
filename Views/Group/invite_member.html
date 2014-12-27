@@ -1,0 +1,16 @@
+<div class="row">
+	<div class="col-xs-12">
+		<form action="{% url 'invite' %}" method="post">
+			{% csrf_token %}
+			<input type="text" class="hidden" value="{{group_id}}" name="group_id">
+			<div class="form-group">
+				<label>E-post</label>
+				<input type="text" class="form-control" name="e_mail" >
+			</div>
+			<div class="pull-right">
+				<span class="btn btn-default" data-dismiss="modal">Lukk</span>
+				<input type="submit" value="Send" class="btn btn-primary">
+			</div>
+		</form>
+	</div>
+</div>

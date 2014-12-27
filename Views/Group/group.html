@@ -1,5 +1,6 @@
 
 {% extends 'base.html' %}
+{% load static  %}
 
 {% block body_block %}
 
@@ -33,6 +34,7 @@
 				
 						<div class="pull-right">
 							<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
+							<button class="btn btn-primary" data-id="{{group.id}}">Legg til</button>
 						</div>
 					</div>
 				</div>
@@ -40,4 +42,12 @@
 		</div>
 	</div>
 	
+	{% include 'Shared/modal.html' %}
+	
+{% endblock %}
+
+
+
+{% block js %}
+	<script src="{% static 'scripts/group/inviteGroupMember.js' %}"></script>
 {% endblock %}
