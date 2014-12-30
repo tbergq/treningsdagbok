@@ -8,6 +8,11 @@ body {
 	background-color:white;
 }
 
+.main-container > div, span, p {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
 /* margins */
 
 .margin-left {
@@ -24,9 +29,7 @@ body {
 
 /* background styling */
 
-/*.well-table {
-    background-color:white;
-}*/
+
 
 .well > table {
 	background-color:white;

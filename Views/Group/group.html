@@ -1,53 +1,79 @@
+ {% extends 'base.html' %} {% load static %} {% block body_block %}
 
-{% extends 'base.html' %}
-{% load static  %}
-
-{% block body_block %}
-
-	<div class="row">
-		<div class="col-xs-12">
-			<h3>{{group.name}}</h3>
-		</div>
+<div class="row">
+	<div class="col-xs-12">
+		<h3>{{group.name}}</h3>
 	</div>
+</div>
+{% if error %}
+<div class="alert alert-danger">{{error}}</div>
+{% endif %}
+<div class="row">
+	<div class="col-xs-12 col-sm-6">
+		<div class="well">
+		<h4>Medlemmer</h4>
+			<table class="table table-bordered">
 
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="well">
-				<table class="table table-bordered">
-					
-						<tr>
-							<th>Navn</th>
-							<th></th>
-						</tr>
-					
-					<tbody>
-						{% for member in members %}
-							<tr>
-								<td>{{member.member.user.username}}</td>
-								<td></td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<div class="row">
-					<div class="col-xs-12">
-				
-						<div class="pull-right">
-							<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
-							<button class="btn btn-primary" data-id="{{group.id}}">Legg til</button>
-						</div>
+				<tr>
+					<th>Navn</th>
+					<th></th>
+				</tr>
+
+				<tbody>
+					{% for member in members %}
+					<tr>
+						<td>{{member.member.user.username}}</td>
+						<td></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="pull-right">
+						<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
+						<button class="btn btn-primary add-member" data-id="{{group.id}}">Legg
+							til</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	{% include 'Shared/modal.html' %}
-	
-{% endblock %}
+	<div class="col-xs-12 col-sm-6">
+		<div class="well">
+			<h4>Programmer</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Navn</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for program in programs %}
+						<tr>
+							<td>{{program.program.name}}</td>
+							<td></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="pull-right">
+						<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
+						<button class="btn btn-primary add-program" data-id="{{group.id}}">
+							Legg til
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 
+{% include 'Shared/modal.html' %} {% endblock %} {% block js %}
 
-{% block js %}
-	<script src="{% static 'scripts/group/inviteGroupMember.js' %}"></script>
+<script src="{% static 'scripts/group/inviteGroupMember.js' %}"></script>
 {% endblock %}

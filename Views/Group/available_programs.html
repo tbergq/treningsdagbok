@@ -1,0 +1,32 @@
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Programmer</th>
+					<th></th>
+				</tr>
+			</thead>
+			{% for program in programs %}
+				<tr>
+					<td>
+						{{program.name}}
+					</td>
+					<td>
+						<form id="form-{{program.id}}" method="post" action="{% url 'add_program' %}">
+							{% csrf_token %}
+							<input type="text" class="hidden" value="{{program.id}}" name="program_id">
+							<input type="text" class="hidden" value="{{group_id}}" name="group_id">
+							<button type="submit" class="btn btn-sm btn-success">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		<div class="pull-right">
+				<span class="btn btn-default" data-dismiss="modal">Lukk</span>
+			</div>
+	</div>
+</div>
