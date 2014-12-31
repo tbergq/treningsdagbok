@@ -59,6 +59,10 @@ body {
 	cursor: pointer;
 }
 
+.fc-content {
+	cursor: pointer;
+}
+
 /* combox styling */
 .custom-combobox {
 	position: relative;
