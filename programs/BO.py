@@ -97,14 +97,14 @@ class ProgramManager(models.Manager):
         def get_programs_for_register(self, user_profile_id):
             cursor = connection.cursor()
             cursor.execute("""
-            Select * from Treningsdagbok.programs_program
+            Select * from programs_program
             where user_id = %s
             UNION
-            SELECT * FROM Treningsdagbok.programs_program
+            SELECT * FROM programs_program
             where id in
-            (SELECT program_id from Treningsdagbok.group_groupprograms
+            (SELECT program_id from group_groupprograms
             where group_id in
-            (select group_id from Treningsdagbok.group_groupmembers
+            (select group_id from group_groupmembers
             where member_id = %s))
             order by date desc""" %(user_profile_id, user_profile_id))
             result_list = []
