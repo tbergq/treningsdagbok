@@ -131,7 +131,7 @@ class ProgramWeeks(TemplateView):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        model = MyProgramsViewModel(kwargs['program_id'])
+        model = MyProgramsViewModel(kwargs['program_id'], get_user(request).id)
         context = {'model' : model
                    }
         return render(request, self.template_name, context)
