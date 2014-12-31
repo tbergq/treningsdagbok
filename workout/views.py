@@ -20,13 +20,18 @@ from workout.models import ExcerciseRegister
 # Create your views here.
 
 workout_service = WorkoutServie
+program_service = BO.ProgramService()
+program_manager = BO.ProgramManager()
 
 def get_user(request):
     return account_models.UserProfile.objects.get(user=request.user)
 
 @login_required
 def index(request):
-    programs = program_models.Program.objects.filter(user=get_user(request))
+    current_user = get_user(request)
+    programs = program_manager.get_programs_for_register(current_user.id) #program_models.Program.objects.filter(user=current_user)
+    #group_programs = program_service.get_group_programs(current_user)
+    
     return render(request, 'Workout/index.html', {'programs' : programs}) 
 
 

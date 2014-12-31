@@ -14,13 +14,14 @@
             </div>
             <div class="col-sm-9 col-xs-12">
             	<div class="well">
+            	
             	<h4>Velg økt</h4>
             		<table class="table table-bordered well-table">
             			<thead>
             				<tr>
             				<th>Navn</th>
             				<th>Dato</th>
-            				<th>Handling</th>
+            				<!-- <th>Handling</th> -->
             				</tr>
             				
             			</thead>
@@ -29,14 +30,16 @@
             			<tr>
             				
             				<td>
+            					<a href="{% url 'select' program.id %}">
             					{{program.name}}
+            					</a>
             				</td>
             				<td>{{program.date}}</td>
-            				<td>
+            				<!-- <td>
             					<form method="get" action="/workout/select/{{program.id}}/">
             						<input type="submit" class="btn btn-primary btn-sm" value="Registrer">
             					</form>
-            				</td>
+            				</td> -->
             				
             			</tr>
             			{% endfor %}

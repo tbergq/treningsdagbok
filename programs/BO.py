@@ -4,6 +4,8 @@ from django.db import models
 import forms
 from __builtin__ import True
 from workout import models as workout_models
+from group import models as group_models
+from django.db import connection
 
 class WeekService:
     repository = Week
@@ -71,6 +73,14 @@ class ProgramService:
                 return False
         return is_deletable
     
+    def get_group_programs(self, user_profile):
+        groups = group_models.GroupMembers.objects.filter(member=user_profile)
+        programs = []
+        for group in groups:
+            program_list = group_models.GroupPrograms.objects.filter(group_id=group.group_id)
+            programs.extend(program_list)
+        return programs
+            
     
     
     
@@ -82,10 +92,31 @@ class DayProgramService:
         
         return day_program
     
+class ProgramManager(models.Manager):
+        
+        def get_programs_for_register(self, user_profile_id):
+            cursor = connection.cursor()
+            cursor.execute("""
+            Select * from Treningsdagbok.programs_program
+            where user_id = %s
+            UNION
+            SELECT * FROM Treningsdagbok.programs_program
+            where id in
+            (SELECT program_id from Treningsdagbok.group_groupprograms
+            where group_id in
+            (select group_id from Treningsdagbok.group_groupmembers
+            where member_id = %s))
+            order by date desc""" %(user_profile_id, user_profile_id))
+            result_list = []
+            for row in cursor.fetchall():
+                element = Program(id=row[0],name=row[1],date=row[2],user_id=row[3])
+                result_list.append(element)
+            return result_list
+    
 class BaseExerciseService(models.Manager):
     
     def get_distinct_muscle_groups(self):
-        from django.db import connection
+        #from django.db import connection
         muscle_groups = []
         cursor = connection.cursor()
         cursor.execute("""
