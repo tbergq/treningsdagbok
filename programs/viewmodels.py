@@ -4,10 +4,10 @@ from workout import models as workout_models
 
 class DayProgramViewModel:
     
-    def __init__(self, dayProgram):
+    def __init__(self, dayProgram, user_profile_id):
         self.day_program = dayProgram
         self.exercise = []
-        registers = workout_models.DayRegister.objects.filter(day_program=self.day_program).exclude(end_time=None)
+        registers = workout_models.DayRegister.objects.filter(day_program=self.day_program, user_id=user_profile_id).exclude(end_time=None)
         self.is_registered = len(registers) > 0
        
         for ex in models.DayExcersice.objects.filter(day_program=dayProgram):
@@ -16,22 +16,22 @@ class DayProgramViewModel:
         
 class WeekViewModel:
     
-    def __init__(self, week_entity):
+    def __init__(self, week_entity, user_profile_id):
         self.week = week_entity
         self.day_program = []
         for day in models.DayProgram.objects.filter(week=self.week):
-            self.day_program.append(DayProgramViewModel(day))
+            self.day_program.append(DayProgramViewModel(day, user_profile_id))
         
     
 
 class MyProgramsViewModel:
     
-    def __init__(self, program_id):
+    def __init__(self, program_id, user_profile_id):
         self.program = models.Program.objects.get(pk=program_id)
         self.weeks = []
         
         for week in models.Week.objects.filter(program=self.program):
-            self.weeks.append(WeekViewModel(week))
+            self.weeks.append(WeekViewModel(week, user_profile_id))
             
 
 class ShowExersiceViewModel:

@@ -40,8 +40,11 @@ class LoadExercise(TemplateView):
     template_name = 'Workout/select.html'
     #model = program_models.Program
     
-    def get_context_data(self, **kwargs):
-        return {'object' : viewmodels.MyProgramsViewModel(kwargs['program_id'])}
+    def get(self, request, *args, **kwargs):
+        context = {'object' : viewmodels.MyProgramsViewModel(kwargs['program_id'], get_user(request).id)}
+        return self.render_to_response(context)
+    
+     
     
     @method_decorator(login_required(redirect_field_name='/workout/select/', login_url='/account/'))
     def dispatch(self, request, *args, **kwargs):
@@ -51,10 +54,14 @@ class RegisterWorkout(TemplateView):
     
     template_name = 'Workout/register.html'
     
+    def get(self, request, *args, **kwargs):
+        self.user = get_user(request)
+        return TemplateView.get(self, request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         day_id = kwargs['day_id']
         program_id = kwargs['program_id']        
-        day_register = workout_models.DayRegister.objects.filter(day_program_id=day_id)
+        day_register = workout_models.DayRegister.objects.filter(day_program_id=day_id, user=self.user)
         
         if len(day_register) == 0:
             date = ''
@@ -85,6 +92,7 @@ class RegisterPartial(FormView):
     
     
     def get(self, request, *args, **kwargs):
+        self.user = get_user(request)
         self.initial['day_id'] = kwargs['day_id']#day program id
         self.initial['exercise_id'] = kwargs['exercise_id']#day exercise id
         return FormView.get(self, request, *args, **kwargs)
@@ -93,7 +101,7 @@ class RegisterPartial(FormView):
         day_id = kwargs['day_id']
         exercise_id = kwargs['exercise_id']
         self.success_url = '/workout/register_partial/%s/%s/' % (day_id,exercise_id)
-        print "success_url: %s" % self.success_url
+        
         return FormView.post(self, request, *args, **kwargs)
     
     def form_valid(self, form):
@@ -106,7 +114,7 @@ class RegisterPartial(FormView):
     
     
     def get_initial(self):
-        day_register = workout_models.DayRegister.objects.get(day_program_id=self.initial['day_id'])
+        day_register = workout_models.DayRegister.objects.get(day_program_id=self.initial['day_id'], user=self.user)
         previous_sets = workout_models.ExcerciseRegister.objects.filter(day_excersice_id=self.initial['exercise_id']).order_by('set_number')
         
         set_number = len(previous_sets) + 1
