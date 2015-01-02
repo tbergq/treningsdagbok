@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block body_block %}
 
 <div class="row">
@@ -39,6 +39,7 @@
             				{% elif not day.is_registered %}
             				<a class="btn btn-xs btn-primary" href="/workout/register/{{day.day_program.id}}/{{object.program.id}}/">Registrer</a>
             				{% endif %}
+            				<button class="btn btn-xs btn-primary show-day" data-id="{{day.day_program.id}}">Vis dag</button>
             			</tr>
             			{% endfor %}
             			</table>
@@ -51,6 +52,11 @@
             
             </div>
 </div>
+
+{% include 'Shared/modal.html' %}            
             
-            
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'scripts/workout/select.js' %}"></script>
 {% endblock %}

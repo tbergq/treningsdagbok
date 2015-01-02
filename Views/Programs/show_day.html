@@ -22,6 +22,7 @@
 				<td>{{element.exercise.reps}}</td>
 				<td>{{element.exercise.break_time}} min</td>
 				<td>
+				{% if editable %}
 					<button class="btn btn-xs btn-success" onclick="loadEditExcerciseWarning(this)" data-url="{% url 'edit_day' element.exercise.id %}">
 						<span class="glyphicon glyphicon-edit"></span>
 					</button>
@@ -29,7 +30,7 @@
 						onclick="loadDeleteExcerciseWarning(this)">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
-					
+					{% endif %}
 				</td>
 			</tr>
 			

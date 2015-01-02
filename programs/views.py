@@ -287,12 +287,14 @@ class EditExerciseView(UpdateView):
 class ShowDayPartialView(TemplateView):
     template_name = 'Programs/show_day.html'
     
-    @method_decorator(login_required)
+    @method_decorator(login_required(login_url='account/login/'))
     def get(self, request, *args, **kwargs):
         day_id = kwargs['day_id']
         model = ShowDayViewModel(day_id)
-        
-        return render(request, self.template_name, {'model' : model})
+        show_edit_delete = request.GET.get('hideEditDelete', True)
+        if show_edit_delete and show_edit_delete == 'false':
+            show_edit_delete = False
+        return render(request, self.template_name, {'model' : model, 'editable' : show_edit_delete})
 
 
 def add_day(request, week_id):
