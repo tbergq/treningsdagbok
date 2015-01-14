@@ -101,12 +101,18 @@ class RegisterPartial(FormView):
         day_id = kwargs['day_id']
         exercise_id = kwargs['exercise_id']
         self.success_url = '/workout/register_partial/%s/%s/' % (day_id,exercise_id)
-        
-        return FormView.post(self, request, *args, **kwargs)
+        form_class = self.get_form_class()        
+        form = form_class(request.POST)        
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
     
     def form_valid(self, form):
         form.save()
         return FormView.form_valid(self, form)
+    
     
     @method_decorator(login_required(login_url='/account/'))
     def dispatch(self, request, *args, **kwargs):
