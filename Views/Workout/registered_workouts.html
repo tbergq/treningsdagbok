@@ -18,9 +18,14 @@
     	<div class="well  overflow-x-auto">
     	
     	<select class="form-control margin-bottom" id="programDropdown" onchange="loadRequestedProgram()">
-    		<option value="">--Velg--</option>
+    		<option value="">Alle programmer</option>
     		{% for element in select_list_items %}
-    		<option value="{{element.value}}">{{element.name}}</option>
+    			{% if element.is_selected %}
+    		
+    		<option value="{{element.value}}" selected>{{element.name}}</option>
+    		{% else %}
+    		<option value="{{element.value}}">{{element.name}}</option> 
+    		{% endif %}
     		{% endfor %}
     	</select>
     	

@@ -18,9 +18,11 @@ class ExerciseRegisterService:
     
 class SelectListItem():
     
-    def __init__(self, name, value):
+    def __init__(self, name, value, is_selected):
         self.name = name
         self.value = value
+        self.is_selected = is_selected
+        
     
 class WorkoutManager(models.Manager):
     def get_day_registers_for_program(self, requested_program_id):
@@ -40,7 +42,7 @@ class WorkoutManager(models.Manager):
             result_list.append(day_register)
         return result_list
     
-    def get_selectlistitems_for_registered_workout(self, user_id):
+    def get_selectlistitems_for_registered_workout(self, user_id, requested_id):
         cursor = connection.cursor()
         cursor.execute("""
         select name, id from programs_program
@@ -58,7 +60,7 @@ class WorkoutManager(models.Manager):
                        """% user_id)
         result_list = []
         for row in cursor.fetchall():
-            
-            select_list_item = SelectListItem(row[0],row[1])
+            is_requested = int(row[1]) == int(requested_id)
+            select_list_item = SelectListItem(row[0],row[1], is_requested)
             result_list.append(select_list_item)
         return result_list
