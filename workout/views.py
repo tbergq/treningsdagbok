@@ -20,6 +20,7 @@ from workout.models import ExcerciseRegister
 # Create your views here.
 
 workout_service = WorkoutServie
+workout_manager = WorkoutServie.WorkoutManager()
 program_service = BO.ProgramService()
 program_manager = BO.ProgramManager()
 
@@ -144,9 +145,7 @@ def finish_register(request, program_id):
     if not register.end_time:
         register.end_time = datetime.datetime.now()
         register.save()
-        print register.end_time
-    else:
-        print "pala"
+        
     return redirect('/workout/')
     
     
@@ -159,7 +158,13 @@ class ShowRegisteredExercises(TemplateView):
         return TemplateView.dispatch(self, request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
-        context = {'model' : workout_models.DayRegister.objects.filter(user=get_user(request)).exclude(end_time=None) }
+        requested_program = request.GET.get('program_id', None)
+        context = {}
+        context['select_list_items'] = workout_manager.get_selectlistitems_for_registered_workout(get_user(request).id)
+        if requested_program:
+            context['model'] =  workout_manager.get_day_registers_for_program(requested_program)
+        else:
+            context['model'] =  workout_models.DayRegister.objects.filter(user=get_user(request)).exclude(end_time=None) 
         return self.render_to_response(context)
     
     

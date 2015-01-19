@@ -16,6 +16,14 @@
     </div>
     <div class="col-sm-9 col-xs-12">
     	<div class="well  overflow-x-auto">
+    	
+    	<select class="form-control margin-bottom" id="programDropdown" onchange="loadRequestedProgram()">
+    		<option value="">--Velg--</option>
+    		{% for element in select_list_items %}
+    		<option value="{{element.value}}">{{element.name}}</option>
+    		{% endfor %}
+    	</select>
+    	
     	<table class="table table-bordered well-table">
     		<thead>
     			<tr>
@@ -43,4 +51,7 @@
     </div>
 </div>
 
+{% endblock %}
+{% block js %}
+<script src="{% static 'scripts/workout/registeredWorkouts.js' %}"></script>
 {% endblock %}
