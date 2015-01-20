@@ -9,16 +9,6 @@ function loadRequestedProgram() {
 		document.open();
 		document.write(data);
 		document.close();
-		setDropdown(programId);
 	});
 }
 
-function setDropdown(programValue) {
-	var options = $("#programDropdown").find("option");
-	for(var i = 0; i < options.length; i++) {
-		if(option[i].value == programValue) {
-			alert(option[i]);
-			break;
-		}
-	}
-}
