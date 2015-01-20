@@ -165,7 +165,7 @@ class ShowRegisteredExercises(TemplateView):
             context['model'] =  workout_manager.get_day_registers_for_program(requested_program)
             context['select_list_items'] = workout_manager.get_selectlistitems_for_registered_workout(get_user(request).id, requested_program)
         else:
-            context['model'] =  workout_models.DayRegister.objects.filter(user=get_user(request)).exclude(end_time=None)
+            context['model'] =  workout_models.DayRegister.objects.filter(user=get_user(request)).exclude(end_time=None).order_by('-start_time')
             context['select_list_items'] = workout_manager.get_selectlistitems_for_registered_workout(get_user(request).id, 0) 
         
         return self.render_to_response(context)

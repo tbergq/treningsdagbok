@@ -33,7 +33,7 @@ class WorkoutManager(models.Manager):
         select id from programs_dayprogram
         where week_id in(
         select id from programs_week 
-        where program_id = %s))
+        where program_id = %s)) order by start_time desc
                        """ % requested_program_id)
         result_list = []
         for row in cursor.fetchall():
@@ -56,7 +56,7 @@ class WorkoutManager(models.Manager):
         and user_id = %s
         )
         )
-        )
+        ) 
                        """% user_id)
         result_list = []
         for row in cursor.fetchall():
