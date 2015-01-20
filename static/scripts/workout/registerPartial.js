@@ -14,12 +14,14 @@ $(document).ready(
 					type : "POST",
 					data : $("#partialForm").serialize()
 				}).done(function(data) {
-					$(".modal-body").html(data);
+					$("#registerPartial").html(data);
 				});
 			});
-			getPreviousSetData(ex_id);
-			getPreviousLifted(ex_id);
+			//getPreviousSetData(ex_id);
+			//getPreviousLifted(ex_id);
 			$("#submitPartialButton").attr('disabled', false);
+			
+			
 		});
 
 
@@ -30,6 +32,7 @@ function getPreviousSetData(id) {
 		
 	}).done(function(data){
 		$("#previousDiv").html(data);
+		
 	});
 }
 
@@ -39,6 +42,7 @@ function getPreviousLifted(id) {
 		type : "GET"
 	}).done(function(data){
 		$("#previousLiftedDiv").html(data);
+		
 	})
 }
 

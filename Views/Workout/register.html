@@ -51,7 +51,7 @@
             			<td>{{element.reps}}</td>
             			<td>
             			<button class="btn btn-xs btn-success register-button" id="{{element.id}}" onclick="loadRegisterPartial(this)")
-            			data-name="{{element.name}}, Sets: {{element.sets}}, Reps: {{element.reps}}">
+            			data-name="{{element.name}}, set: {{element.sets}}, rep: {{element.reps}},  pause: {{element.break_time}}min">
             				<span class="glyphicon glyphicon-edit"></span>
             			</button>
             			</td>
@@ -68,15 +68,21 @@
     </div>
 </div>
 
-
-
 <div class="row">
-	<div class="col-xs-12">	
-		{% include 'Shared/modal.html' %}
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3">
+		<h5 id="headerName"></h5>
 	</div>
 </div>
+	
+<div class="row">
+	
+	<div class="col-xs-12 col-sm-9 col-sm-offset-3" id="registerPartial">	
+		
+	</div>
+	
+</div>
 
-
+{% endblock %}
 {% block js %}
 <script>
 	var day_id = '{{model.id}}';//day program id
@@ -87,4 +93,3 @@
 
 
 
-{% endblock %}

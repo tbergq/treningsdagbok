@@ -9,10 +9,10 @@ function loadRegisterPartial(element) {
 		url : "/workout/register_partial/" + day_id + "/" + exercise_id + "/",
 		type : "GET"	
 	}).done(function(data){
-		
-		$(".modal-body").html(data);
-		$(".modal-header").html(name);
-		$("#myModal").modal('show');
+		$("#headerName").html(name);
+		$("#registerPartial").html(data);
+		//$(".modal-header").html(name);
+		//$("#myModal").modal('show');
 	}).error(function(data){
 		
 	});

@@ -90,12 +90,15 @@ class RegisterPartial(FormView):
     form_class = forms.ExcerciseRegisterForm
     succsess_url = '/workout/register_partial/'
     initial = {}
+    additional_data = {}
     
     
     def get(self, request, *args, **kwargs):
         self.user = get_user(request)
         self.initial['day_id'] = kwargs['day_id']#day program id
         self.initial['exercise_id'] = kwargs['exercise_id']#day exercise id
+        self.additional_data['registered_this_workout'] = get_previous_register_data(kwargs['exercise_id'])
+        self.additional_data['previous_lifted'] = get_most_recent_exercise_data(self.user, kwargs['exercise_id'])
         return FormView.get(self, request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
@@ -113,6 +116,11 @@ class RegisterPartial(FormView):
     def form_valid(self, form):
         form.save()
         return FormView.form_valid(self, form)
+    
+    def get_context_data(self, **kwargs):
+        kwargs['registered_this_workout'] = self.additional_data['registered_this_workout']
+        kwargs['previous_lifted'] = self.additional_data['previous_lifted']
+        return FormView.get_context_data(self, **kwargs)
     
     
     @method_decorator(login_required(login_url='/account/'))
@@ -208,20 +216,20 @@ class StartDayRegister(RedirectView):
         
         return "%s%s/%s" % (self.url, kwargs['id'], kwargs['program_id'])
     
-@login_required
-def get_previous_register_data(request, exercise_id):
+
+def get_previous_register_data(exercise_id):
     
     exercises = workout_models.ExcerciseRegister.objects.filter(day_excersice_id=exercise_id).order_by('set_number')
-    previous_set_weight = ""
+    previous_set_weight = u"Registrert denne økt: "
     for i in range(len(exercises)):
         previous_set_weight += "%s x %skg, " % (exercises[i].reps, exercises[i].weight)
     
-    return render_to_response('Workout/previous_register_data.html', {'text' : previous_set_weight}, RequestContext(request))
+    return previous_set_weight
 
-@login_required
-def get_most_recent_exercise_data(request, day_exercise_id):
+
+def get_most_recent_exercise_data(current_user, day_exercise_id):
     day_exercise = program_models.DayExcersice.objects.get(pk=day_exercise_id)
-    my_day_registers = workout_models.DayRegister.objects.filter(user=get_user(request)).order_by('start_time')
+    my_day_registers = workout_models.DayRegister.objects.filter(user=current_user).order_by('start_time')
     previous_info = u"Siste registrerte av samme øvelse:"
     ready_for_return = False
     for register in my_day_registers:
@@ -232,9 +240,9 @@ def get_most_recent_exercise_data(request, day_exercise_id):
                 previous_info += " %s x %skg," %(excercise.reps, excercise.weight)
                 ready_for_return = True
         if ready_for_return:
-            return render_to_response('Workout/previous_lifted.html', {'text' : previous_info}, RequestContext(request))
+            return previous_info
     
-    return render_to_response('Workout/previous_lifted.html', {'text' : 'Ingen registrerte tidligere for denne øvelsen'}, RequestContext(request))
+    return u'Ingen registrerte tidligere for denne øvelsen'
 
 
 

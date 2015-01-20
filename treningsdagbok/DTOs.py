@@ -13,6 +13,7 @@ class DTODayExcercise():
         self.sets  = exersice.set
         self.reps = exersice.reps
         self.description = exersice.description
+        self.break_time = exersice.break_time
 
 class DTODayProgram():
     
