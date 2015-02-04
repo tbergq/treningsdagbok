@@ -11,6 +11,7 @@ function loadRegisterPartial(element) {
 	}).done(function(data){
 		$("#headerName").html(name);
 		$("#registerPartial").html(data);
+		$("body").scrollTo("#registerPartial");
 		//$(".modal-header").html(name);
 		//$("#myModal").modal('show');
 	}).error(function(data){
