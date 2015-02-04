@@ -94,6 +94,7 @@ class RegisterPartial(FormView):
     
     
     def get(self, request, *args, **kwargs):
+        
         self.user = get_user(request)
         self.initial['day_id'] = kwargs['day_id']#day program id
         self.initial['exercise_id'] = kwargs['exercise_id']#day exercise id
@@ -106,7 +107,8 @@ class RegisterPartial(FormView):
         exercise_id = kwargs['exercise_id']
         self.success_url = '/workout/register_partial/%s/%s/' % (day_id,exercise_id)
         form_class = self.get_form_class()        
-        form = form_class(request.POST)        
+        form = form_class(request.POST)
+
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -114,12 +116,17 @@ class RegisterPartial(FormView):
     
     
     def form_valid(self, form):
-        form.save()
+        form_object = form.save(commit=False)
+        exists_register_with_same_set = workout_manager.exists_day_register(form_object)
+        if not exists_register_with_same_set:
+            form.save()
         return FormView.form_valid(self, form)
     
     def get_context_data(self, **kwargs):
         kwargs['registered_this_workout'] = self.additional_data['registered_this_workout']
         kwargs['previous_lifted'] = self.additional_data['previous_lifted']
+        if 'spam_error' in self.additional_data:
+            kwargs['spam_error'] = self.additional_data['spam_error']
         return FormView.get_context_data(self, **kwargs)
     
     

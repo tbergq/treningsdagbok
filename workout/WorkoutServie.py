@@ -25,6 +25,17 @@ class SelectListItem():
         
     
 class WorkoutManager(models.Manager):
+    
+    def exists_day_register(self, form_object):
+
+        exercise = ExcerciseRegister.objects.filter(day_excersice_id=form_object.day_excersice, day_register_id=form_object.day_register, set_number=form_object.set_number)
+        
+        if exercise:
+            return True
+        else:
+            return False
+        
+        
     def get_day_registers_for_program(self, requested_program_id):
         cursor = connection.cursor()
         cursor.execute("""
