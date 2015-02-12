@@ -9,6 +9,7 @@ import models
 from programs import models as program_models
 from django.contrib.auth.models import User
 import json
+from workout.views import workout_service
 
 # Create your views here.
 
@@ -127,7 +128,26 @@ class AddProgramToGroup(RedirectView):
     
     
     
+class ShowGroupUserWorkouts(TemplateView):
+    template_name = 'Workout/registered_workouts.html'
     
+    @method_decorator(login_required(login_url='/account/'))
+    def dispatch(self, request, *args, **kwargs):
+        if not validate_user(request):
+            return redirect('/group/purchase_info/')
+        return TemplateView.dispatch(self, request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        requested_program = request.GET.get('program_id', None)
+        user_id = kwargs['user_id']
+        group_id = kwargs['group_id']
+        context = {}
+        if requested_program:
+            print 'req'
+        else:
+            context['model'] = workout_service.WorkoutManager().get_day_program_list_from_user_and_group(user_id, group_id)
+            context['select_list_items'] = workout_service.WorkoutManager().get_selectlistitems_for_registered_workout(get_user(request).id, 0) 
+        return self.render_to_response(context)
     
     
     

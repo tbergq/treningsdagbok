@@ -23,7 +23,11 @@
 					{% for member in members %}
 					<tr>
 						<td>{{member.member.user.username}}</td>
-						<td></td>
+						<td>
+							<a href="{% url 'user_workout_info' member.member.user.id group.id %}" class="btn btn-success pull-right" title="Vis økter">
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -32,8 +36,9 @@
 				<div class="col-xs-12">
 					<div class="pull-right">
 						<a href="{% url 'group_index' %}" class="btn btn-default ">Tilbake</a>
-						<button class="btn btn-primary add-member" data-id="{{group.id}}">Legg
-							til</button>
+						<button class="btn btn-primary add-member" data-id="{{group.id}}">
+							Legg til
+						</button>
 					</div>
 				</div>
 			</div>

@@ -75,3 +75,29 @@ class WorkoutManager(models.Manager):
             select_list_item = SelectListItem(row[0],row[1], is_requested)
             result_list.append(select_list_item)
         return result_list
+    
+    def get_day_program_list_from_user_and_group(self, user_id, group_id):
+        cursor = connection.cursor()
+        cursor.execute("""
+        select * from workout_dayregister
+        where user_id = %s and
+        end_time is not null and
+        day_program_id in(
+        select id from programs_dayprogram
+        where week_id in(
+        select id from programs_week
+        where program_id in(
+        select program_id from group_groupprograms
+        where group_id = %s
+        )))
+        """ % (user_id, group_id))
+        result_list = []
+        for row in cursor.fetchall():
+            workout_object = DayRegister(row[0], row[3], row[4], row[2], row[1])
+            result_list.append(workout_object)
+            print row
+        return result_list
+    
+    
+    
+    
