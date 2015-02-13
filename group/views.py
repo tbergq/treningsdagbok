@@ -130,6 +130,7 @@ class AddProgramToGroup(RedirectView):
     
 class ShowGroupUserWorkouts(TemplateView):
     template_name = 'Workout/registered_workouts.html'
+    #TODO: Move to seperat template because of ability to edit other users
     
     @method_decorator(login_required(login_url='/account/'))
     def dispatch(self, request, *args, **kwargs):
