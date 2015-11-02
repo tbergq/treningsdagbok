@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from Account.models import UserProfile
 
 # Create your models here.
 class BaseExercise(models.Model):
@@ -22,4 +22,4 @@ class MuscleGroup(models.Model):
 class Program(models.Model):
     name = models.CharField(max_length=128)
     date = models.DateTimeField()
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(UserProfile)

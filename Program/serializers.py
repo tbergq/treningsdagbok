@@ -13,7 +13,10 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 		fields = ('id', 'name')
 
 class ProgramSerializer(serializers.ModelSerializer):
-	
+
+	def __unicode__(self):
+		return "%s-%s-%s" %(self.name, self.date, self.user)
+
 	class Meta:
 		model = Program
 		fields = ('id', 'name', 'date', 'user')
