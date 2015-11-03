@@ -1,6 +1,7 @@
 from rest_framework import generics, mixins
 from Program.models import BaseExercise, MuscleGroup, Program
-from Account.models import UserProfile
+from django.contrib.auth.models import User
+#from Account.models import UserProfile
 from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
@@ -37,7 +38,8 @@ class ProgramList(generics.ListCreateAPIView):
 		#serializer = ProgramSerializer(data=request.data)
 		date_now = datetime.datetime.now()
 		req = request.data
-		user_profile = UserProfile.objects.get(user_id=request.user.id)
+		print request.user.id
+		user_profile = User.objects.get(pk=request.user.id)
 		program = Program(name=req["name"], date=date_now, user=user_profile)
 		program.save()
 		serializer = ProgramSerializer(program)

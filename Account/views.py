@@ -6,15 +6,23 @@ from rest_framework.exceptions import ParseError
 from rest_framework import status
  
 from django.contrib.auth.models import User
+#from Account.models import UserProfile
+from Account.serializers import UserSerializer
+from rest_framework import generics
  
  
 # Create your views here.
-class AuthView(APIView):
-	"""
-	Authentication is needed for this methods
-	"""
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (IsAuthenticated,)
 
-	def get(self, request, format=None):
-		return Response({'detail': "I suppose you are authenticated"})
+
+class UserView(generics.RetrieveUpdateDestroyAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+
+	def post(self, request, format=None):
+		print "user post"
+		serializer = UserSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save();
+			#UserProfile.create_new(serializer.id)
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
