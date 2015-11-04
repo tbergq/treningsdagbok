@@ -33,9 +33,12 @@ class ProgramList(generics.ListCreateAPIView):
 	queryset = Program.objects.all()
 	serializer_class = ProgramSerializer
 
+	def get(self, request, format=None):
+		serializer = ProgramSerializer(Program.objects.filter(user_id=request.user.id), many=True)
+		return Response(serializer.data)
+
 	def post(self, request, format=None):
 		print "post program list"
-		#serializer = ProgramSerializer(data=request.data)
 		date_now = datetime.datetime.now()
 		req = request.data
 		print request.user.id
@@ -43,15 +46,7 @@ class ProgramList(generics.ListCreateAPIView):
 		program = Program(name=req["name"], date=date_now, user=user_profile)
 		program.save()
 		serializer = ProgramSerializer(program)
-		#serializer.date = datetime.datetime.now()
-		#serializer.user = request.user.id
-		#print serializer.name
-		#print serializer.date
-		#print serializer.user
-		#if serializer.is_valid():
-		#serializer.save()
 		return Response(serializer.data)
-		#return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
