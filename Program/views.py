@@ -1,12 +1,13 @@
 from rest_framework import generics, mixins
-from Program.models import BaseExercise, MuscleGroup, Program
+from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exersice
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
-from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer
+from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
 from rest_framework import status
+from Program import services
 
 class BaseExerciseList(generics.ListCreateAPIView):
 	queryset = BaseExercise.objects.all()
@@ -53,6 +54,20 @@ class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Program.objects.all()
 	serializer_class = ProgramSerializer
 
+	
 
+
+class WeekGroupList(generics.ListCreateAPIView):
+	queryset = Week.objects.all()
+	serializer_class = WeekSerializer
+
+
+
+	""""def post(self, request, format=None):
+		serializer = WeekSerializer(data=request.data)
+		if serializer.is_valid():
+			print "valid"
+		else:
+			print serializer.errors"""
 
 

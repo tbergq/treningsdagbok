@@ -24,3 +24,29 @@ class Program(models.Model):
     name = models.CharField(max_length=128)
     date = models.DateTimeField()
     user = models.ForeignKey(User)
+
+
+class Week(models.Model):
+    name = models.CharField(max_length=128)
+    program = models.ForeignKey(Program, related_name='weeks')
+
+
+class Day(models.Model):
+    name = models.CharField(max_length=128)
+    week = models.ForeignKey(Week)
+
+class Exersice(models.Model):
+    base_excersice = models.ForeignKey(BaseExercise)
+    set = models.CharField(max_length=10)
+    reps = models.CharField(max_length=128)
+    day = models.ForeignKey(Day)
+    description = models.CharField(max_length=128, null=True, blank=True)
+    break_time = models.TextField(max_length=10,blank=True)
+
+
+
+
+
+
+
+
