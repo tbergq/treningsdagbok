@@ -54,20 +54,27 @@ class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Program.objects.all()
 	serializer_class = ProgramSerializer
 
-	
+
 
 
 class WeekGroupList(generics.ListCreateAPIView):
 	queryset = Week.objects.all()
 	serializer_class = WeekSerializer
 
+class WeekDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Week.objects.all()
+	serializer_class = WeekSerializer
+
+class DayGroupList(generics.ListCreateAPIView):
+	queryset = Day.objects.all()
+	serializer_class = DaySerializer
+
+class DayDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Day.objects.all()
+	serializer_class = DaySerializer
 
 
-	""""def post(self, request, format=None):
-		serializer = WeekSerializer(data=request.data)
-		if serializer.is_valid():
-			print "valid"
-		else:
-			print serializer.errors"""
+
+	
 
 

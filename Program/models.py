@@ -33,7 +33,7 @@ class Week(models.Model):
 
 class Day(models.Model):
     name = models.CharField(max_length=128)
-    week = models.ForeignKey(Week)
+    week = models.ForeignKey(Week, related_name='days')
 
 class Exersice(models.Model):
     base_excersice = models.ForeignKey(BaseExercise)

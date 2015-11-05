@@ -13,19 +13,21 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 		fields = ('id', 'name')
 
 
-
+class DaySerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Day
+		fields = ('id', 'name', 'week')
 	
 
 class WeekSerializer(serializers.ModelSerializer):
 
+	days = DaySerializer(many=True, read_only=True)
+
 	class Meta:
 		model = Week
-		fields = ('id', 'name', 'program')
+		fields = ('id', 'name', 'program', 'days')
 
-class DaySerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Day
-		fields = ('id', 'name')
+
 
 class ExerciseSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -37,7 +39,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 		model = Program
 		fields = ('id', 'name', 'date', 'user', 'weeks')
 
-	weeks = WeekSerializer(many=True, read_only=True)#serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+	weeks = WeekSerializer(many=True, read_only=True)
 
 	def __unicode__(self):
 		return "%s-%s-%s" %(self.name, self.date, self.user)
