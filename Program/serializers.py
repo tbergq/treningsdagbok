@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exersice
+from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
+from django.contrib.auth.models import User
 
 class BaseExerciseSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -12,11 +13,20 @@ class MuscleGroupSerializer(serializers.ModelSerializer):
 		model = MuscleGroup
 		fields = ('id', 'name')
 
+class ExerciseSerializer(serializers.ModelSerializer):
+	#base_exercise = BaseExerciseSerializer()
+	class Meta:
+		model = Exercise
+		fields = ('id', 'set', 'reps', 'day', 'description', 'break_time','base_exercise')
+
+
+
 
 class DaySerializer(serializers.ModelSerializer):
+	exercises = ExerciseSerializer(many=True, read_only=True)
 	class Meta:
 		model = Day
-		fields = ('id', 'name', 'week')
+		fields = ('id', 'name', 'week', 'exercises')
 	
 
 class WeekSerializer(serializers.ModelSerializer):
@@ -29,17 +39,19 @@ class WeekSerializer(serializers.ModelSerializer):
 
 
 
-class ExerciseSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Exersice
-		fields = ('id', 'set', 'reps', 'day', 'description', 'break_time')
+
 
 class ProgramSerializer(serializers.ModelSerializer):
+	weeks = WeekSerializer(many=True, read_only=True)
+
 	class Meta:
 		model = Program
 		fields = ('id', 'name', 'date', 'user', 'weeks')
 
-	weeks = WeekSerializer(many=True, read_only=True)
 
 	def __unicode__(self):
 		return "%s-%s-%s" %(self.name, self.date, self.user)
+
+
+
+

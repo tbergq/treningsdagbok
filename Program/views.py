@@ -1,5 +1,5 @@
 from rest_framework import generics, mixins
-from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exersice
+from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
 from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
@@ -34,9 +34,12 @@ class ProgramList(generics.ListCreateAPIView):
 	queryset = Program.objects.all()
 	serializer_class = ProgramSerializer
 
-	def get(self, request, format=None):
+
+
+	"""def get(self, request, format=None):
 		serializer = ProgramSerializer(Program.objects.filter(user_id=request.user.id), many=True)
-		return Response(serializer.data)
+		return Response(serializer.data)"""
+
 
 	def post(self, request, format=None):
 		print "post program list"
@@ -47,7 +50,11 @@ class ProgramList(generics.ListCreateAPIView):
 		program = Program(name=req["name"], date=date_now, user=user_profile)
 		program.save()
 		serializer = ProgramSerializer(program)
-		return Response(serializer.data)
+		return Response(serializer.data, status.HTTP_201_CREATED)
+
+	def get_queryset(self):
+		#user = self.request.user
+		return Program.objects.filter(user_id=self.request.user.id)
 
 
 class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -72,6 +79,15 @@ class DayGroupList(generics.ListCreateAPIView):
 class DayDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Day.objects.all()
 	serializer_class = DaySerializer
+
+
+class ExerciseGroupList(generics.ListCreateAPIView):
+	queryset = Exercise.objects.all()
+	serializer_class = ExerciseSerializer
+
+class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Exercise.objects.all()
+	serializer_class = ExerciseSerializer
 
 
 

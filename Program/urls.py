@@ -13,6 +13,8 @@ urlpatterns = [
 	url(r'^weeks/(?P<pk>[0-9]+)/$', views.WeekDetail.as_view()),
 	url(r'^days/$', views.DayGroupList.as_view()),
 	url(r'^days/(?P<pk>[0-9]+)/$', views.DayDetail.as_view()),
+	url(r'^exercises/(?P<pk>[0-9]+)/$', views.ExerciseDetail.as_view()),
+	url(r'^exercises/$', views.ExerciseGroupList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

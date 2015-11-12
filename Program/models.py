@@ -23,7 +23,7 @@ class MuscleGroup(models.Model):
 class Program(models.Model):
     name = models.CharField(max_length=128)
     date = models.DateTimeField()
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='program')
 
 
 class Week(models.Model):
@@ -35,11 +35,11 @@ class Day(models.Model):
     name = models.CharField(max_length=128)
     week = models.ForeignKey(Week, related_name='days')
 
-class Exersice(models.Model):
-    base_excersice = models.ForeignKey(BaseExercise)
+class Exercise(models.Model):
+    base_exercise = models.ForeignKey(BaseExercise, related_name="base_exercises")
     set = models.CharField(max_length=10)
     reps = models.CharField(max_length=128)
-    day = models.ForeignKey(Day)
+    day = models.ForeignKey(Day, related_name='exercises')
     description = models.CharField(max_length=128, null=True, blank=True)
     break_time = models.TextField(max_length=10,blank=True)
 
