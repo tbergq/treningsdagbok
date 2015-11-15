@@ -2,16 +2,21 @@ from rest_framework import serializers
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from django.contrib.auth.models import User
 
+class MuscleGroupSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = MuscleGroup
+		fields = ('id', 'name')
+
+		
+
 class BaseExerciseSerializer(serializers.ModelSerializer):
+	muscle_group = MuscleGroupSerializer()
 	class Meta:
 		model = BaseExercise
 		fields = ('id', 'name', 'youtube_link', 'muscle_group', 'description')
 
 
-class MuscleGroupSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = MuscleGroup
-		fields = ('id', 'name')
+
 
 class ExerciseSerializer(serializers.ModelSerializer):
 	#base_exercise = BaseExerciseSerializer()

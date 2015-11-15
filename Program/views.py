@@ -8,32 +8,36 @@ import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from Program import services
+from rest_framework.permissions import IsAuthenticated
 
 class BaseExerciseList(generics.ListCreateAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
-
+	permission_classes = (IsAuthenticated,)
 	
 
 class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
+	permission_classes = (IsAuthenticated,)
 
 
 class MuscleGroupList(generics.ListCreateAPIView):
 	queryset = MuscleGroup.objects.all()
 	serializer_class = MuscleGroupSerializer
+	permission_classes = (IsAuthenticated,)
 
 	
 
 class MuscleGroupDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = MuscleGroup.objects.all()
 	serializer_class = MuscleGroupSerializer
+	permission_classes = (IsAuthenticated,)
 
 class ProgramList(generics.ListCreateAPIView):
-	queryset = Program.objects.all()
+	queryset = Program.objects.order_by('id')
 	serializer_class = ProgramSerializer
-
+	permission_classes = (IsAuthenticated,)
 
 
 	"""def get(self, request, format=None):
@@ -54,12 +58,13 @@ class ProgramList(generics.ListCreateAPIView):
 
 	def get_queryset(self):
 		#user = self.request.user
-		return Program.objects.filter(user_id=self.request.user.id)
+		return Program.objects.filter(user_id=self.request.user.id).order_by('-date')
 
 
 class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Program.objects.all()
 	serializer_class = ProgramSerializer
+	permission_classes = (IsAuthenticated,)
 
 
 
@@ -67,27 +72,33 @@ class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
 class WeekGroupList(generics.ListCreateAPIView):
 	queryset = Week.objects.all()
 	serializer_class = WeekSerializer
+	permission_classes = (IsAuthenticated,)
 
 class WeekDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Week.objects.all()
 	serializer_class = WeekSerializer
+	permission_classes = (IsAuthenticated,)
 
 class DayGroupList(generics.ListCreateAPIView):
 	queryset = Day.objects.all()
 	serializer_class = DaySerializer
+	permission_classes = (IsAuthenticated,)
 
 class DayDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Day.objects.all()
 	serializer_class = DaySerializer
+	permission_classes = (IsAuthenticated,)
 
 
 class ExerciseGroupList(generics.ListCreateAPIView):
 	queryset = Exercise.objects.all()
 	serializer_class = ExerciseSerializer
+	permission_classes = (IsAuthenticated,)
 
 class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Exercise.objects.all()
 	serializer_class = ExerciseSerializer
+	permission_classes = (IsAuthenticated,)
 
 
 
