@@ -19,7 +19,7 @@ class BaseExerciseSerializer(serializers.ModelSerializer):
 
 
 class ExerciseSerializer(serializers.ModelSerializer):
-	#base_exercise = BaseExerciseSerializer()
+	base_exercise = BaseExerciseSerializer(read_only=True)
 	class Meta:
 		model = Exercise
 		fields = ('id', 'set', 'reps', 'day', 'description', 'break_time','base_exercise')

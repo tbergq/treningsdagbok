@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'corsheaders',
     'Program',
-    'Account'
+    'Account',
+    'Workout'
 )
 
 MIDDLEWARE_CLASSES = (

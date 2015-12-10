@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^api/Program/', include('Program.urls')),
     url(r'^api/Account/', include('Account.urls')),
+    url(r'^api/Workout/', include('Workout.urls')),
 ]
