@@ -56,7 +56,7 @@ class RegisterDayDetail(generics.RetrieveUpdateDestroyAPIView):
 class ExcerciseRegisterList(generics.ListCreateAPIView):
 	serializer_class = ExcerciseSerializer
 	#queryset = workout_models.ExcerciseRegister.objects.all()
-	#permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated,)
 
 	def get_queryset(self):
 		day_register_id = self.request.query_params.get('day_register_id', None)
