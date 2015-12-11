@@ -14,12 +14,34 @@ class BaseExerciseList(generics.ListCreateAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
 	permission_classes = (IsAuthenticated,)
+
+	def post(self, request, format=None):
+		data = request.data;
+		print data
+		item = BaseExercise(muscle_group_id=data["muscle_group"], name=data["name"], youtube_link=data["youtube_link"], description=data["description"])
+		item.save()
+		serializer = BaseExerciseSerializer(item)
+		return Response(serializer.data, status.HTTP_201_CREATED)
 	
 
 class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
 	permission_classes = (IsAuthenticated,)
+
+	def update(self, request, *args, **kwargs):
+		data = request.data
+		print data
+		item = BaseExercise.objects.get(pk=data["id"])
+		item.description = data["description"]
+		item.muscle_group_id = data["muscle_group"]["id"]
+		item.name = data["name"]
+		item.youtube_link = data["youtube_link"]
+		item.save()
+		serializer = BaseExerciseSerializer(item)
+		return Response(serializer.data, status.HTTP_200_OK)
+
+
 
 
 class MuscleGroupList(generics.ListCreateAPIView):
@@ -94,6 +116,13 @@ class ExerciseGroupList(generics.ListCreateAPIView):
 	queryset = Exercise.objects.all()
 	serializer_class = ExerciseSerializer
 	permission_classes = (IsAuthenticated,)
+
+	def post(self, request, format=None):
+		data = request.data
+		item = Exercise(base_exercise_id=data["base_exercise"], set=data["set"], reps=data["reps"], day_id=data["day"], description=data["description"], break_time=data["break_time"])
+		item.save()
+		serializer = ExerciseSerializer(item)
+		return Response(serializer.data, status.HTTP_201_CREATED)
 
 class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Exercise.objects.all()
