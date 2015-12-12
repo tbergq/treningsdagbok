@@ -74,7 +74,16 @@ class WorkoutDaySerializer(serializers.ModelSerializer):
 		model = Day
 		fields = ('id', 'name', 'week', 'exercises')
 
+class WorkoutBaseExerciseSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = BaseExercise
+		fields = '__all__'
 
+class WorkoutExerciseSerializer(serializers.ModelSerializer):
+	base_exercise = WorkoutBaseExerciseSerializer(many=False, read_only=True)
+	class Meta:
+		model = Exercise
+		fields = '__all__'
 
 
 

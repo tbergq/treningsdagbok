@@ -10,6 +10,7 @@ urlpatterns = [
 	url(r'^exerciseRegister/$', views.ExcerciseRegisterList.as_view()),
 	url(r'^lastRegistered/$', views.GetLastRegisteredList.as_view()),
 	url(r'^exerciseRegisterForUser/$', views.RegisterDayAllForUserList.as_view()),
+	url(r'^exerciseRegisterForDay/(?P<day_register_id>[0-9]+)/$', views.ExcerciseRegisterForDayRegister.as_view()),
 	
 ]
 

@@ -28,4 +28,10 @@ class DayRegisterCustomSerializer(serializers.ModelSerializer):
 	day_program = program_serializers.WorkoutDaySerializer(many=False, read_only=True)
 	class Meta:
 		model = workout_models.DayRegister
-		fields = ('start_time', 'end_time', 'day_program', 'user')
+		fields = ('id', 'start_time', 'end_time', 'day_program', 'user')
+
+class ExerciseCustomSerializer(serializers.ModelSerializer):
+	day_excersice = program_serializers.WorkoutExerciseSerializer(many=False, read_only=True)
+	class Meta:
+		model = workout_models.ExcerciseRegister
+		fields = ('id', 'day_excersice', 'set_number', 'reps', 'weight', 'note')
