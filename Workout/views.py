@@ -5,7 +5,7 @@ from Workout.models import DayRegister
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
 from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
-from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer
+from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
@@ -25,6 +25,39 @@ class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
 	permission_classes = (IsAuthenticated,)"""
+
+class RegisterDayAllForUserList(generics.ListCreateAPIView):
+	permission_classes = (IsAuthenticated,)
+	serializer_class = DayRegisterCustomSerializer
+
+	"""def get(self, request, format=None):
+		print request
+		print request.build_absolute_uri()
+		registers = DayRegister.objects.filter(user_id=request.user.id).exclude(end_time__isnull=True)
+		data = []
+		for register in registers:
+			program_name = register.day_program.week.program.name
+			day = register.day_program.name
+			week = register.day_program.week.name
+			data.append(
+				{'program_name' : program_name, 
+				'start_time' : register.start_time, 
+				'end_time' : register.end_time,
+				'week_day' : "%s/%s" % (week, day)
+				})
+		limit = request.query_params.get('limit', None)
+		if limit == None or len(data < 10):
+			return Response(data, status.HTTP_200_OK)
+		else :
+			offset = request.query_params.get('offset', None)
+
+			pagination = {
+				'count' : len(data),
+
+			}
+			return Response(data, HTTP_200_OK)"""
+	def get_queryset(self):
+		return DayRegister.objects.filter(user_id=self.request.user.id).exclude(end_time__isnull=True).order_by('-start_time')
 
 
 class RegisterDayList(generics.ListCreateAPIView):
@@ -94,6 +127,13 @@ class GetLastRegisteredList(generics.ListCreateAPIView):
 
 
 
+class ExcerciseRegisterListForUser(generics.ListCreateAPIView):
+	serializer_class = ExcerciseSerializer
+	permission_classes = (IsAuthenticated, )
+
+	def get_queryset(self):
+		print "get query set"
+		return workout_services.WorkoutManager().get_latest_by_user_id(self.request.user.id)
 
 
 

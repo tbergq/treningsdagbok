@@ -65,6 +65,19 @@ class WorkoutManager(models.Manager):
 		
 		return return_list
 
+	def get_latest_by_user_id(self, user_id):
+		cursor = connection.cursor()
+		cursor.execute("""
+			SELECT * FROM Workout_excerciseregister
+			where day_register_id in(
+			select id from Workout_dayregister
+			where user_id = %s)
+			""" % user_id)
 
+		result_list = []
+		for row in cursor.fetchall():
+			register = workout_models.ExcerciseRegister(id=row[0], set_number=row[1], reps=row[2], weight=row[3], note=row[4], day_excersice_id=row[5], day_register_id=row[6])
+			result_list.append(register)
+		return result_list
 
 

@@ -57,6 +57,24 @@ class ProgramSerializer(serializers.ModelSerializer):
 	def __unicode__(self):
 		return "%s-%s-%s" %(self.name, self.date, self.user)
 
+class WorkoutProgramSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Program
+		fields = '__all__'
+
+class WorkoutWeekSerializer(serializers.ModelSerializer):
+	program = WorkoutProgramSerializer(many=False, read_only=True)
+	class Meta:
+		model = Week
+		fields = ('id', 'name', 'program', 'days')
+
+class WorkoutDaySerializer(serializers.ModelSerializer):
+	week = WorkoutWeekSerializer(many=False, read_only=True)
+	class Meta:
+		model = Day
+		fields = ('id', 'name', 'week', 'exercises')
+
+
 
 
 

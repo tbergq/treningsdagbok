@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 import Program.serializers as program_serializers
 
 class DayRegisterSerializer(serializers.ModelSerializer):
+	#day_program = program_serializers.DaySerializer(many=True, read_only=True)
 	class Meta:
 		model = workout_models.DayRegister
 		fields = '__all__'
@@ -22,3 +23,9 @@ class ExcerciseWithForeignSerializer(serializers.ModelSerializer):
 		model = workout_models.ExcerciseRegister
 		fields = ('day_excersice', 'day_register', 'set_number ', 'reps', 'weight', 'note') 
      
+
+class DayRegisterCustomSerializer(serializers.ModelSerializer):
+	day_program = program_serializers.WorkoutDaySerializer(many=False, read_only=True)
+	class Meta:
+		model = workout_models.DayRegister
+		fields = ('start_time', 'end_time', 'day_program', 'user')
