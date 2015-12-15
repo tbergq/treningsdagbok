@@ -2,7 +2,7 @@ from rest_framework import generics, mixins
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
-from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
+from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer, ExerciseEditSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
@@ -126,9 +126,12 @@ class ExerciseGroupList(generics.ListCreateAPIView):
 
 class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Exercise.objects.all()
-	serializer_class = ExerciseSerializer
+	serializer_class = ExerciseEditSerializer
 	permission_classes = (IsAuthenticated,)
 
+	def get_queryset(self):
+		print self.request.data
+		return Exercise.objects.all()
 
 
 	

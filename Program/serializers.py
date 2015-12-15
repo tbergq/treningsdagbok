@@ -25,7 +25,11 @@ class ExerciseSerializer(serializers.ModelSerializer):
 		fields = ('id', 'set', 'reps', 'day', 'description', 'break_time','base_exercise')
 
 
-
+class ExerciseEditSerializer(serializers.ModelSerializer):
+	#base_exercise = serializers.PrimarKeyRelatedField(read_only=False)
+	class Meta:
+		model = Exercise
+		fields = '__all__'
 
 class DaySerializer(serializers.ModelSerializer):
 	exercises = ExerciseSerializer(many=True, read_only=True)

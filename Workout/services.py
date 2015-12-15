@@ -36,14 +36,14 @@ class WorkoutManager(models.Manager):
 			and id != %s
 			and end_time is not null)
 			and day_excersice_id in(
-			select id from Treningsdagbok.Program_exercise
+			select id from Program_exercise
 			where base_exercise_id = %s
 			and day_id in(
-			select id from Treningsdagbok.Program_day
+			select id from Program_day
 			where week_id in(
-			select id from Treningsdagbok.Program_week
+			select id from Program_week
 			where  program_id in(
-			select id from Treningsdagbok.Program_program
+			select id from Program_program
 			where user_id = %s))))
 			""" % (user_id, day_register_id, base_exercise_id, user_id))
 
