@@ -15,6 +15,7 @@ urlpatterns = [
 	url(r'^days/(?P<pk>[0-9]+)/$', views.DayDetail.as_view()),
 	url(r'^exercises/(?P<pk>[0-9]+)/$', views.ExerciseDetail.as_view()),
 	url(r'^exercises/$', views.ExerciseGroupList.as_view()),
+	url(r'^copyWeek/(?P<week_id>[0-9]+)/$', views.CopyWeek.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

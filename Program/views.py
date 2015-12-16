@@ -1,4 +1,5 @@
 from rest_framework import generics, mixins
+from rest_framework.views import APIView
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
@@ -134,6 +135,12 @@ class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 		return Exercise.objects.all()
 
 
+class CopyWeek(APIView):
+
+	def post(self, request, week_id, format=None):
+		new_week_id = services.WeekService().copy_week_from_week_id(week_id)
+		serializer = WeekSerializer(Week.objects.get(pk=new_week_id))
+		return Response(serializer.data, status.HTTP_201_CREATED)
 	
 
 
