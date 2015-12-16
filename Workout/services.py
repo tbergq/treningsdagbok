@@ -80,4 +80,32 @@ class WorkoutManager(models.Manager):
 			result_list.append(register)
 		return result_list
 
+	def get_day_registers_from_program_id(self, program_id):
+		cursor = connection.cursor()
+		cursor.execute("""
+			SELECT * FROM Workout_dayregister
+			where day_program_id in(
+			select id from Program_day
+			where week_id in(
+			select id from Program_week
+			where program_id = %s)
+			)
+			""" % program_id)
+
+		result_list = []
+		for row in cursor.fetchall():
+			result = workout_models.DayRegister(id=row[0], start_time=row[1], end_time=row[2], day_program_id=row[3], user_id=row[4])
+			result_list.append(result)
+		return result_list
+
+
+
+
+
+
+
+
+
+
+
 

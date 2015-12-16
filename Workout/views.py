@@ -113,6 +113,17 @@ class ExcerciseRegisterForDayRegister(generics.ListCreateAPIView):
 
 
 
+class DayRegisterOfProgram(APIView):
+	permission_classes = (IsAuthenticated,)
+
+	def get(self, request, program_id, format=None):
+		registers = workout_services.WorkoutManager().get_day_registers_from_program_id(program_id)
+		print "got registers"
+		test = DayRegisterCustomSerializer(registers[0])
+		print test.data
+		serializer = DayRegisterCustomSerializer(registers, many=True)
+		return Response(serializer.data, status.HTTP_200_OK)
+
 
 
 

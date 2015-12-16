@@ -136,7 +136,8 @@ class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CopyWeek(APIView):
-
+	permission_classes = (IsAuthenticated,)
+	
 	def post(self, request, week_id, format=None):
 		new_week_id = services.WeekService().copy_week_from_week_id(week_id)
 		serializer = WeekSerializer(Week.objects.get(pk=new_week_id))
