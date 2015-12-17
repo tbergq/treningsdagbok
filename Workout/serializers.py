@@ -35,3 +35,4 @@ class ExerciseCustomSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = workout_models.ExcerciseRegister
 		fields = ('id', 'day_excersice', 'set_number', 'reps', 'weight', 'note')
+

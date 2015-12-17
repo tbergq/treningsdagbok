@@ -32,6 +32,14 @@ class RegisterDayAllForUserList(generics.ListCreateAPIView):
 
 	
 	def get_queryset(self):
+		start = self.request.query_params.get('start', None)
+		end = self.request.query_params.get('end', None)
+		
+		if start != None and end != None:
+			start_time = datetime.datetime.fromtimestamp(float(start))
+			end_time = datetime.datetime.fromtimestamp(float(end))
+			return DayRegister.objects.exclude(end_time__isnull=True).filter(user_id=self.request.user.id, end_time__lte=end_time, start_time__gte=start_time).order_by('-start_time')
+		
 		return DayRegister.objects.filter(user_id=self.request.user.id).exclude(end_time__isnull=True).order_by('-start_time')
 
 
