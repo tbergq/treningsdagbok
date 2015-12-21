@@ -23,3 +23,11 @@ class ExcerciseRegister(models.Model):
     reps = models.IntegerField()
     weight = models.TextField(max_length=128)
     note = models.TextField(max_length=128, blank=True)
+
+
+class OtherActivity(models.Model):
+    user = models.ForeignKey(User)
+    date = models.DateTimeField()
+    duration = models.IntegerField()
+    activity = models.TextField(max_length=128)
+    description = models.TextField(blank=True)

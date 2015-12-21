@@ -42,3 +42,15 @@ class ExcerciseDepthTwoSerializer(serializers.ModelSerializer):
 		model = workout_models.ExcerciseRegister
 		fields = '__all__'
 		depth = 2
+
+class OtherActivitySerializer(serializers.ModelSerializer):
+	user = serializers.ReadOnlyField(source="user.id")
+	#description = serializers.CharField(blank=True)
+	class Meta:
+		model = workout_models.OtherActivity
+		fields = '__all__'
+
+
+
+
+

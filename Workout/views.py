@@ -5,7 +5,7 @@ from Workout.models import DayRegister
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
 from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
-from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer
+from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer, OtherActivitySerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
@@ -15,16 +15,31 @@ from rest_framework.permissions import IsAuthenticated
 import Workout.services as workout_services
 import Workout.models as workout_models
 
-"""class BaseExerciseList(generics.ListCreateAPIView):
-	queryset = BaseExercise.objects.all()
-	serializer_class = BaseExerciseSerializer
+class OtherActivityList(generics.ListCreateAPIView):
+	#queryset = BaseExercise.objects.all()
+	serializer_class = OtherActivitySerializer
 	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		start = self.request.query_params.get('start', None)
+		end = self.request.query_params.get('end', None)
+		if start != None and end != None:
+			start = datetime.datetime.fromtimestamp(float(start))
+			end = datetime.datetime.fromtimestamp(float(end))
+			return workout_models.OtherActivity.objects.filter(user_id=self.request.user.id, date__gte=start, date__lte=end)
+		return workout_models.OtherActivity.objects.filter(user_id=self.request.user.id)
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
 	
 
-class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
-	queryset = BaseExercise.objects.all()
-	serializer_class = BaseExerciseSerializer
-	permission_classes = (IsAuthenticated,)"""
+class OtherActivityDetail(generics.RetrieveUpdateDestroyAPIView):
+	#queryset = BaseExercise.objects.all()
+	serializer_class = OtherActivitySerializer
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		return workout_models.OtherActivity.objects.filter(user_id=self.request.user.id)
 
 class RegisterDayAllForUserList(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
