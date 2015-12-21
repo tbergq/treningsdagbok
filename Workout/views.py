@@ -133,6 +133,10 @@ class DayRegisterOfProgram(APIView):
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
+class ExcerciseRegisterDetail(generics.RetrieveUpdateDestroyAPIView):
+	permission_classes = (IsAuthenticated,)
+	serializer_class = ExcerciseSerializer
+	queryset = workout_models.ExcerciseRegister.objects.all()
 
 
 
