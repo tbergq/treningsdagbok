@@ -5,7 +5,7 @@ from Workout.models import DayRegister
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
 from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
-from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer, ExerciseCustomSerializer
+from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
@@ -87,6 +87,7 @@ class ExcerciseRegisterList(generics.ListCreateAPIView):
 	def get_queryset(self):
 		day_register_id = self.request.query_params.get('day_register_id', None)
 		day_excersice_id = self.request.query_params.get('day_excersice_id', None)
+
 		return workout_models.ExcerciseRegister.objects.filter(day_excersice_id=day_excersice_id, day_register_id=day_register_id)
 		
 
@@ -126,16 +127,17 @@ class DayRegisterOfProgram(APIView):
 
 	def get(self, request, program_id, format=None):
 		registers = workout_services.WorkoutManager().get_day_registers_from_program_id(program_id)
-		print "got registers"
-		test = DayRegisterCustomSerializer(registers[0])
-		print test.data
+		#print "got registers"
+		#print registers
+		#test = DayRegisterCustomSerializer(registers[0])
+		#print test.data
 		serializer = DayRegisterCustomSerializer(registers, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
 class ExcerciseRegisterDetail(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = (IsAuthenticated,)
-	serializer_class = ExcerciseSerializer
+	serializer_class = ExcerciseDepthTwoSerializer
 	queryset = workout_models.ExcerciseRegister.objects.all()
 
 

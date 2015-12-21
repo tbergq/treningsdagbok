@@ -15,7 +15,7 @@ class ExcerciseSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = workout_models.ExcerciseRegister
 		fields = '__all__'
-		depth = 2
+		#depth = 2
 
 class ExcerciseWithForeignSerializer(serializers.ModelSerializer):
 	day_excersice = program_serializers.ExerciseSerializer(many=True, read_only=True)
@@ -37,3 +37,8 @@ class ExerciseCustomSerializer(serializers.ModelSerializer):
 		model = workout_models.ExcerciseRegister
 		fields = ('id', 'day_excersice', 'set_number', 'reps', 'weight', 'note')
 
+class ExcerciseDepthTwoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = workout_models.ExcerciseRegister
+		fields = '__all__'
+		depth = 2
