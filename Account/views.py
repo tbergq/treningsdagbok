@@ -82,6 +82,14 @@ class PasswordReset(APIView):
 
 	def post(self, request, format=None):
 		reset = UserReset.objects.get(guid=request.data['guid'])
+		reset_time = reset.reset_time.replace(tzinfo=None)
+		now = datetime.datetime.now()
+		delta = now - reset_time
+
+		if delta.days > 1:
+			reset.delete()
+			return Response({'error' : 'reset token to old'}, status.HTTP_400_BAD_REQUEST)
+			
 		user = User.objects.get(pk=reset.user_id)
 		encoded_password = hashers.make_password(request.data['new_password'])
 		if hashers.is_password_usable(encoded_password):
