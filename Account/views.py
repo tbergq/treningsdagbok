@@ -6,10 +6,13 @@ from rest_framework.exceptions import ParseError
 from rest_framework import status
  
 from django.contrib.auth.models import User
-#from Account.models import UserProfile
-from Account.serializers import UserSerializer
+from Account.models import UserReset
+from Account.serializers import UserSerializer, UserResetSerializer
 from rest_framework import generics
 from django.contrib.auth import hashers
+import uuid
+import datetime
+from Account.mailService import MailService
  
  
 # Create your views here.
@@ -62,6 +65,31 @@ class ChangePassword(APIView):
 
 
 
+class PasswordReset(APIView):
+	def get(self, request, format=None):
+		email = request.query_params.get('email', None)
+		redirect_url = request.query_params.get('redirect_url', None)
+		if email != None:
+			user = User.objects.get(email=email)
+			reset = UserReset(user_id=user.id, guid=uuid.uuid1(), reset_time=datetime.datetime.now())
+			reset.save()
+			redirect_url = "%s%s" % (redirect_url, reset.guid)
+			message = "got to %s to reset password" % redirect_url
+			MailService().send_mail(email, message)
+			return Response({}, status.HTTP_200_OK)
+		return Response({'error' : 'no mail address supplied'}, status.HTTP_400_BAD_REQUEST)
+
+
+	def post(self, request, format=None):
+		reset = UserReset.objects.get(guid=request.data['guid'])
+		user = User.objects.get(pk=reset.user_id)
+		encoded_password = hashers.make_password(request.data['new_password'])
+		if hashers.is_password_usable(encoded_password):
+			user.password = encoded_password
+			user.save()
+			reset.delete()
+			return Response({}, status.HTTP_200_OK)
+		return Response({'error' : 'reset passoword failed'}, status.HTTP_400_BAD_REQUEST)
 
 
 

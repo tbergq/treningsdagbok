@@ -2,6 +2,7 @@ from rest_framework import serializers
 #from Account.models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+import Account.models as account_models
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -22,3 +23,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('username', 'email')
+
+
+class UserResetSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = account_models.UserReset
+		fields = '__all__'
+	
