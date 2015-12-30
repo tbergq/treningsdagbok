@@ -13,6 +13,7 @@ from django.contrib.auth import hashers
 import uuid
 import datetime
 from Account.mailService import MailService
+from Account.services import LogoutService
  
  
 # Create your views here.
@@ -102,8 +103,10 @@ class PasswordReset(APIView):
 
 
 
-
-
+class LogoutView(APIView):
+	def get(self, request, format=None):
+		LogoutService().logout(request.user.id)
+		return Response({}, status.HTTP_200_OK)
 
 
 
