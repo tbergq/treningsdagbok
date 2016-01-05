@@ -15,7 +15,11 @@ class BaseExerciseSerializer(serializers.ModelSerializer):
 		model = BaseExercise
 		fields = ('id', 'name', 'youtube_link', 'muscle_group', 'description')
 
-
+class BaseExercisePutSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = BaseExercise
+		fields = '__all__'
+		depth = 1
 
 
 class ExerciseSerializer(serializers.ModelSerializer):

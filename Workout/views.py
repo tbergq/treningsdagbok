@@ -133,7 +133,7 @@ class ExcerciseRegisterForDayRegister(generics.ListCreateAPIView):
 
 	def get_queryset(self):
 		day_register_id = self.kwargs["day_register_id"]
-		return workout_models.ExcerciseRegister.objects.filter(day_register_id=day_register_id)
+		return workout_models.ExcerciseRegister.objects.filter(day_register_id=day_register_id, day_register__user_id=self.request.user.id)
 
 
 

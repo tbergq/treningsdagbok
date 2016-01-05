@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from django.contrib.auth.models import User
 #from Account.models import UserProfile
-from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer, ExerciseEditSerializer
+from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer, ExerciseEditSerializer, BaseExercisePutSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
@@ -36,11 +36,11 @@ class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 		print data
 		item = BaseExercise.objects.get(pk=data["id"])
 		item.description = data["description"]
-		item.muscle_group_id = data["muscle_group"]["id"]
+		item.muscle_group_id = data["muscle_group"]
 		item.name = data["name"]
 		item.youtube_link = data["youtube_link"]
 		item.save()
-		serializer = BaseExerciseSerializer(item)
+		serializer = BaseExercisePutSerializer(item)
 		return Response(serializer.data, status.HTTP_200_OK)
 
 
@@ -90,7 +90,8 @@ class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ProgramSerializer
 	permission_classes = (IsAuthenticated,)
 
-
+	def get_queryset(self):
+		return Program.objects.filter(user_id=self.request.user.id)
 
 
 class WeekGroupList(generics.ListCreateAPIView):
