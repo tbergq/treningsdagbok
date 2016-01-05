@@ -157,3 +157,5 @@ class ExcerciseRegisterDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+
+

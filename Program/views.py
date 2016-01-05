@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from Program import services
 from rest_framework.permissions import IsAuthenticated
+from Program.permissions import IsSuperUser
 
 class BaseExerciseList(generics.ListCreateAPIView):
 	queryset = BaseExercise.objects.all()
@@ -28,7 +29,7 @@ class BaseExerciseList(generics.ListCreateAPIView):
 class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = BaseExercise.objects.all()
 	serializer_class = BaseExerciseSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, IsSuperUser)
 
 	def update(self, request, *args, **kwargs):
 		data = request.data
