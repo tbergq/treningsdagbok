@@ -31,3 +31,10 @@ class OtherActivity(models.Model):
     duration = models.IntegerField()
     activity = models.TextField(max_length=128)
     description = models.TextField(blank=True)
+
+
+class OneRepMax(models.Model):
+    user = models.ForeignKey(User)
+    date = models.DateTimeField()
+    base_exercise = models.ForeignKey(program_models.BaseExercise)
+    weight = models.FloatField()

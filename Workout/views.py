@@ -120,7 +120,7 @@ class GetLastRegisteredList(generics.ListCreateAPIView):
 		registers = workout_services.WorkoutManager().get_latest_registers(user_id, day_register_id, base_exercise_id)
 		data = []
 		for item in registers:
-			temp_item = {'reps' : item.reps, 'weight' : item.weight}
+			temp_item = {'reps' : item.reps, 'weight' : item.weight, 'note' : item.note}
 			data.append(temp_item)
 		return Response(data, status.HTTP_200_OK)
 
@@ -154,6 +154,33 @@ class ExcerciseRegisterDetail(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = (IsAuthenticated,)
 	serializer_class = ExcerciseDepthTwoSerializer
 	queryset = workout_models.ExcerciseRegister.objects.all()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
