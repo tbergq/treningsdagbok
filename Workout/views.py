@@ -3,20 +3,20 @@ from rest_framework.views import APIView
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from Workout.models import DayRegister
 from django.contrib.auth.models import User
-#from Account.models import UserProfile
-from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer, DaySerializer, ExerciseSerializer
-from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer, DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer, OtherActivitySerializer
+from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer 
+from Program.serializers import DaySerializer, ExerciseSerializer
+from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer
+from Workout.serializers import DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer
+from Workout.serializers import OtherActivitySerializer, OneRepMaxSerializer
 from django.shortcuts import render, get_object_or_404
 import datetime
 from rest_framework.response import Response
 from rest_framework import status
-#from Program import services
 from rest_framework.permissions import IsAuthenticated
 import Workout.services as workout_services
 import Workout.models as workout_models
 
 class OtherActivityList(generics.ListCreateAPIView):
-	#queryset = BaseExercise.objects.all()
 	serializer_class = OtherActivitySerializer
 	permission_classes = (IsAuthenticated,)
 
@@ -34,7 +34,6 @@ class OtherActivityList(generics.ListCreateAPIView):
 	
 
 class OtherActivityDetail(generics.RetrieveUpdateDestroyAPIView):
-	#queryset = BaseExercise.objects.all()
 	serializer_class = OtherActivitySerializer
 	permission_classes = (IsAuthenticated,)
 
@@ -61,7 +60,6 @@ class RegisterDayAllForUserList(generics.ListCreateAPIView):
 class RegisterDayList(generics.ListCreateAPIView):
 	serializer_class = DayRegisterSerializer
 	permission_classes = (IsAuthenticated,)
-	#queryset = Day.objects.all()
 
 	def get_queryset(self):
 		day_id = self.kwargs["day_id"]
@@ -69,7 +67,6 @@ class RegisterDayList(generics.ListCreateAPIView):
 		return queryset
 
 	def post(self, request, day_id, format=None):
-		print "post"
 		date_now = datetime.datetime.now()
 		req = request.data
 		user_profile = User.objects.get(pk=request.user.id)
@@ -84,9 +81,7 @@ class RegisterDayDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Day.objects.all()
 
 	def update(self, request, *args, **kwargs):
-		print "update"
 		data = request.data
-		print kwargs
 		item = workout_models.DayRegister.objects.get(pk=kwargs["pk"])
 		item.end_time = datetime.datetime.now()
 		item.save()
@@ -96,7 +91,6 @@ class RegisterDayDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ExcerciseRegisterList(generics.ListCreateAPIView):
 	serializer_class = ExcerciseSerializer
-	#queryset = workout_models.ExcerciseRegister.objects.all()
 	permission_classes = (IsAuthenticated,)
 
 	def get_queryset(self):
@@ -113,7 +107,6 @@ class GetLastRegisteredList(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, format=None):
-		print "get latest registered"
 		user_id = request.user.id
 		day_register_id = request.query_params.get('day_register_id', None)
 		base_exercise_id = request.query_params.get('base_exercise_id', None)
@@ -142,10 +135,6 @@ class DayRegisterOfProgram(APIView):
 
 	def get(self, request, program_id, format=None):
 		registers = workout_services.WorkoutManager().get_day_registers_from_program_id(program_id)
-		#print "got registers"
-		#print registers
-		#test = DayRegisterCustomSerializer(registers[0])
-		#print test.data
 		serializer = DayRegisterCustomSerializer(registers, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 
@@ -158,7 +147,22 @@ class ExcerciseRegisterDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+class OneRepMaxList(generics.ListCreateAPIView):
+	permission_classes = (IsAuthenticated,)
+	serializer_class = OneRepMaxSerializer
 
+	def get_queryset(self):
+		latest = self.request.query_params.get('latest', None)
+		base_exercise_id = self.request.query_params.get('base_exercise_id', None)
+
+		if latest != None and latest:
+			return workout_services.OneRepMaxService().get_latest(self.request.user.id)
+		elif base_exercise_id != None:
+			return workout_models.OneRepMax.objects.filter(user_id=self.request.user.id, base_exercise_id=base_exercise_id).order_by('date')
+		return workout_models.OneRepMax.objects.filter(user_id=self.request.user.id)
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user, base_exercise_id=self.request.data["base_exercise_id"])
 
 
 

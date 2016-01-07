@@ -5,12 +5,9 @@ from django.db import models, connection
 class SelectDayService():
 
 	def get_data(self, program_id):
-		print "get data"
-		print program_id
 		program = program_models.Program.objects.get(pk=program_id)
 		program.weeks = program_models.Week.objects.filter(program_id=program_id)
-		print "start looping"
-		print program.weeks
+
 		for week in program.weeks:
 			week.days = program_models.Day.objects.filter(week=week)
 
@@ -23,6 +20,18 @@ class SelectDayService():
 					day.disabled = False
 
 		return program
+
+class OneRepMaxManager(models.Manager):
+	
+	def get_distinct(self, user_id, table_name):
+		cursor = connection.cursor()
+		cursor.execute("""
+			SELECT distinct %s
+			from Workout_onerepmax
+			where user_id = %s
+		""" % (table_name, user_id))
+		result=cursor.fetchall()
+		return result
 
 class WorkoutManager(models.Manager):
 
@@ -100,7 +109,17 @@ class WorkoutManager(models.Manager):
 
 
 
+class OneRepMaxService():
 
+	def get_latest(self, user_id):
+		latest = []
+		ids = OneRepMaxManager().get_distinct(user_id, 'base_exercise_id')
+		
+		for id in ids:
+			rm = workout_models.OneRepMax.objects.filter(base_exercise_id=id).order_by('-date')[0]
+			latest.append(rm)
+
+		return latest
 
 
 

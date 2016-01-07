@@ -50,6 +50,14 @@ class OtherActivitySerializer(serializers.ModelSerializer):
 		model = workout_models.OtherActivity
 		fields = '__all__'
 
+class OneRepMaxSerializer(serializers.ModelSerializer):
+	user =  serializers.ReadOnlyField(source="user.id")
+	#base_exercise = program_serializers.BaseExerciseSerializer(many=False, read_only=True)
+	class Meta:
+		model = workout_models.OneRepMax
+		fields = '__all__'
+		depth = 1
+
 
 
 

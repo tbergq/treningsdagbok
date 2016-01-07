@@ -24,11 +24,10 @@ class UserView(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = UserSerializer
 
 	def post(self, request, format=None):
-		print "user post"
+
 		serializer = UserSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save();
-			#UserProfile.create_new(serializer.id)
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

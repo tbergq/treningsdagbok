@@ -19,7 +19,7 @@ class BaseExerciseList(generics.ListCreateAPIView):
 
 	def post(self, request, format=None):
 		data = request.data;
-		print data
+
 		item = BaseExercise(muscle_group_id=data["muscle_group"], name=data["name"], youtube_link=data["youtube_link"], description=data["description"])
 		item.save()
 		serializer = BaseExerciseSerializer(item)
@@ -33,7 +33,7 @@ class BaseExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 
 	def update(self, request, *args, **kwargs):
 		data = request.data
-		print data
+
 		item = BaseExercise.objects.get(pk=data["id"])
 		item.description = data["description"]
 		item.muscle_group_id = data["muscle_group"]
@@ -64,16 +64,10 @@ class ProgramList(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
 
 
-	"""def get(self, request, format=None):
-		serializer = ProgramSerializer(Program.objects.filter(user_id=request.user.id), many=True)
-		return Response(serializer.data)"""
-
 
 	def post(self, request, format=None):
-		print "post program list"
 		date_now = datetime.datetime.now()
 		req = request.data
-		print request.user.id
 		user_profile = User.objects.get(pk=request.user.id)
 		program = Program(name=req["name"], date=date_now, user=user_profile)
 		program.save()
@@ -81,7 +75,6 @@ class ProgramList(generics.ListCreateAPIView):
 		return Response(serializer.data, status.HTTP_201_CREATED)
 
 	def get_queryset(self):
-		#user = self.request.user
 		return Program.objects.filter(user_id=self.request.user.id).order_by('-date')
 
 
@@ -133,7 +126,6 @@ class ExerciseDetail(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get_queryset(self):
-		print self.request.data
 		return Exercise.objects.all()
 
 
