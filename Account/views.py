@@ -7,7 +7,7 @@ from rest_framework import status
  
 from django.contrib.auth.models import User
 from Account.models import UserReset
-from Account.serializers import UserSerializer, UserResetSerializer
+from Account.serializers import UserSerializer, UserResetSerializer, UserInfoSerializer
 from rest_framework import generics
 from django.contrib.auth import hashers
 import uuid
@@ -106,6 +106,42 @@ class LogoutView(APIView):
 	def get(self, request, format=None):
 		LogoutService().logout(request.user.id)
 		return Response({}, status.HTTP_200_OK)
+
+
+
+class SearchUser(APIView):
+	def get(self, request, format=None):
+		username = request.query_params.get('username', None)
+		email = request.query_params.get('email', None)
+		print username
+		print email
+		
+		if username != None:
+			user = User.objects.filter(username=username)
+			if(len(user) > 0):
+				return Response({'username' : user[0].username, 'id' : user[0].id}, status.HTTP_200_OK)
+		elif email != None:
+			user = User.objects.filter(email=email)
+			if len(user) > 0:
+				return Response({'username' : user[0].username, 'id' : user[0].id}, status.HTTP_200_OK)		
+			
+		
+		return Response({}, status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

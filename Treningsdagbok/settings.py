@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'corsheaders',
     'Program',
     'Account',
-    'Workout'
+    'Workout',
+    'Groups'
 )
 
 MIDDLEWARE_CLASSES = (
