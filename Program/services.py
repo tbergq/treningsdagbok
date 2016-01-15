@@ -16,8 +16,10 @@ class ProgramService(models.Manager):
 			UNION
 			SELECT * FROM Program_program
 			WHERE id in(
+			SELECT program_id from Groups_groupprograms
+			where group_id in(
 			SELECT group_id FROM Groups_groupmembers
-			where member_id = %s)
+			where member_id = %s))
 			order by date desc
 			""" % (user_id, user_id))
 
