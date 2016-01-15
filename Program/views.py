@@ -11,6 +11,9 @@ from rest_framework import status
 from Program import services
 from rest_framework.permissions import IsAuthenticated
 from Program.permissions import IsSuperUser
+from itertools import chain
+import Groups.models as group_models
+import Program.services as program_service
 
 class BaseExerciseList(generics.ListCreateAPIView):
 	queryset = BaseExercise.objects.all()
@@ -75,7 +78,15 @@ class ProgramList(generics.ListCreateAPIView):
 		return Response(serializer.data, status.HTTP_201_CREATED)
 
 	def get_queryset(self):
-		return Program.objects.filter(user_id=self.request.user.id).order_by('-date')
+		add_group_programs = self.request.query_params.get('addGroupPrograms', False)
+		my_programs = Program.objects.filter(user_id=self.request.user.id)
+		if add_group_programs:
+			"""my_groups = group_models.GroupMembers.objects.filter(member_id=self.request.user.id).values('group_id')
+			group_programs = Program.objects.filter(id__in=my_groups)
+			all_programs = list(chain(my_programs, group_programs))
+			return all_programs.order_by('-date')"""
+			return program_service.ProgramService().get_my_programs_and_group_programs(self.request.user.id)
+		return my_programs.order_by('-date')
 
 
 class ProgramDetail(generics.RetrieveUpdateDestroyAPIView):

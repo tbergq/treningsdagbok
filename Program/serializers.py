@@ -94,4 +94,8 @@ class WorkoutExerciseSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
+class ProgramSimpleSerializer(serializers.ModelSerializer):
+	class Meta: 
+		model = Program
+		fields = ('id', 'name')
 

@@ -63,7 +63,7 @@ class RegisterDayList(generics.ListCreateAPIView):
 
 	def get_queryset(self):
 		day_id = self.kwargs["day_id"]
-		queryset = DayRegister.objects.filter(day_program_id=day_id)
+		queryset = DayRegister.objects.filter(day_program_id=day_id, user_id=self.request.user.id)
 		return queryset
 
 	def post(self, request, day_id, format=None):
@@ -134,7 +134,7 @@ class DayRegisterOfProgram(APIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, program_id, format=None):
-		registers = workout_services.WorkoutManager().get_day_registers_from_program_id(program_id)
+		registers = workout_services.WorkoutManager().get_day_registers_from_program_id(program_id, request.user.id)
 		serializer = DayRegisterCustomSerializer(registers, many=True)
 		return Response(serializer.data, status.HTTP_200_OK)
 

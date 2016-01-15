@@ -1,11 +1,31 @@
 from Program import models as program_models
+from django.db import models, connection
 
-class ProgramService():
+class ProgramService(models.Manager):
 
 	def get_program(self, program_id):
 		program = program_models.Program.objects.get(pk=program_id)
 		program.weeks = WeekService.get_weeks(program_id)
 		return program
+
+	def get_my_programs_and_group_programs(self, user_id):
+		cursor = connection.cursor()
+		cursor.execute("""
+			SELECT * FROM Program_program
+			WHERE user_id = %s
+			UNION
+			SELECT * FROM Program_program
+			WHERE id in(
+			SELECT group_id FROM Groups_groupmembers
+			where member_id = %s)
+			order by date desc
+			""" % (user_id, user_id))
+
+		result_list = []
+		for row in cursor.fetchall():
+			program = program_models.Program(id=row[0], name=row[1], date=row[2], user_id=row[3])
+			result_list.append(program)
+		return result_list
 
 
 class WeekService():

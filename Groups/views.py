@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from rest_framework import generics
 import Groups.models as group_models
+import Program.models as program_models
 import Groups.serializers as group_serializers
+import Program.serializers as program_serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -35,8 +37,23 @@ class InviteList(generics.ListCreateAPIView):
 	def get_queryset(self):
 		return group_models.Invite.objects.filter(invited_id=self.request.user.id)
 
+	def create(self, request, *args, **kwargs):
+		try:
+			return super(InviteList, self).create(request, *args, **kwargs)
+		except Exception as e:
+			
+			return Response({'error' : e.args[0]}, status.HTTP_409_CONFLICT)
+
 	def perform_create(self, serializer):
-		serializer.save(inviter=self.request.user, invited_id=self.request.data["invited_id"], group_id=self.request.data["group"])
+		invited_id=self.request.data["invited_id"]
+		group_id=self.request.data["group"]
+		invite = group_models.Invite.objects.filter(invited_id=invited_id, group_id=group_id)
+		member = group_models.GroupMembers.objects.filter(group_id=group_id, member_id=invited_id)
+		if len(invite) > 0:
+			raise Exception('User is already invited')
+		if len(member) > 0:
+			raise Exception('User is already a member of this group')
+		serializer.save(inviter=self.request.user, invited_id=invited_id, group_id=group_id)
 		
 class InviteDetail(generics.DestroyAPIView):
 	serializer_class = group_serializers.InviteSerializer
@@ -66,6 +83,47 @@ class GroupMembersList(generics.ListCreateAPIView):
 	def get_queryset(self):
 		group_id = self.request.query_params.get('group_id', 0)
 		return group_models.GroupMembers.objects.filter(group_id=group_id)
+
+
+class AddableProgramsList(generics.ListAPIView):
+	serializer_class = program_serializers.ProgramSimpleSerializer
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		group_id = self.request.query_params.get('group_id', 0)
+		my_group_programs = group_models.GroupPrograms.objects.filter(group_id=group_id).values('program_id')
+		except_programs = program_models.Program.objects.filter(id__in=my_group_programs)
+		return program_models.Program.objects.filter(user=self.request.user).exclude(id__in=except_programs)
+
+
+
+class GroupProgramsList(generics.ListCreateAPIView):
+	serializer_class = group_serializers.GroupProgramSerializer
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		group_id = self.request.query_params.get('group_id', 0)
+		return group_models.GroupPrograms.objects.filter(group_id=group_id)
+
+	def perform_create(self, serializer):
+		serializer.save(program_id=self.request.data['program_id'], group_id=self.request.data['group'])
+
+class GroupProgramDelete(generics.DestroyAPIView):
+	serializer_class = group_serializers.GroupProgramSerializer
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		return group_models.GroupPrograms.objects.filter(program__user=self.request.user)
+
+
+
+
+
+
+
+
+
+
 
 
 

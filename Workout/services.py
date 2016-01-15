@@ -89,17 +89,18 @@ class WorkoutManager(models.Manager):
 			result_list.append(register)
 		return result_list
 
-	def get_day_registers_from_program_id(self, program_id):
+	def get_day_registers_from_program_id(self, program_id, user_id):
 		cursor = connection.cursor()
 		cursor.execute("""
 			SELECT * FROM Workout_dayregister
-			where day_program_id in(
+			where user_id = %s
+			and day_program_id in(
 			select id from Program_day
 			where week_id in(
 			select id from Program_week
 			where program_id = %s)
 			)
-			""" % program_id)
+			""" % (user_id, program_id))
 
 		result_list = []
 		for row in cursor.fetchall():
