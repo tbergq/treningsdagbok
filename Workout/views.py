@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from Program.models import BaseExercise, MuscleGroup, Program, Week, Day, Exercise
 from Workout.models import DayRegister
 from django.contrib.auth.models import User
-from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer 
+from Program.serializers import BaseExerciseSerializer, MuscleGroupSerializer, ProgramSerializer, WeekSerializer
 from Program.serializers import DaySerializer, ExerciseSerializer
 from Workout.serializers import DayRegisterSerializer, ExcerciseSerializer, ExcerciseWithForeignSerializer
 from Workout.serializers import DayRegisterCustomSerializer, ExerciseCustomSerializer, ExcerciseDepthTwoSerializer
@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import Workout.services as workout_services
 import Workout.models as workout_models
+from time import strftime
 
 class OtherActivityList(generics.ListCreateAPIView):
 	serializer_class = OtherActivitySerializer
@@ -31,7 +32,7 @@ class OtherActivityList(generics.ListCreateAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
-	
+
 
 class OtherActivityDetail(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = OtherActivitySerializer
@@ -44,16 +45,16 @@ class RegisterDayAllForUserList(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
 	serializer_class = DayRegisterCustomSerializer
 
-	
+
 	def get_queryset(self):
 		start = self.request.query_params.get('start', None)
 		end = self.request.query_params.get('end', None)
-		
+
 		if start != None and end != None:
 			start_time = datetime.datetime.fromtimestamp(float(start))
 			end_time = datetime.datetime.fromtimestamp(float(end))
 			return DayRegister.objects.exclude(end_time__isnull=True).filter(user_id=self.request.user.id, end_time__lte=end_time, start_time__gte=start_time).order_by('-start_time')
-		
+
 		return DayRegister.objects.filter(user_id=self.request.user.id).exclude(end_time__isnull=True).order_by('-start_time')
 
 
@@ -98,7 +99,7 @@ class ExcerciseRegisterList(generics.ListCreateAPIView):
 		day_excersice_id = self.request.query_params.get('day_excersice_id', None)
 
 		return workout_models.ExcerciseRegister.objects.filter(day_excersice_id=day_excersice_id, day_register_id=day_register_id)
-		
+
 
 
 class GetLastRegisteredList(generics.ListCreateAPIView):
@@ -169,8 +170,9 @@ class LatestRegistersOfExercise(generics.ListAPIView):
 	permission_classes = (IsAuthenticated,)
 	serializer_class = ExcerciseDepthTwoSerializer
 
-	def get_queryset(self):
-		base_exercise_id = self.kwargs['base_exercise_id']
+	def get(self, request, base_exercise_id ,Format=None):
+		self.request = request
+		#base_exercise_id = self.kwargs['base_exercise_id']
 		limit_increase = self.request.query_params.get('limit_increase', '0')
 		limit_increase = int(limit_increase)
 		low_limit = 0 + limit_increase
@@ -178,11 +180,30 @@ class LatestRegistersOfExercise(generics.ListAPIView):
 		#my_day_registers = workout_models.DayRegister.objects.filter(user_id=self.request.user.id)
 		my_day_registers = workout_models.DayRegister.objects.raw("""
 			SELECT * FROM Workout_dayregister
-			where user_id = %s
-			limit %s,%s;
-			""" % (self.request.user.id, low_limit, high_limit))
+            where user_id = %s
+            and id in(
+            select day_register_id from Workout_excerciseregister
+            where day_excersice_id in(
+            select id from Program_exercise
+            where base_exercise_id = %s))
+            order by start_time desc
+            limit %s,%s;
+			""" % (self.request.user.id, base_exercise_id, low_limit, high_limit))
 		registers = workout_models.ExcerciseRegister.objects.filter(day_register__in=my_day_registers, day_excersice__base_exercise_id=base_exercise_id)
-		return registers
+		dic = {}
+		data = []
+		for item in registers:
+			date_string = item.day_register.start_time.strftime('%d.%m.%Y')
+			if dic.has_key(date_string):
+				dic[date_string] = "%s, %s x %s kg" % (dic[date_string], item.reps, item.weight)
+			else:
+				dic[date_string] = "%s x %s kg" % (item.reps, item.weight)
+		
+		for item in dic:
+			print item
+			data.append({'date' : item, 'data' : dic[item]})
+
+		return Response(data, status.HTTP_200_OK)
 
 
 
