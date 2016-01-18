@@ -165,6 +165,25 @@ class OneRepMaxList(generics.ListCreateAPIView):
 		serializer.save(user=self.request.user, base_exercise_id=self.request.data["base_exercise_id"])
 
 
+class LatestRegistersOfExercise(generics.ListAPIView):
+	permission_classes = (IsAuthenticated,)
+	serializer_class = ExcerciseDepthTwoSerializer
+
+	def get_queryset(self):
+		base_exercise_id = self.kwargs['base_exercise_id']
+		limit_increase = self.request.query_params.get('limit_increase', '0')
+		limit_increase = int(limit_increase)
+		low_limit = 0 + limit_increase
+		high_limit = 10 + limit_increase
+		#my_day_registers = workout_models.DayRegister.objects.filter(user_id=self.request.user.id)
+		my_day_registers = workout_models.DayRegister.objects.raw("""
+			SELECT * FROM Workout_dayregister
+			where user_id = %s
+			limit %s,%s;
+			""" % (self.request.user.id, low_limit, high_limit))
+		registers = workout_models.ExcerciseRegister.objects.filter(day_register__in=my_day_registers, day_excersice__base_exercise_id=base_exercise_id)
+		return registers
+
 
 
 

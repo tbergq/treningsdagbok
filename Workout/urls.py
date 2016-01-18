@@ -14,6 +14,7 @@ urlpatterns = [
 	url(r'^exerciseRegisterForDay/(?P<day_register_id>[0-9]+)/$', views.ExcerciseRegisterForDayRegister.as_view()),
 	url(r'^dayregister/(?P<program_id>[0-9]+)/$', views.DayRegisterOfProgram.as_view()),
 	url(r'^1rm/$', views.OneRepMaxList.as_view()),
+	url(r'^registersOfExercise/(?P<base_exercise_id>[0-9]+)/$', views.LatestRegistersOfExercise.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
