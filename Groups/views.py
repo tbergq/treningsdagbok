@@ -7,6 +7,7 @@ import Program.serializers as program_serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
+from Groups.permissions import IsGroupOwner, IsGroupMemberOrOwner
 
 # Create your views here.
 
@@ -16,7 +17,15 @@ class GroupsList(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get_queryset(self):
-		return group_models.Group.objects.filter(group_owner_id=self.request.user.id)
+		include_member_groups = self.request.query_params.get('includeMemberShipGroups', False)
+		my_groups = group_models.Group.objects.filter(group_owner_id=self.request.user.id)
+		
+		if include_member_groups:
+			member_group_ids = group_models.GroupMembers.objects.filter(member_id=self.request.user.id).values('group_id')
+			member_groups = group_models.Group.objects.filter(id__in=member_group_ids)
+			return my_groups | member_groups 
+
+		return my_groups
 
 	def perform_create(self, serializer):
 		serializer.save(group_owner=self.request.user)
@@ -24,10 +33,13 @@ class GroupsList(generics.ListCreateAPIView):
 		
 class GroupsDetail(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class =group_serializers.GroupSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, IsGroupOwner,)
 
 	def get_queryset(self):
-		return group_models.Group.objects.filter(group_owner_id=self.request.user.id)
+		my_groups = group_models.Group.objects.filter(group_owner_id=self.request.user.id)
+		group_ids = group_models.GroupMembers.objects.filter(member_id=self.request.user.id).values('group_id')
+
+		return my_groups | group_models.Group.objects.filter(id__in=group_ids) 
 
 
 class InviteList(generics.ListCreateAPIView):
@@ -117,7 +129,13 @@ class GroupProgramDelete(generics.DestroyAPIView):
 
 
 
+class GroupMessagesList(generics.ListCreateAPIView):
+	serializer_class = group_serializers.GroupMessagesSerializer
+	permission_classes = (IsAuthenticated, IsGroupMemberOrOwner,)
+	queryset = group_models.GroupMessages.objects.all()
 
+	def perform_create(self, serializer):
+		serializer.save(group_id=self.request.query_params.get('groupId', None), user_id=self.request.user.id)
 
 
 

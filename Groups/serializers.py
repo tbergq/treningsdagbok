@@ -38,3 +38,10 @@ class GroupProgramSerializer(serializers.ModelSerializer):
 		model = group_models.GroupPrograms
 		fields = '__all__'
 		depth = 1
+
+class GroupMessagesSerializer(serializers.ModelSerializer):
+	user = account_serializers.UserInfoSerializer(many=False, read_only=True)
+	class Meta:
+		model = group_models.GroupMessages
+		fields = '__all__'
+		depth = 1

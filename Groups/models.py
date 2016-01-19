@@ -26,3 +26,9 @@ class Invite(models.Model):
 	group = models.ForeignKey(Group)
 	#class Meta:
 	#	unique_together = (("group", "invited"),)
+
+class GroupMessages(models.Model):
+	group = models.ForeignKey(Group)
+	user = models.ForeignKey(User)
+	message = models.TextField()
+	time = models.DateTimeField(auto_now_add=True)
