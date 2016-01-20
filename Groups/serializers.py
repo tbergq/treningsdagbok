@@ -5,7 +5,8 @@ import Program.serializers as program_serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 class GroupSerializer(serializers.ModelSerializer):
-	group_owner = serializers.ReadOnlyField(source="user.id")
+	#group_owner = serializers.ReadOnlyField(source="user.id")
+	group_owner = account_serializers.UserInfoSerializer(many=False, read_only=True)
 	class Meta:
 		model = group_models.Group
 		fields = '__all__'

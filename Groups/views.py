@@ -7,7 +7,7 @@ import Program.serializers as program_serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from Groups.permissions import IsGroupOwner, IsGroupMemberOrOwner
+from Groups.permissions import IsGroupOwner, IsGroupMemberOrOwner, CanInviteMembersToGroup, CanAddDeleteGroupPrograms
 
 # Create your views here.
 
@@ -44,7 +44,7 @@ class GroupsDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class InviteList(generics.ListCreateAPIView):
 	serializer_class = group_serializers.InviteSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, CanInviteMembersToGroup,)
 
 	def get_queryset(self):
 		return group_models.Invite.objects.filter(invited_id=self.request.user.id)
@@ -69,7 +69,7 @@ class InviteList(generics.ListCreateAPIView):
 		
 class InviteDetail(generics.DestroyAPIView):
 	serializer_class = group_serializers.InviteSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, )
 
 	def get_queryset(self):
 		return group_models.Invite.objects.filter(invited_id=self.request.user.id)
@@ -111,7 +111,7 @@ class AddableProgramsList(generics.ListAPIView):
 
 class GroupProgramsList(generics.ListCreateAPIView):
 	serializer_class = group_serializers.GroupProgramSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, CanAddDeleteGroupPrograms,)
 
 	def get_queryset(self):
 		group_id = self.request.query_params.get('group_id', 0)
@@ -122,7 +122,7 @@ class GroupProgramsList(generics.ListCreateAPIView):
 
 class GroupProgramDelete(generics.DestroyAPIView):
 	serializer_class = group_serializers.GroupProgramSerializer
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, CanAddDeleteGroupPrograms,)
 
 	def get_queryset(self):
 		return group_models.GroupPrograms.objects.filter(program__user=self.request.user)
@@ -132,12 +132,15 @@ class GroupProgramDelete(generics.DestroyAPIView):
 class GroupMessagesList(generics.ListCreateAPIView):
 	serializer_class = group_serializers.GroupMessagesSerializer
 	permission_classes = (IsAuthenticated, IsGroupMemberOrOwner,)
-	queryset = group_models.GroupMessages.objects.all()
+	queryset = group_models.GroupMessages.objects.all().order_by('-time')
 
 	def perform_create(self, serializer):
 		serializer.save(group_id=self.request.query_params.get('groupId', None), user_id=self.request.user.id)
 
 
+	def get_queryset(self):
+		group_id=self.request.query_params.get('groupId', 0)
+		return group_models.GroupMessages.objects.filter(group_id=group_id).order_by('-time')
 
 
 
